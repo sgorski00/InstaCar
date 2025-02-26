@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="pl">
+<th:block th:replace="~{/fragments/headerFragments :: head}"></th:block>
+<body>
+    <p><strong>Witaj świecie</strong></p>
+    <p th:text="${info}"></p>
+    <div th:if="${car != null}" th:text="${car.id} + ' ' + ${car.model}"></div>
+</body>
+</html>
