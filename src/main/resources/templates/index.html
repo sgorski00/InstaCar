@@ -1,9 +1,10 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" xmlns:sec="http://www.w3.org/1999/xhtml">
 <th:block th:replace="~{/fragments/headerFragments :: head}"></th:block>
 <body>
     <p><strong>Witaj świecie</strong></p>
     <p th:text="${info}"></p>
     <div th:if="${car != null}" th:text="${car.id} + ' ' + ${car.model}"></div>
+    <div sec:authorize="hasRole('ADMIN')">ZALOGOWANO JAKO ADMINISTRATOR</div>
 </body>
 </html>
