@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pl">
+<th:block th:replace="~{/fragments/headerFragments :: head}"></th:block>
+<body>
+<form th:action="@{/login}" method="post">
+    <label for="login" class="form-label">
+        Podaj login:
+        <input type="text" id="login" th:name="username" required>
+    </label>
+    <label for="pass" class="form-label">
+        Podaj hasło:
+        <input type="password" id="pass" th:name="password" required>
+    </label>
+    <p th:if="${error}">Podano błędne dane logowania!</p>
+    <div class="form-buttons">
+        <button type="reset">Wyczyść</button>
+        <button type="submit">Zaloguj</button>
+    </div>
+</form>
+</body>
+</html>

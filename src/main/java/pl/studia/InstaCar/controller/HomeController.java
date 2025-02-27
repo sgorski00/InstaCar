@@ -22,8 +22,8 @@ public class HomeController {
     public String showHome(
             Model model
     ) {
-        Car attributeValue = new Car("BMW", 1L);
-        model.addAttribute("car", attributeValue);
+        Car car = new Car(1L, "BMW");
+        model.addAttribute("car", car);
         return "index";
     }
 
