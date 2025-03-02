@@ -3,10 +3,14 @@ package pl.studia.InstaCar.model.authentication;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -22,6 +26,7 @@ public class ApplicationUser implements UserDetails {
     private Long id;
 
     @NotBlank
+    @Size(min = 5, max = 50)
     @Column(unique = true, nullable = false)
     private String username;
 
@@ -37,6 +42,9 @@ public class ApplicationUser implements UserDetails {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    @Transient
+    private static PasswordEncoder passwordEncoder;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.getName().toUpperCase()));
@@ -49,6 +57,18 @@ public class ApplicationUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username.toLowerCase();
+        return username;
+    }
+
+    public static void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        ApplicationUser.passwordEncoder = passwordEncoder;
+    }
+
+    @PrePersist
+    @PreUpdate
+    public void encryptPassword() {
+        if(password != null && !password.startsWith("2a$")) {
+            this.password = passwordEncoder.encode(password);
+        }
     }
 }
