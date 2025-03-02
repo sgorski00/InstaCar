@@ -1,0 +1,36 @@
+package pl.studia.InstaCar.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import pl.studia.InstaCar.event.UserRegistrationEvent;
+import pl.studia.InstaCar.model.authentication.ApplicationUser;
+import pl.studia.InstaCar.model.authentication.Role;
+
+import java.util.NoSuchElementException;
+
+@Service
+public class UserRegistrationService {
+    private final ApplicationEventPublisher eventPublisher;
+    private final UserService userService;
+    private final RoleService roleService;
+
+    @Autowired
+    public UserRegistrationService(ApplicationEventPublisher eventPublisher, UserService userService, RoleService roleService) {
+        this.eventPublisher = eventPublisher;
+        this.userService = userService;
+        this.roleService = roleService;
+    }
+
+
+    public void registerUser(ApplicationUser user) {
+        try {
+            Role role = roleService.findByName("user");
+            user.setRole(role);
+            userService.save(user);
+            eventPublisher.publishEvent(new UserRegistrationEvent(this, user));
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Role: 'user' not found");
+        }
+    }
+}

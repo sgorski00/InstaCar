@@ -1,8 +1,6 @@
 package pl.studia.InstaCar.controller;
 
 import lombok.extern.log4j.Log4j2;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,20 +11,18 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
-import pl.studia.InstaCar.service.UserService;
-
-import java.util.NoSuchElementException;
+import pl.studia.InstaCar.service.UserRegistrationService;
 
 @Controller
 @RequestMapping("/register")
 @Log4j2
 public class RegisterController {
 
-    private final UserService userService;
+    private final UserRegistrationService userRegistrationService;
 
     @Autowired
-    public RegisterController(UserService userService) {
-        this.userService = userService;
+    public RegisterController(UserRegistrationService userRegistrationService) {
+        this.userRegistrationService = userRegistrationService;
     }
 
     @GetMapping
@@ -50,7 +46,7 @@ public class RegisterController {
         }
 
         try {
-            userService.save(user);
+            userRegistrationService.registerUser(user);
             redirectAttributes.addFlashAttribute("info", "Proszę potwierdzić swój adres email poprzez link weryfikacyjny wysłany na adres: " + user.getEmail());
         }  catch (Exception e) {
             log.error(e.getCause());

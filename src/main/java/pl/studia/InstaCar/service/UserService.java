@@ -32,15 +32,7 @@ public class UserService implements UserDetailsService {
     }
 
     public void save(ApplicationUser user) {
-        if(user.getId() == null) {
-            try {
-                Role role = roleService.findByName("user");
-                user.setRole(role);
-                userRepository.save(user);
-            } catch (NoSuchElementException e) {
-                throw new NoSuchElementException("Role: 'user' not found");
-            }
-        }
+        userRepository.save(user);
     }
 
     @Override
