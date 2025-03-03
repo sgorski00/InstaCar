@@ -1,6 +1,7 @@
 package pl.studia.InstaCar.controller;
 
 import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -36,7 +37,7 @@ public class RegisterController {
 
     @PostMapping
     public String registerUser(
-            @ModelAttribute("user") ApplicationUser user,
+            @Valid @ModelAttribute("user") ApplicationUser user,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     ) {

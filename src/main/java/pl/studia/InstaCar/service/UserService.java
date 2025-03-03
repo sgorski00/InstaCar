@@ -17,7 +17,6 @@ import java.util.NoSuchElementException;
 @Service
 public class UserService implements UserDetailsService {
 
-    private static final Logger log = LogManager.getLogger(UserService.class);
     private final UserRepository userRepository;
     private final RoleService roleService;
 

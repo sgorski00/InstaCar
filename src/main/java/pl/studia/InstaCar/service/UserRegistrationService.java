@@ -1,5 +1,6 @@
 package pl.studia.InstaCar.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import pl.studia.InstaCar.model.authentication.Role;
 import java.util.NoSuchElementException;
 
 @Service
+@Log4j2
 public class UserRegistrationService {
     private final ApplicationEventPublisher eventPublisher;
     private final UserService userService;
@@ -22,7 +24,6 @@ public class UserRegistrationService {
         this.roleService = roleService;
     }
 
-
     public void registerUser(ApplicationUser user) {
         try {
             Role role = roleService.findByName("user");
@@ -30,7 +31,11 @@ public class UserRegistrationService {
             userService.save(user);
             eventPublisher.publishEvent(new UserRegistrationEvent(this, user));
         } catch (NoSuchElementException e) {
+            log.error(e.getCause());
             throw new NoSuchElementException("Role: 'user' not found");
+        } catch (Exception e) {
+            log.error(e.getCause());
+            throw new RuntimeException("An error occurred while registering user");
         }
     }
 }
