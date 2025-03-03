@@ -1,5 +1,6 @@
 package pl.studia.InstaCar.controller;
 
+import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,7 +49,11 @@ public class RegisterController {
         try {
             userRegistrationService.registerUser(user);
             redirectAttributes.addFlashAttribute("info", "Proszę potwierdzić swój adres email poprzez link weryfikacyjny wysłany na adres: " + user.getEmail());
-        }  catch (Exception e) {
+        }  catch (ConstraintViolationException e){
+            log.error(e.getMessage());
+            redirectAttributes.addFlashAttribute("error", "Nazwa użytkownika lub email są już w użyciu.");
+            return "redirect:/register";
+        }   catch (Exception e) {
             log.error(e.getCause());
             redirectAttributes.addFlashAttribute("error", "Coś poszło nie tak!");
             return "redirect:/register";
