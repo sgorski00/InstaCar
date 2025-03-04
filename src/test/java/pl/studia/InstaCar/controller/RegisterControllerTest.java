@@ -2,13 +2,12 @@ package pl.studia.InstaCar.controller;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.context.annotation.Import;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.studia.InstaCar.config.SecurityTestConfig;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
+import pl.studia.InstaCar.service.EmailTokenService;
 import pl.studia.InstaCar.service.UserRegistrationService;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -19,11 +18,14 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(RegisterController.class)
-@Import(SecurityTestConfig.class)
+@AutoConfigureMockMvc(addFilters = false)
 public class RegisterControllerTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @MockitoBean
+    private EmailTokenService emailTokenService;
 
     @MockitoBean
     private UserRegistrationService userRegistrationService;
