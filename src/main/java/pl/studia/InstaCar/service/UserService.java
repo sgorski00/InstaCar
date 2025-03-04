@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
-import pl.studia.InstaCar.model.authentication.Role;
 import pl.studia.InstaCar.repository.UserRepository;
 
 import java.util.NoSuchElementException;
@@ -17,13 +15,12 @@ import java.util.NoSuchElementException;
 @Service
 public class UserService implements UserDetailsService {
 
+    private static final Logger log = LogManager.getLogger(UserService.class);
     private final UserRepository userRepository;
-    private final RoleService roleService;
 
     @Autowired
-    public UserService(UserRepository userRepository, RoleService roleService) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.roleService = roleService;
     }
 
     public boolean isEmpty() {
@@ -36,8 +33,14 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByUsernameIgnoreCase(username).orElseThrow(
+        ApplicationUser user = userRepository.findByUsernameIgnoreCase(username).orElseThrow(
                 () -> new NoSuchElementException("Podano błędną nazwę użytkownika!")
         );
+        log.info("User found: {}", username);
+        if (!user.isEnabled()){
+            log.error("User {} not enabled", username);
+            throw new IllegalArgumentException("Konto nie jest aktywowane!");
+        }
+        return user;
     }
 }

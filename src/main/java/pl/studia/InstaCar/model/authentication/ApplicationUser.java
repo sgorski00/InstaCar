@@ -5,14 +5,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import org.springframework.context.annotation.Bean;
+import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +26,7 @@ public class ApplicationUser implements UserDetails {
     @NotBlank
     @Size(min = 5, max = 50)
     @Column(unique = true, nullable = false)
+    @EqualsAndHashCode.Include
     private String username;
 
     @Email
@@ -41,6 +40,9 @@ public class ApplicationUser implements UserDetails {
     @ManyToOne
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
+    private List<EmailToken> emailTokens;
 
     @Transient
     private static PasswordEncoder passwordEncoder;
@@ -70,5 +72,11 @@ public class ApplicationUser implements UserDetails {
         if(password != null && !password.startsWith("2a$")) {
             this.password = passwordEncoder.encode(password);
         }
+    }
+
+    @Override
+    public boolean isEnabled(){
+        return this.emailTokens.stream()
+                .anyMatch(EmailToken::getIsVerified);
     }
 }

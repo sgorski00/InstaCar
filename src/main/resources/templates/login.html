@@ -11,7 +11,7 @@
         Podaj hasło:
         <input type="password" id="pass" th:name="password" required>
     </label>
-    <p th:if="${error}">Podano błędne dane logowania!</p>
+    <p th:if="${error}">Nie udało się zalogować!</p>
     <p th:if="${info}" th:text="${info}"></p>
     <div>
         <button type="reset">Wyczyść</button>
