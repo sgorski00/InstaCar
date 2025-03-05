@@ -29,6 +29,9 @@ public class EmailTokenService {
     }
 
     public EmailToken saveTokenForUser(ApplicationUser user) {
+        if(user == null) {
+            throw new IllegalArgumentException("Nie podano użytkownika");
+        }
         EmailToken token = generateTokenForUser(user);
         return emailTokenRepository.save(token);
     }

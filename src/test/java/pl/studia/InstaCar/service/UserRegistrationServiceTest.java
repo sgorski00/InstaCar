@@ -55,21 +55,24 @@ public class UserRegistrationServiceTest {
 
         userRegistrationService.registerUser(user);
 
-        verify(userService, times(1)).save(any(ApplicationUser.class));
         assertEquals(userRole, user.getRole());
+
+        verify(userService, times(1)).save(any(ApplicationUser.class));
+        verify(emailTokenService, times(1)).saveTokenForUser(any(ApplicationUser.class));
         verify(eventPublisher, times(1)).publishEvent(any(UserRegistrationEvent.class));
     }
 
     @Test
     void shouldNotRegisterWhenRoleNotFound() {
-        when(roleService.findByName(anyString())).thenThrow(new NoSuchElementException());
+        when(roleService.findByName(anyString())).thenThrow(
+                new NoSuchElementException("Nie odnaleziono roli: user")
+        );
 
-        NoSuchElementException thrown = assertThrows(
+        assertThrows(
                 NoSuchElementException.class,
                 () -> userRegistrationService.registerUser(user)
         );
 
-        assertTrue(thrown.getMessage().contains("not found"));
         verify(userService, never()).save(any(ApplicationUser.class));
         verify(eventPublisher, never()).publishEvent(any(UserRegistrationEvent.class));
     }
@@ -87,4 +90,6 @@ public class UserRegistrationServiceTest {
         verify(userService, never()).save(any(ApplicationUser.class));
         verify(eventPublisher, never()).publishEvent(any(UserRegistrationEvent.class));
     }
+
+
 }

@@ -14,6 +14,8 @@ import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.service.EmailTokenService;
 import pl.studia.InstaCar.service.UserRegistrationService;
 
+import java.util.NoSuchElementException;
+
 @Controller
 @Log4j2
 public class RegisterController {
@@ -50,11 +52,15 @@ public class RegisterController {
         try {
             userRegistrationService.registerUser(user);
             redirectAttributes.addFlashAttribute("info", "Proszę potwierdzić swój adres email poprzez link weryfikacyjny wysłany na adres: " + user.getEmail());
-        }  catch (ConstraintViolationException e){
+        } catch (ConstraintViolationException e) {
             log.error(e.getMessage());
             redirectAttributes.addFlashAttribute("error", "Nazwa użytkownika lub email są już w użyciu.");
             return "redirect:/register";
-        }   catch (Exception e) {
+        } catch (IllegalArgumentException | NoSuchElementException e) {
+            log.error(e.getCause());
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/register";
+        } catch (Exception e) {
             log.error(e.getCause());
             redirectAttributes.addFlashAttribute("error", "Coś poszło nie tak!");
             return "redirect:/register";

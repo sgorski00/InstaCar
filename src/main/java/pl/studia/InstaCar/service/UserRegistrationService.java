@@ -36,9 +36,9 @@ public class UserRegistrationService {
             userService.save(user);
             EmailToken token = emailTokenService.saveTokenForUser(user);
             eventPublisher.publishEvent(new UserRegistrationEvent(this, user, token));
-        } catch (NoSuchElementException e) {
-            log.error(e.getCause());
-            throw new NoSuchElementException("Role: 'user' not found");
+        } catch (NoSuchElementException | IllegalArgumentException e) {
+            log.error(e.getMessage());
+            throw new NoSuchElementException(e.getMessage());
         } catch (Exception e) {
             log.error(e.getCause());
             throw new RuntimeException("An error occurred while registering user");

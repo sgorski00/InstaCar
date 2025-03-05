@@ -26,7 +26,7 @@ public class RoleService {
         roleRepository.saveAll(Arrays.stream(roles).toList());
     }
 
-    public Role findByName(String name) {
+    public Role findByName(String name) throws NoSuchElementException {
         return roleRepository.findByNameIgnoreCase(name).orElseThrow(
                 () -> new NoSuchElementException("Nie odnaleziono roli: " + name)
         );
