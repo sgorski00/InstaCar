@@ -26,5 +26,17 @@ psql:
 bash:
 	docker exec -it app sh
 
+redis:
+	docker exec -it redis redis-cli
+
+flyway-clean:
+	docker exec -it app mvn flyway:clean
+
+flyway-migrate:
+	docker exec -it app mvn flyway:migrate
+
+flyway-info:
+	docker exec -it app mvn flyway:info
+
 restart:
 	docker compose restart

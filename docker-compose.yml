@@ -23,6 +23,7 @@ services:
     depends_on:
       - postgres
       - mailhog
+      - redis
     ports:
       - "80:80"
     volumes:
@@ -38,6 +39,14 @@ services:
     ports:
       - "1025:1025"
       - "8025:8025"
+    networks:
+      - network
+
+  redis:
+    image: redis:7.4.2-alpine
+    container_name: redis
+    ports:
+      - "6479:6379"
     networks:
       - network
 

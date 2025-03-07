@@ -1,5 +1,6 @@
 package pl.studia.InstaCar.config;
 
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -9,6 +10,7 @@ import pl.studia.InstaCar.model.authentication.ApplicationUser;
 
 @Configuration
 @EnableAsync
+@EnableCaching
 public class ApplicationConfig {
 
     @Bean
