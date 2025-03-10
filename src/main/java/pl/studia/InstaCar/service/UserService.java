@@ -8,8 +8,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
+import pl.studia.InstaCar.model.authentication.AuthProvider;
 import pl.studia.InstaCar.repository.UserRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -31,6 +33,10 @@ public class UserService implements UserDetailsService {
         userRepository.save(user);
     }
 
+    public void saveAll(List<ApplicationUser> users) {
+        userRepository.saveAll(users);
+    }
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         ApplicationUser user = userRepository.findByUsernameIgnoreCase(username).orElseThrow(
@@ -41,6 +47,14 @@ public class UserService implements UserDetailsService {
             log.error("User {} not enabled", username);
             throw new IllegalArgumentException("Konto nie jest aktywowane!");
         }
+
+        if(user.getProvider().equals(AuthProvider.GOOGLE)) {
+            throw new IllegalArgumentException("Zaloguj się poprzez konto Google!");
+        }
         return user;
+    }
+
+    public long count() {
+        return userRepository.count();
     }
 }

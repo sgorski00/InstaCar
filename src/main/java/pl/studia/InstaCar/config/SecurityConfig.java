@@ -12,6 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import pl.studia.InstaCar.service.OAuth2UserService;
 import pl.studia.InstaCar.service.UserService;
 
 @Configuration
@@ -20,11 +21,13 @@ public class SecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
     private final UserService userService;
+    private final OAuth2UserService oAuth2UserService;
 
     @Autowired
-    public SecurityConfig(PasswordEncoder passwordEncoder, UserService userService) {
+    public SecurityConfig(PasswordEncoder passwordEncoder, UserService userService, OAuth2UserService oAuth2UserService) {
         this.passwordEncoder = passwordEncoder;
         this.userService = userService;
+        this.oAuth2UserService = oAuth2UserService;
     }
 
     @Bean
@@ -34,6 +37,11 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/login/**", "/register", "/register/**").not().authenticated()
                         .requestMatchers("/logout").authenticated()
                         .anyRequest().authenticated())
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo -> userInfo
+                                .userService(oAuth2UserService))
+                        .defaultSuccessUrl("/")
+                        .loginPage("/login"))
                 .formLogin(login -> login
                         .loginPage("/login")
                         .defaultSuccessUrl("/"))

@@ -4,6 +4,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 docker-files/logs
+application-prod.properties
 
 ### STS ###
 .apt_generated

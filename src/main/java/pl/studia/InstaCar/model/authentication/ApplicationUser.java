@@ -34,8 +34,6 @@ public class ApplicationUser implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
-    @NotBlank
-    @Column(nullable = false)
     private String password;
 
     @ManyToOne
@@ -44,6 +42,13 @@ public class ApplicationUser implements UserDetails {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<EmailToken> emailTokens;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private AuthProvider provider = AuthProvider.LOCAL;
+
+    @Column(unique = true)
+    private String providerId;
 
     @Transient
     private static PasswordEncoder passwordEncoder;
@@ -77,7 +82,7 @@ public class ApplicationUser implements UserDetails {
 
     @Override
     public boolean isEnabled(){
-        return this.emailTokens.stream()
+        return !this.provider.equals(AuthProvider.LOCAL) || this.emailTokens.stream()
                 .anyMatch(EmailToken::getIsVerified);
     }
 }
