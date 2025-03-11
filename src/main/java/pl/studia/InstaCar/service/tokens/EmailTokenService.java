@@ -1,4 +1,4 @@
-package pl.studia.InstaCar.service;
+package pl.studia.InstaCar.service.tokens;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

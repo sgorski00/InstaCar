@@ -5,9 +5,5 @@ import lombok.*;
 
 @Entity
 @Table(name = "password_tokens")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class PasswordResetToken extends BaseToken {
 }

@@ -5,9 +5,5 @@ import lombok.*;
 
 @Entity
 @Table(name = "email_tokens")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
 public class EmailActivationToken extends BaseToken {
 }

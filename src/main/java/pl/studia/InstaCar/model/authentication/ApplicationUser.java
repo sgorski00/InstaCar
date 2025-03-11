@@ -34,6 +34,7 @@ public class ApplicationUser implements UserDetails {
     @Column(unique = true, nullable = false)
     private String email;
 
+    @Size(min = 5)
     private String password;
 
     @ManyToOne

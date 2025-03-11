@@ -9,6 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.repository.EmailTokenRepository;
+import pl.studia.InstaCar.service.tokens.EmailTokenService;
 
 import java.util.NoSuchElementException;
 import java.util.Optional;

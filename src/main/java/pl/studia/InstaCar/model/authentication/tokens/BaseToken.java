@@ -22,6 +22,6 @@ public abstract class BaseToken {
     @EqualsAndHashCode.Include
     private String token;
 
-    @Column(nullable = false)
+    @Column(name ="is_used", nullable = false)
     private Boolean isUsed;
 }

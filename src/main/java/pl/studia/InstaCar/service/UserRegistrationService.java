@@ -9,6 +9,7 @@ import pl.studia.InstaCar.event.UserRegistrationEvent;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.model.authentication.Role;
+import pl.studia.InstaCar.service.tokens.EmailTokenService;
 
 import java.util.NoSuchElementException;
 
