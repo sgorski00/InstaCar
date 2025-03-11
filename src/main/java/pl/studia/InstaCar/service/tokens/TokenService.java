@@ -3,6 +3,7 @@ package pl.studia.InstaCar.service.tokens;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
+import pl.studia.InstaCar.model.authentication.AuthProvider;
 import pl.studia.InstaCar.model.authentication.tokens.BaseToken;
 
 import java.util.NoSuchElementException;
@@ -37,6 +38,9 @@ public abstract class TokenService<T extends BaseToken> {
     public T saveTokenForUser(ApplicationUser user) {
         if (user == null) {
             throw new IllegalArgumentException("Nie podano użytkownika");
+        }
+        if(!user.getProvider().equals(AuthProvider.LOCAL)){
+            throw new IllegalArgumentException("Zmiana hasła niemożliwa");
         }
         T token = generateTokenForUser(user);
         return tokenRepository.save(token);
