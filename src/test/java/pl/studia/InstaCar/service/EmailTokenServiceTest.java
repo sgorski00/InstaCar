@@ -7,7 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
-import pl.studia.InstaCar.model.authentication.EmailToken;
+import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.repository.EmailTokenRepository;
 
 import java.util.NoSuchElementException;
@@ -26,15 +26,15 @@ public class EmailTokenServiceTest {
     @InjectMocks
     private EmailTokenService emailTokenService;
 
-    private EmailToken token;
+    private EmailActivationToken token;
     private ApplicationUser user;
 
     @BeforeEach
     void setUp() {
         user = new ApplicationUser();
-        token = new EmailToken();
+        token = new EmailActivationToken();
         token.setUser(user);
-        token.setIsVerified(false);
+        token.setIsUsed(false);
         token.setToken("fakedToken");
     }
 
@@ -44,8 +44,8 @@ public class EmailTokenServiceTest {
 
         emailTokenService.setTokenActivated("fakedToken");
 
-        assertTrue(token.getIsVerified());
-        verify(emailTokenRepository, times(1)).save(any(EmailToken.class));
+        assertTrue(token.getIsUsed());
+        verify(emailTokenRepository, times(1)).save(any(EmailActivationToken.class));
     }
 
     @Test
@@ -55,21 +55,21 @@ public class EmailTokenServiceTest {
         NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () ->emailTokenService.setTokenActivated("fakedToken"));
 
         assertTrue(thrown.getMessage().contains("token nie istnieje"));
-        assertFalse(token.getIsVerified());
-        verify(emailTokenRepository, times(0)).save(any(EmailToken.class));
+        assertFalse(token.getIsUsed());
+        verify(emailTokenRepository, times(0)).save(any(EmailActivationToken.class));
     }
 
     @Test
     void shouldCreateNewToken() {
-        EmailToken emailToken = emailTokenService.saveTokenForUser(user);
+        EmailActivationToken emailToken = emailTokenService.saveTokenForUser(user);
 
-        verify(emailTokenRepository, times(1)).save(any(EmailToken.class));
+        verify(emailTokenRepository, times(1)).save(any(EmailActivationToken.class));
     }
 
     @Test
     void shouldNotCreateNewTokenIfNullUser() {
         assertThrows(IllegalArgumentException.class, () -> emailTokenService.saveTokenForUser(null));
 
-        verify(emailTokenRepository, times(0)).save(any(EmailToken.class));
+        verify(emailTokenRepository, times(0)).save(any(EmailActivationToken.class));
     }
 }

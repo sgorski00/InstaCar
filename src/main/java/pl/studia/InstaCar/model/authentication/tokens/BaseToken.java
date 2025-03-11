@@ -1,16 +1,15 @@
-package pl.studia.InstaCar.model.authentication;
+package pl.studia.InstaCar.model.authentication.tokens;
 
 import jakarta.persistence.*;
 import lombok.*;
+import pl.studia.InstaCar.model.authentication.ApplicationUser;
 
-@Entity
-@Table(name = "email_tokens")
+@MappedSuperclass
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailToken {
+public abstract class BaseToken {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,6 +22,6 @@ public class EmailToken {
     @EqualsAndHashCode.Include
     private String token;
 
-    @Column(name = "verified", nullable = false)
-    private Boolean isVerified;
+    @Column(nullable = false)
+    private Boolean isUsed;
 }

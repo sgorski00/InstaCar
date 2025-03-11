@@ -9,7 +9,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import pl.studia.InstaCar.event.UserRegistrationEvent;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
-import pl.studia.InstaCar.model.authentication.EmailToken;
+import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.model.authentication.Role;
 
 import java.util.NoSuchElementException;
@@ -51,7 +51,7 @@ public class UserRegistrationServiceTest {
     @Test
     void shouldRegisterUser() {
         when(roleService.findByName(anyString())).thenReturn(userRole);
-        when(emailTokenService.saveTokenForUser(any(ApplicationUser.class))).thenReturn(new EmailToken());
+        when(emailTokenService.saveTokenForUser(any(ApplicationUser.class))).thenReturn(new EmailActivationToken());
 
         userRegistrationService.registerUser(user);
 
