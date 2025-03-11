@@ -7,8 +7,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.studia.InstaCar.event.UserRegistrationEvent;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
-import pl.studia.InstaCar.model.authentication.EmailToken;
+import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.model.authentication.Role;
+import pl.studia.InstaCar.service.tokens.EmailTokenService;
 
 import java.util.NoSuchElementException;
 
@@ -34,7 +35,7 @@ public class UserRegistrationService {
             Role role = roleService.findByName("user");
             user.setRole(role);
             userService.save(user);
-            EmailToken token = emailTokenService.saveTokenForUser(user);
+            EmailActivationToken token = emailTokenService.saveTokenForUser(user);
             eventPublisher.publishEvent(new UserRegistrationEvent(this, user, token));
         } catch (NoSuchElementException | IllegalArgumentException e) {
             log.error(e.getMessage());

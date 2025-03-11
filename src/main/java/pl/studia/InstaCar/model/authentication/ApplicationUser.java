@@ -1,20 +1,22 @@
 package pl.studia.InstaCar.model.authentication;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 
 import java.util.Collection;
 import java.util.List;
 
+@Log4j2
 @Entity
 @Data
 @Table(name = "app_users")
@@ -41,7 +43,7 @@ public class ApplicationUser implements UserDetails {
     private Role role;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true, fetch = FetchType.EAGER)
-    private List<EmailToken> emailTokens;
+    private List<EmailActivationToken> emailTokens;
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
@@ -75,7 +77,7 @@ public class ApplicationUser implements UserDetails {
     @PrePersist
     @PreUpdate
     public void encryptPassword() {
-        if(password != null && !password.startsWith("2a$")) {
+        if(password != null && !password.startsWith("$2a$")) {
             this.password = passwordEncoder.encode(password);
         }
     }
@@ -83,6 +85,6 @@ public class ApplicationUser implements UserDetails {
     @Override
     public boolean isEnabled(){
         return !this.provider.equals(AuthProvider.LOCAL) || this.emailTokens.stream()
-                .anyMatch(EmailToken::getIsVerified);
+                .anyMatch(EmailActivationToken::getIsUsed);
     }
 }

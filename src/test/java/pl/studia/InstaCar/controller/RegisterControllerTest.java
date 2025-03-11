@@ -7,7 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
-import pl.studia.InstaCar.service.EmailTokenService;
+import pl.studia.InstaCar.service.tokens.EmailTokenService;
 import pl.studia.InstaCar.service.UserRegistrationService;
 
 import static org.mockito.ArgumentMatchers.any;

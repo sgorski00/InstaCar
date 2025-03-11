@@ -13,6 +13,7 @@ import pl.studia.InstaCar.repository.UserRepository;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -56,5 +57,16 @@ public class UserService implements UserDetailsService {
 
     public long count() {
         return userRepository.count();
+    }
+
+    public ApplicationUser findByUsernameOrEmail(String identifier) {
+        Optional<ApplicationUser> user = userRepository.findByUsernameIgnoreCase(identifier);
+        if(user.isPresent()) {
+            return user.get();
+        }
+        user = userRepository.findByEmailIgnoreCase(identifier);
+        return user.orElseThrow(
+                () -> new NoSuchElementException("Nie odnaleziono użytkownika: " + identifier)
+        );
     }
 }

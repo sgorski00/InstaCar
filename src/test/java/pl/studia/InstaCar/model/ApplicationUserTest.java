@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
-import pl.studia.InstaCar.model.authentication.EmailToken;
+import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 
 import java.util.List;
 
@@ -52,8 +52,8 @@ public class ApplicationUserTest {
 
     @Test
     void shouldReturnTrueIfVerifiedWithOneToken() {
-        EmailToken emailToken = new EmailToken();
-        emailToken.setIsVerified(true);
+        EmailActivationToken emailToken = new EmailActivationToken();
+        emailToken.setIsUsed(true);
         applicationUser.setEmailTokens(List.of(emailToken));
 
         boolean result = applicationUser.isEnabled();
@@ -63,10 +63,10 @@ public class ApplicationUserTest {
 
     @Test
     void shouldReturnTrueIfVerifiedWithMultipleTokens() {
-        EmailToken emailToken = new EmailToken();
-        emailToken.setIsVerified(true);
-        EmailToken emailToken2 = new EmailToken();
-        emailToken2.setIsVerified(true);
+        EmailActivationToken emailToken = new EmailActivationToken();
+        emailToken.setIsUsed(true);
+        EmailActivationToken emailToken2 = new EmailActivationToken();
+        emailToken2.setIsUsed(true);
         applicationUser.setEmailTokens(List.of(emailToken, emailToken2));
 
         boolean result = applicationUser.isEnabled();
@@ -76,10 +76,10 @@ public class ApplicationUserTest {
 
     @Test
     void shouldReturnFalseIfVerifiedWithMultipleTokens() {
-        EmailToken emailToken = new EmailToken();
-        emailToken.setIsVerified(false);
-        EmailToken emailToken2 = new EmailToken();
-        emailToken2.setIsVerified(false);
+        EmailActivationToken emailToken = new EmailActivationToken();
+        emailToken.setIsUsed(false);
+        EmailActivationToken emailToken2 = new EmailActivationToken();
+        emailToken2.setIsUsed(false);
         applicationUser.setEmailTokens(List.of(emailToken, emailToken2));
 
         boolean result = applicationUser.isEnabled();
@@ -89,8 +89,8 @@ public class ApplicationUserTest {
 
     @Test
     void shouldReturnFalseIfVerifiedWithOneToken() {
-        EmailToken emailToken = new EmailToken();
-        emailToken.setIsVerified(false);
+        EmailActivationToken emailToken = new EmailActivationToken();
+        emailToken.setIsUsed(false);
         applicationUser.setEmailTokens(List.of(emailToken));
 
         boolean result = applicationUser.isEnabled();
@@ -100,10 +100,10 @@ public class ApplicationUserTest {
 
     @Test
     void shouldReturnTrueIfVerifiedWithMixedTokens() {
-        EmailToken emailToken = new EmailToken();
-        emailToken.setIsVerified(false);
-        EmailToken emailToken2 = new EmailToken();
-        emailToken.setIsVerified(true);
+        EmailActivationToken emailToken = new EmailActivationToken();
+        emailToken.setIsUsed(false);
+        EmailActivationToken emailToken2 = new EmailActivationToken();
+        emailToken.setIsUsed(true);
         applicationUser.setEmailTokens(List.of(emailToken, emailToken2));
 
         boolean result = applicationUser.isEnabled();
