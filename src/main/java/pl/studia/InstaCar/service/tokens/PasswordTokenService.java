@@ -7,6 +7,7 @@ import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.tokens.PasswordResetToken;
 import pl.studia.InstaCar.repository.PasswordTokenRepository;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,6 +25,7 @@ public class PasswordTokenService extends TokenService<PasswordResetToken> {
         token.setUser(user);
         token.setToken(UUID.randomUUID().toString());
         token.setIsUsed(false);
+        token.setExpiresAt(LocalDateTime.now().plusHours(24));
         return token;
     }
 

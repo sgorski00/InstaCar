@@ -75,9 +75,12 @@ public class RegisterController {
         try {
             emailTokenService.setTokenActivated(token);
             redirectAttributes.addFlashAttribute("info", "Aktywacja zakończona pomyślnie. Możesz się zalogować!");
+        } catch (IllegalArgumentException | NoSuchElementException e){
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            return "redirect:/register";
         } catch (Exception e) {
             log.error(e.getCause());
-            redirectAttributes.addFlashAttribute("info", "Aktywacja nie powiodła się.");
+            redirectAttributes.addFlashAttribute("error", "Aktywacja nie powiodła się.");
             return "redirect:/register";
         }
         return "redirect:/login";

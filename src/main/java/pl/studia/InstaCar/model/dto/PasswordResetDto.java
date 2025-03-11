@@ -8,6 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PasswordResetDto {
+
     @NotBlank
     @Size(min = 5)
     private String password;

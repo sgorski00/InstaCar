@@ -23,6 +23,12 @@ public abstract class TokenService<T extends BaseToken> {
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException("Podany token nie istnieje"));
 
+        if(foundToken.getIsUsed()){
+            throw new IllegalArgumentException("Podany token został już zużyty");
+        }
+        if(foundToken.isExpired()){
+            throw new IllegalArgumentException("Podany token jest przeterminowany");
+        }
         foundToken.setIsUsed(true);
         tokenRepository.save(foundToken);
     }

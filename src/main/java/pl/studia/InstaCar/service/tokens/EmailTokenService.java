@@ -6,6 +6,7 @@ import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.repository.EmailTokenRepository;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Service
@@ -22,6 +23,7 @@ public class EmailTokenService extends TokenService<EmailActivationToken> {
         token.setUser(user);
         token.setToken(UUID.randomUUID().toString());
         token.setIsUsed(false);
+        token.setExpiresAt(LocalDateTime.now().plusHours(24));
         return token;
     }
 }

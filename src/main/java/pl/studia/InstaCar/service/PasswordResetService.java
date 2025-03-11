@@ -29,7 +29,6 @@ public class PasswordResetService {
     @Transactional
     public void generateToken(ApplicationUser user) {
         try {
-            log.info("generateToken");
             PasswordResetToken token = passwordTokenService.saveTokenForUser(user);
             log.info("token: {}", token.getToken());
             log.info("user: {}", token.getUser());

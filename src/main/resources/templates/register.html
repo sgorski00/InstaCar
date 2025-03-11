@@ -20,6 +20,7 @@
         <input type="password" id="passRepeat" required>
     </label>
     <p th:if="${error}" th:text="${error}"></p>
+    <p th:if="${info}" th:text="${info}"></p>
     <div>
         <button type="reset">Wyczyść</button>
         <button type="submit">Zarejestruj</button>
