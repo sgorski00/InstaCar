@@ -6,8 +6,6 @@
 # 4. Zainstalować make przy użyciu komendy:
 # choco install make
 
-.PHONY: up down build logs psql bash restart
-
 up:
 	docker compose up -d
 
@@ -40,3 +38,9 @@ flyway-info:
 
 restart:
 	docker compose restart
+
+test:
+	docker exec -it app mvn test
+
+test-class:
+	docker exec -it app mvn test -Dtest=${class}

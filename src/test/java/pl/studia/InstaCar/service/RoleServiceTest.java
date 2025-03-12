@@ -13,7 +13,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class RoleServiceTest {
@@ -57,5 +57,12 @@ public class RoleServiceTest {
         );
 
         assertTrue(thrown.getMessage().contains("not exist"));
+    }
+
+    @Test
+    void shouldSaveNewRole(){
+        roleService.save(new Role());
+
+        verify(roleRepository, times(1)).save(any(Role.class));
     }
 }

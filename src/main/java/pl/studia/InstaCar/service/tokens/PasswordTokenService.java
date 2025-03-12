@@ -8,15 +8,19 @@ import pl.studia.InstaCar.model.authentication.tokens.PasswordResetToken;
 import pl.studia.InstaCar.repository.PasswordTokenRepository;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class PasswordTokenService extends TokenService<PasswordResetToken> {
 
+    private final PasswordTokenRepository passwordTokenRepository;
+
     @Autowired
     public PasswordTokenService(PasswordTokenRepository passwordTokenRepository) {
         super(passwordTokenRepository);
+        this.passwordTokenRepository = passwordTokenRepository;
     }
 
     @Override
@@ -27,6 +31,12 @@ public class PasswordTokenService extends TokenService<PasswordResetToken> {
         token.setIsUsed(false);
         token.setExpiresAt(LocalDateTime.now().plusHours(24));
         return token;
+    }
+
+    @Override
+    protected PasswordResetToken findLastToken(String tokenStr) {
+        return passwordTokenRepository.findFirstByTokenOrderByIdDesc(tokenStr)
+                .orElseThrow(() -> new NoSuchElementException("Podany token nie istnieje"));
     }
 
     public ApplicationUser getUserForToken(String tokenStr) {
