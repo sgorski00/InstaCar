@@ -63,4 +63,20 @@ public class RegisterControllerTest {
 
         verify(userRegistrationService, times(0)).registerUser(any(ApplicationUser.class));
     }
+
+    @Test
+    void shouldActivateAccount() throws Exception {
+        mvc.perform(get("/activate")
+                        .param("token", "correct_token"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"))
+                .andExpect(flash().attributeExists("info"))
+                .andExpect(flash().attributeCount(1));
+    }
+
+    @Test
+    void shouldNotActivateAccountWithoutParam() throws Exception {
+        mvc.perform(get("/activate"))
+                .andExpect(status().is4xxClientError());
+    }
 }

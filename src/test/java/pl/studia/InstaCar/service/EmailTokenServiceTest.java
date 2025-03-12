@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
+import pl.studia.InstaCar.model.authentication.AuthProvider;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.repository.EmailTokenRepository;
 import pl.studia.InstaCar.service.tokens.EmailTokenService;
@@ -63,15 +64,51 @@ public class EmailTokenServiceTest {
     }
 
     @Test
+    void shouldNotSetTokenActivatedIfTokenIsExpired() {
+        token.setExpiresAt(LocalDateTime.MIN);
+        when(emailTokenRepository.findFirstByTokenOrderByIdDesc(anyString())).thenReturn(Optional.of(token));
+
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->emailTokenService.setTokenActivated("fakedToken"));
+
+        assertTrue(thrown.getMessage().contains("token jest przeterminowany"));
+        assertFalse(token.getIsUsed());
+        verify(emailTokenRepository, times(0)).save(any(EmailActivationToken.class));
+    }
+
+    @Test
+    void shouldNotSetTokenActivatedIfTokenIsAlreadyUsed() {
+        token.setIsUsed(true);
+        when(emailTokenRepository.findFirstByTokenOrderByIdDesc(anyString())).thenReturn(Optional.of(token));
+
+        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->emailTokenService.setTokenActivated("fakedToken"));
+
+        assertTrue(thrown.getMessage().contains("zużyty"));
+        assertTrue(token.getIsUsed());
+        verify(emailTokenRepository, times(0)).save(any(EmailActivationToken.class));
+    }
+
+    @Test
     void shouldCreateNewToken() {
         EmailActivationToken emailToken = emailTokenService.saveTokenForUser(user);
 
+        assertEquals(user, emailToken.getUser());
+        assertNotNull(emailToken.getToken());
+        assertFalse(emailToken.getIsUsed());
+        assertFalse(emailToken.isExpired());
         verify(emailTokenRepository, times(1)).save(any(EmailActivationToken.class));
     }
 
     @Test
     void shouldNotCreateNewTokenIfNullUser() {
         assertThrows(IllegalArgumentException.class, () -> emailTokenService.saveTokenForUser(null));
+
+        verify(emailTokenRepository, times(0)).save(any(EmailActivationToken.class));
+    }
+
+    @Test
+    void shouldNotCreateNewTokenIfNotLocalAccount() {
+        user.setProvider(AuthProvider.GOOGLE);
+        assertThrows(IllegalArgumentException.class, () -> emailTokenService.saveTokenForUser(user));
 
         verify(emailTokenRepository, times(0)).save(any(EmailActivationToken.class));
     }

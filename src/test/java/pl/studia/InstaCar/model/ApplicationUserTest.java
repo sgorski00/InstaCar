@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
+import pl.studia.InstaCar.model.authentication.AuthProvider;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 
 import java.util.List;
@@ -109,5 +110,10 @@ public class ApplicationUserTest {
         boolean result = applicationUser.isEnabled();
 
         assertTrue(result);
+    }
+
+    @Test
+    void shouldBeLocalAccountByDefault() {
+        assertEquals(applicationUser.getProvider(), AuthProvider.LOCAL);
     }
 }
