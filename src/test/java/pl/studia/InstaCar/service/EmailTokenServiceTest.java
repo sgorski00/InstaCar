@@ -11,6 +11,7 @@ import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.repository.EmailTokenRepository;
 import pl.studia.InstaCar.service.tokens.EmailTokenService;
 
+import java.time.LocalDateTime;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -37,6 +38,7 @@ public class EmailTokenServiceTest {
         token.setUser(user);
         token.setIsUsed(false);
         token.setToken("fakedToken");
+        token.setExpiresAt(LocalDateTime.MAX);
     }
 
     @Test

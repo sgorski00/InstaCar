@@ -42,7 +42,7 @@ public class ApplicationUserTest {
 
     @Test
     void shouldNotEncryptPasswordIfAlreadyEncrypted() {
-        String fakeEncryptedPassword = "2a$faked";
+        String fakeEncryptedPassword = "$2a$faked";
         applicationUser.setPassword(fakeEncryptedPassword);
 
         applicationUser.encryptPassword();

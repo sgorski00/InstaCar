@@ -7,14 +7,18 @@ import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.repository.EmailTokenRepository;
 
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
 public class EmailTokenService extends TokenService<EmailActivationToken> {
 
+    private final EmailTokenRepository emailTokenRepository;
+
     @Autowired
     public EmailTokenService(EmailTokenRepository emailTokenRepository) {
         super(emailTokenRepository);
+        this.emailTokenRepository = emailTokenRepository;
     }
 
     @Override
@@ -25,5 +29,11 @@ public class EmailTokenService extends TokenService<EmailActivationToken> {
         token.setIsUsed(false);
         token.setExpiresAt(LocalDateTime.now().plusHours(24));
         return token;
+    }
+
+    @Override
+    protected EmailActivationToken findLastToken(String tokenStr) {
+        return emailTokenRepository.findFirstByTokenOrderByIdDesc(tokenStr)
+                .orElseThrow(() -> new NoSuchElementException("Podany token nie istnieje"));
     }
 }
