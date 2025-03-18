@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.Car;
 import pl.studia.InstaCar.repository.CarRepository;
 
+import java.util.List;
+
 @Service
 public class CarService {
 
@@ -20,4 +22,16 @@ public class CarService {
         carRepository.save(car);
     }
 
+
+    public List<Car> getAllCars() {
+        return carRepository.findAll();
+    }
+
+    public void saveAllCars(List<Car> cars) {
+        carRepository.saveAll(cars);
+    }
+
+    public long count() {
+        return carRepository.count();
+    }
 }
