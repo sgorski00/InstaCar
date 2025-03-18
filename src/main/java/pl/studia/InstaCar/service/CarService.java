@@ -6,6 +6,8 @@ import pl.studia.InstaCar.model.Car;
 import pl.studia.InstaCar.repository.CarRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class CarService {
@@ -33,5 +35,11 @@ public class CarService {
 
     public long count() {
         return carRepository.count();
+    }
+
+    public Car getCarById(long id) {
+        return carRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("Car is not found.")
+        );
     }
 }
