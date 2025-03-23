@@ -32,8 +32,6 @@ public abstract class Vehicle implements Rental {
 
     private String engine;
 
-    private int mileage;
-
     private String color;
 
     @Enumerated(EnumType.STRING)

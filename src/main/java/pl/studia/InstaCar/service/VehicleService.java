@@ -18,17 +18,8 @@ public class VehicleService {
         this.vehicleRepository = vehicleRepository;
     }
 
-    public void saveCar(Vehicle car) {
-        vehicleRepository.save(car);
-    }
-
-
     public List<Vehicle> getAllCars() {
         return vehicleRepository.findAll();
-    }
-
-    public void saveAllCars(List<Vehicle> cars) {
-        vehicleRepository.saveAll(cars);
     }
 
     public long count() {
