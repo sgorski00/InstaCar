@@ -1,14 +1,11 @@
 package pl.studia.InstaCar.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.studia.InstaCar.model.Car;
-import pl.studia.InstaCar.service.CarService;
+import pl.studia.InstaCar.model.Vehicle;
+import pl.studia.InstaCar.service.VehicleService;
 
-import java.net.URI;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -16,16 +13,16 @@ import java.util.NoSuchElementException;
 @RequestMapping("/api/cars")
 public class CarApiController {
 
-    private final CarService carService;
+    private final VehicleService vehicleService;
 
     @Autowired
-    public CarApiController(CarService carService) {
-        this.carService = carService;
+    public CarApiController(VehicleService vehicleService) {
+        this.vehicleService = vehicleService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Car>> showCars() {
-        List<Car> cars = carService.getAllCars();
+    public ResponseEntity<List<Vehicle>> showCars() {
+        List<Vehicle> cars = vehicleService.getAllCars();
         return ResponseEntity.status(200).body(cars);
     }
 
@@ -34,7 +31,7 @@ public class CarApiController {
             @PathVariable(value = "id") Long id
     ) {
         try {
-            Car car = carService.getCarById(id);
+            Vehicle car = vehicleService.getCarById(id);
             return ResponseEntity.status(200).body(car);
         } catch (NoSuchElementException e) {
             return ResponseEntity.status(302)
