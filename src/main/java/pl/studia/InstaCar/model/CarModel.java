@@ -1,9 +1,7 @@
 package pl.studia.InstaCar.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,10 +32,12 @@ public class CarModel {
     @Enumerated(EnumType.STRING)
     private CarType carType;
 
-    @Size(min = 2, max = 9)
+    @Min(2)
+    @Max(9)
     private int seats;
 
-    @Size(min = 2, max = 5)
+    @Min(2)
+    @Max(5)
     private int doors;
 
     @Enumerated(EnumType.STRING)
