@@ -1,4 +1,4 @@
-package pl.studia.InstaCar.event;
+package pl.studia.InstaCar.service.event;
 
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;

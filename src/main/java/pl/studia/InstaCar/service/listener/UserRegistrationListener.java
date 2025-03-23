@@ -1,11 +1,11 @@
-package pl.studia.InstaCar.listener;
+package pl.studia.InstaCar.service.listener;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import pl.studia.InstaCar.event.UserRegistrationEvent;
+import pl.studia.InstaCar.service.event.UserRegistrationEvent;
 import pl.studia.InstaCar.service.EmailService;
 
 @Component
