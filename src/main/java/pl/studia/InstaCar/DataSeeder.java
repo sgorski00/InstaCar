@@ -5,11 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import pl.studia.InstaCar.model.Car;
+import pl.studia.InstaCar.model.Vehicle;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.AuthProvider;
 import pl.studia.InstaCar.model.authentication.Role;
-import pl.studia.InstaCar.service.CarService;
+import pl.studia.InstaCar.service.VehicleService;
 import pl.studia.InstaCar.service.RoleService;
 import pl.studia.InstaCar.service.UserService;
 
@@ -22,14 +22,14 @@ public class DataSeeder implements CommandLineRunner {
 
     private final UserService userService;
     private final RoleService roleService;
-    private final CarService carService;
+    private final VehicleService vehicleService;
     private final Faker faker;
 
     @Autowired
-    public DataSeeder(UserService userService, RoleService roleService, CarService carService) {
+    public DataSeeder(UserService userService, RoleService roleService, VehicleService vehicleService) {
         this.userService = userService;
         this.roleService = roleService;
-        this.carService = carService;
+        this.vehicleService = vehicleService;
         this.faker = new Faker();
     }
 
@@ -38,20 +38,20 @@ public class DataSeeder implements CommandLineRunner {
         if(userService.count() < 3) {
             generateFakeUsers(100);
         }
-        if(carService.count() < 3) {
-            generateFakeCars(100);
-        }
+//        if(vehicleService.count() < 3) {
+//            generateFakeCars(100);
+//        }
     }
 
-    private void generateFakeCars(int numOfCars) {
-        List<Car> cars = new ArrayList<>();
-        for(int i = 0; i < numOfCars; i++) {
-            Car car = new Car();
-            car.setModel(faker.beer().name());
-            cars.add(car);
-        }
-        carService.saveAllCars(cars);
-    }
+//    private void generateFakeCars(int numOfCars) {
+//        List<Vehicle> cars = new ArrayList<>();
+//        for(int i = 0; i < numOfCars; i++) {
+//            Vehicle car = new Vehicle();
+//            car.setModel(faker.beer().name());
+//            cars.add(car);
+//        }
+//        vehicleService.saveAllCars(cars);
+//    }
 
     private void generateFakeUsers(int quantity) {
         List<ApplicationUser> users = new ArrayList<>();

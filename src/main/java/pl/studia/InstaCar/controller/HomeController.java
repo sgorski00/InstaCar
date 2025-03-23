@@ -5,25 +5,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.studia.InstaCar.model.Car;
-import pl.studia.InstaCar.service.CarService;
+import pl.studia.InstaCar.service.VehicleService;
 
 @Controller
 public class HomeController {
 
-    private final CarService carService;
+    private final VehicleService vehicleService;
 
     @Autowired
-    public HomeController(CarService carService) {
-        this.carService = carService;
+    public HomeController(VehicleService vehicleService) {
+        this.vehicleService = vehicleService;
     }
 
     @GetMapping("/")
     public String showHome(
             Model model
     ) {
-        Car car = new Car(1L, "BMW");
-        model.addAttribute("car", car);
         return "index";
     }
 
@@ -36,7 +33,6 @@ public class HomeController {
     public String save(
             RedirectAttributes redirectAttributes
     ) {
-        carService.saveCar(new Car());
         redirectAttributes.addFlashAttribute("info", "Pojazd został zapisany");
         return "redirect:/";
     }
