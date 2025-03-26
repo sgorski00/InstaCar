@@ -23,13 +23,16 @@ public class CarModel {
     private Long id;
 
     @NotBlank
+    @Column(nullable = false)
     private String brand;
 
     @NotBlank
+    @Column(nullable = false)
     private String modelName;
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private CarType carType;
 
     @Min(2)

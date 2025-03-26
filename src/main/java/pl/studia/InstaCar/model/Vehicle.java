@@ -1,9 +1,11 @@
 package pl.studia.InstaCar.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import pl.studia.InstaCar.model.enums.RentalStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -24,8 +26,10 @@ public abstract class Vehicle implements Rental {
     @JoinColumn(name = "model_id", nullable = false)
     private CarModel model;
 
+    @Column(unique = true)
     private String licensePlate;
 
+    @Column(unique = true, nullable = false)
     private String vin;
 
     private int productionYear;
@@ -38,12 +42,13 @@ public abstract class Vehicle implements Rental {
     @Column(name = "rent_status")
     private RentalStatus status;
 
+    @Positive
     private double price; // per day
 
     private String imageUrl;
 
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
-    private List<Rent> rents;
+    private List<Rent> rents = new ArrayList<>();
 
     @Override
     public boolean isAvailable() {
