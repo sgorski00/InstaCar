@@ -6,6 +6,8 @@
 # 4. Zainstalować make przy użyciu komendy:
 # choco install make
 
+.PHONY: logs
+
 up:
 	docker compose up -d
 
