@@ -40,7 +40,7 @@ public abstract class Vehicle implements Rental {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "rent_status")
-    private RentalStatus status;
+    private RentalStatus status = RentalStatus.AVAILABLE;
 
     @Positive
     private double price; // per day
