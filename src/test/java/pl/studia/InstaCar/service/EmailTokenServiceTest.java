@@ -3,6 +3,7 @@ package pl.studia.InstaCar.service;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -89,13 +90,16 @@ public class EmailTokenServiceTest {
 
     @Test
     void shouldCreateNewToken() {
-        EmailActivationToken emailToken = emailTokenService.saveTokenForUser(user);
+        ArgumentCaptor<EmailActivationToken> tokenCaptor = ArgumentCaptor.forClass(EmailActivationToken.class);
+        emailTokenService.saveTokenForUser(user);
 
-        assertEquals(user, emailToken.getUser());
-        assertNotNull(emailToken.getToken());
-        assertFalse(emailToken.getIsUsed());
-        assertFalse(emailToken.isExpired());
-        verify(emailTokenRepository, times(1)).save(any(EmailActivationToken.class));
+        verify(emailTokenRepository, times(1)).save(tokenCaptor.capture());
+        EmailActivationToken capturedToken = tokenCaptor.getValue();
+
+        assertEquals(user, capturedToken.getUser());
+        assertNotNull(capturedToken.getToken());
+        assertFalse(capturedToken.getIsUsed());
+        assertFalse(capturedToken.isExpired());
     }
 
     @Test
