@@ -5,7 +5,7 @@ public enum CarType {
     HATCHBACK,
     SUV,
     COUPE,
-    CONVERTIBLE,
+    CABRIOLET,
     WAGON,
     VAN,
     MINIVAN,
