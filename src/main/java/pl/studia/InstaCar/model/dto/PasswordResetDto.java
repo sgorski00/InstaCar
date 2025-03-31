@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class PasswordResetDto {
+public class PasswordResetDto implements PasswordEquals {
 
     @NotBlank
     @Size(min = 5)

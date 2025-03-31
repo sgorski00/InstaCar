@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
-<th:block th:replace="~{/fragments/headerFragments :: head}"></th:block>
+<th:block th:replace="~{/fragments/headerFragments :: head('Rejestracja')}"></th:block>
 <body>
 <form th:action="@{/register}" th:object="${user}" method="post">
     <label for="login">
@@ -17,7 +17,7 @@
     </label>
     <label for="passRepeat">
         Powtórz hasło:
-        <input type="password" id="passRepeat" required>
+        <input type="password" id="passRepeat" th:field="*{confirmPassword}" required>
     </label>
     <p th:if="${error}" th:text="${error}"></p>
     <p th:if="${info}" th:text="${info}"></p>

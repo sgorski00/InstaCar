@@ -38,19 +38,26 @@ public class UserService implements UserDetailsService {
         userRepository.saveAll(users);
     }
 
+    /**
+     * Finds user by username.
+     *
+     * @param username the username to search for
+     * @return the user details of the user
+     * @throws UsernameNotFoundException if user is not found, account not enabled or not local
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         ApplicationUser user = userRepository.findByUsernameIgnoreCase(username).orElseThrow(
-                () -> new NoSuchElementException("Podano błędną nazwę użytkownika!")
+                () -> new UsernameNotFoundException("Podano błędną nazwę użytkownika!")
         );
         log.info("User found: {}", username);
         if (!user.isEnabled()){
             log.error("User {} not enabled", username);
-            throw new IllegalArgumentException("Konto nie jest aktywowane!");
+            throw new UsernameNotFoundException("Konto nie jest aktywowane!");
         }
 
         if(user.getProvider().equals(AuthProvider.GOOGLE)) {
-            throw new IllegalArgumentException("Zaloguj się poprzez konto Google!");
+            throw new UsernameNotFoundException("Zaloguj się poprzez konto Google!");
         }
         return user;
     }
@@ -59,6 +66,11 @@ public class UserService implements UserDetailsService {
         return userRepository.count();
     }
 
+    /**
+     * Find a user by their username or email address.
+     * @param identifier either the username or the email address of the user to find
+     * @return the user if found, otherwise throws a {@link UsernameNotFoundException}
+     */
     public ApplicationUser findByUsernameOrEmail(String identifier) {
         Optional<ApplicationUser> user = userRepository.findByUsernameIgnoreCase(identifier);
         if(user.isPresent()) {
@@ -66,7 +78,7 @@ public class UserService implements UserDetailsService {
         }
         user = userRepository.findByEmailIgnoreCase(identifier);
         return user.orElseThrow(
-                () -> new NoSuchElementException("Nie odnaleziono użytkownika: " + identifier)
+                () -> new UsernameNotFoundException("Nie odnaleziono użytkownika: " + identifier)
         );
     }
 }

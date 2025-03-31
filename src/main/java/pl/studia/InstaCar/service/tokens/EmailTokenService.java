@@ -17,7 +17,7 @@ public class EmailTokenService extends TokenService<EmailActivationToken> {
 
     @Autowired
     public EmailTokenService(EmailTokenRepository emailTokenRepository) {
-        super(emailTokenRepository);
+        super(emailTokenRepository, EmailActivationToken.class);
         this.emailTokenRepository = emailTokenRepository;
     }
 

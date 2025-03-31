@@ -13,6 +13,7 @@ import pl.studia.InstaCar.model.authentication.AuthProvider;
 import pl.studia.InstaCar.model.authentication.Role;
 import pl.studia.InstaCar.repository.UserRepository;
 
+import javax.management.relation.RoleNotFoundException;
 import java.util.List;
 
 @Log4j2
@@ -36,7 +37,6 @@ public class OAuth2UserService extends DefaultOAuth2UserService {
         String email = oAuth2User.getAttribute("email");
 
         ApplicationUser user = saveAndGetUser(email, provider, providerId);
-
         return new DefaultOAuth2User(
                 user.getAuthorities(),
                 oAuth2User.getAttributes(),

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.authentication.Role;
 import pl.studia.InstaCar.repository.RoleRepository;
 
+import javax.management.relation.RoleNotFoundException;
 import java.util.NoSuchElementException;
 
 @Service
@@ -29,7 +30,7 @@ public class RoleService {
     }
 
     @Cacheable(value = "roles", key = "#name")
-    public Role findByName(String name) throws NoSuchElementException {
+    public Role findByName(String name) {
         return roleRepository.findByNameIgnoreCase(name).orElseThrow(
                 () -> new NoSuchElementException("Nie odnaleziono roli: " + name)
         );

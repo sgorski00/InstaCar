@@ -7,6 +7,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.AuthProvider;
@@ -57,7 +58,7 @@ public class UserServiceTest {
     void shouldNotLoadUserIfNotFound() {
         when(userRepository.findByUsernameIgnoreCase("user")).thenReturn(Optional.empty());
 
-        assertThrows(NoSuchElementException.class, () -> userService.loadUserByUsername("user"));
+        assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("user"));
     }
 
     @Test
@@ -66,7 +67,7 @@ public class UserServiceTest {
 
         when(userRepository.findByUsernameIgnoreCase("user")).thenReturn(Optional.of(user));
 
-        assertThrows(IllegalArgumentException.class, () -> userService.loadUserByUsername("user"));
+        assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("user"));
     }
 
     @Test
@@ -74,6 +75,6 @@ public class UserServiceTest {
         user.setProvider(AuthProvider.GOOGLE);
         when(userRepository.findByUsernameIgnoreCase("user")).thenReturn(Optional.of(user));
 
-        assertThrows(IllegalArgumentException.class, () -> userService.loadUserByUsername("user"));
+        assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("user"));
     }
 }
