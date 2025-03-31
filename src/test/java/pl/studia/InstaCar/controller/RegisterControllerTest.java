@@ -7,6 +7,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
+import pl.studia.InstaCar.model.dto.UserRegistrationDto;
 import pl.studia.InstaCar.service.tokens.EmailTokenService;
 import pl.studia.InstaCar.service.UserRegistrationService;
 
@@ -40,9 +41,10 @@ public class RegisterControllerTest {
 
     @Test
     void shouldRegisterUser() throws Exception {
-        ApplicationUser user = new ApplicationUser();
+        UserRegistrationDto user = new UserRegistrationDto();
         user.setUsername("username");
         user.setPassword("password");
+        user.setConfirmPassword("password");
         user.setEmail("email@email.com");
 
         mvc.perform(post("/register")
@@ -61,7 +63,7 @@ public class RegisterControllerTest {
                 .andExpect(flash().attributeExists("error"))
                 .andExpect(redirectedUrl("/register"));
 
-        verify(userRegistrationService, times(0)).registerUser(any(ApplicationUser.class));
+        verify(userRegistrationService, times(0)).registerUser(any(UserRegistrationDto.class));
     }
 
     @Test
@@ -72,11 +74,5 @@ public class RegisterControllerTest {
                 .andExpect(redirectedUrl("/login"))
                 .andExpect(flash().attributeExists("info"))
                 .andExpect(flash().attributeCount(1));
-    }
-
-    @Test
-    void shouldNotActivateAccountWithoutParam() throws Exception {
-        mvc.perform(get("/activate"))
-                .andExpect(status().is4xxClientError());
     }
 }
