@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pl">
-<head th:fragment="head">
+<head th:fragment="head(title)">
     <meta charset="UTF-8">
-    <title>InstaCar</title>
+    <title th:text="${title} ? ${title} + ' - InstaCar' : 'InstaCar'">InstaCar</title>
 </head>
 </html>
