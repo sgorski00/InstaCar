@@ -7,18 +7,24 @@ on:
 
 jobs:
   sync:
-    if: github.event.pull_request.merged == true  # Wykonuje się tylko jeśli PR został zmergowany
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
-
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
-          ref: main # Pobiera main i ustawia jako punkt odniesienia
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
       - name: Sync branch with main
         run: |
-          git fetch origin 
-          git checkout ${{ github.event.pull_request.head.ref }}
-          git reset --hard main
-          git push --force
+          BRANCH="${{ github.event.pull_request.head.ref }}"
+          git fetch origin
+          git checkout $BRANCH
+          git reset --hard origin/main
+          git push --force origin $BRANCH
