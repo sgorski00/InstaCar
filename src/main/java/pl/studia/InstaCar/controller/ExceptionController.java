@@ -2,20 +2,20 @@ package pl.studia.InstaCar.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.config.exceptions.TokenIllegalArgumentException;
 import pl.studia.InstaCar.model.authentication.tokens.PasswordResetToken;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Log4j2
 @ControllerAdvice
-@RequestMapping("/error")
 public class ExceptionController {
 
     @ExceptionHandler(UsernameNotFoundException.class)
@@ -54,20 +54,25 @@ public class ExceptionController {
     @ExceptionHandler(Exception.class)
     public String exceptionHandler(
             Exception ex,
-            Model model
+            RedirectAttributes redirectAttributes
     ) {
-        String message ="";
+        List<String> messages = new ArrayList<>();
+        messages.add("Wystąpił nieoczekiwany błąd:");
         log.error("An error occurred: {}", ex.getMessage());
+
+        if(ex.getClass().equals(NoResourceFoundException.class)){
+            messages.add("Strona nie istnieje");
+            redirectAttributes.addFlashAttribute("code", 404);
+        }
+
         if(ex.getClass().equals(NoSuchElementException.class)){
-            message = "Wybrany element nie istnieje.\n";
+            messages.add("Wybrany element nie istnieje");
         }
 
         if(ex.getClass().equals(IllegalArgumentException.class)){
-            message = "Nieprawidłowe dane.\n";
+            messages.add("Nieprawidłowe dane");
         }
-        message += ex.getMessage();
-        model.addAttribute("message", message);
-        return "error";
+        redirectAttributes.addFlashAttribute("messages", messages);
+        return "redirect:/error";
     }
-
 }

@@ -80,14 +80,12 @@ public class UserRegistrationServiceTest {
 
     @Test
     void shouldNotRegisterWhenUserIsNull() {
-        when(roleService.findByName(anyString())).thenReturn(userRole);
-
         RuntimeException thrown = assertThrows(
                 RuntimeException.class,
                 () -> userRegistrationService.registerUser(null)
         );
 
-        assertTrue(thrown.getMessage().contains("error occurred"));
+        assertTrue(thrown.getMessage().contains("is null"));
         verify(userService, never()).save(any(ApplicationUser.class));
         verify(eventPublisher, never()).publishEvent(any(UserRegistrationEvent.class));
     }

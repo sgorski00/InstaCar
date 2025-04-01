@@ -3,6 +3,9 @@
 <th:block th:replace="~{/fragments/headerFragments :: head('Błąd')}"></th:block>
 <body>
 <p><strong>Error</strong></p>
-    <p th:text="${message}"></p>
+    <p th:if="${code}" th:text="'Kod błędu: ' + ${code}"></p>
+    <p th:if="${messages != null}" th:each="message: ${messages}" th:text="${message}"></p>
+    <p th:unless="${messages != null}">Wystąpił nieoczekiwany błąd!</p>
+    <a th:href="@{/}">Powrót do strony głównej</a>
 </body>
 </html>
