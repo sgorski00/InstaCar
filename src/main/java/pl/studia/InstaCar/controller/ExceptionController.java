@@ -5,6 +5,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.studia.InstaCar.config.exceptions.EntityValidationException;
@@ -54,7 +55,7 @@ public class ExceptionController {
     @ExceptionHandler(Exception.class)
     public String exceptionHandler(
             Exception ex,
-            Model model
+            RedirectAttributes redirectAttributes
     ) {
         String message ="";
         log.error("An error occurred: {}", ex.getMessage());
@@ -66,7 +67,12 @@ public class ExceptionController {
             message = "Nieprawidłowe dane.\n";
         }
         message += ex.getMessage();
-        model.addAttribute("message", message);
+        redirectAttributes.addFlashAttribute("message", message);
+        return "redirect:/error";
+    }
+
+    @GetMapping("/error")
+    public String show() {
         return "error";
     }
 
