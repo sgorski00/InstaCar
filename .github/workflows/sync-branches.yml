@@ -1,0 +1,24 @@
+name: Sync Branch with Main after PR
+
+on:
+  pull_request:
+    types:
+      - closed  # Wykonuje się po zamknięciu PR
+
+jobs:
+  sync:
+    if: github.event.pull_request.merged == true  # Wykonuje się tylko jeśli PR został zmergowany
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          ref: main # Pobiera main i ustawia jako punkt odniesienia
+
+      - name: Sync branch with main
+        run: |
+          git fetch origin 
+          git checkout ${{ github.event.pull_request.head.ref }}
+          git reset --hard main
+          git push --force
