@@ -1,6 +1,10 @@
 package pl.studia.InstaCar.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.CityCar;
 import pl.studia.InstaCar.model.SportCar;
@@ -26,6 +30,7 @@ public class VehicleService {
         this.cityCarRepository = cityCarRepository;
     }
 
+    @Cacheable(value = "allCars")
     public List<Vehicle> getAllCars() {
         return vehicleRepository.findAll();
     }
@@ -34,19 +39,34 @@ public class VehicleService {
         return vehicleRepository.count();
     }
 
+    @Cacheable(value = "cars", key = "#id")
     public Vehicle getCarById(long id) {
         return vehicleRepository.findById(id).orElseThrow(
                 () -> new NoSuchElementException("Car is not found.")
         );
     }
 
-    public void save(Vehicle vehicle) {
-        if(vehicle instanceof CityCar cityCar) {
-            cityCarRepository.save(cityCar);
+    @Caching(
+            put = @CachePut(value = "cars", key = "#result.id"),
+            evict = @CacheEvict(value = "allCars", allEntries = true)
+    )
+    public Vehicle save(Vehicle vehicle) {
+        if (vehicle instanceof CityCar cityCar) {
+            return cityCarRepository.save(cityCar);
         } else if (vehicle instanceof SportCar sportCar) {
-            sportCarRepository.save(sportCar);
+            return sportCarRepository.save(sportCar);
         } else {
             throw new IllegalArgumentException("Vehicle type is not supported");
         }
+    }
+
+    @Caching(
+            evict = {
+                    @CacheEvict(value = "cars", key = "#id"),
+                    @CacheEvict(value = "allCars", allEntries = true)
+            }
+    )
+    public void deleteById(long id) {
+        vehicleRepository.deleteById(id);
     }
 }

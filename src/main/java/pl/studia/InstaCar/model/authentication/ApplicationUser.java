@@ -52,6 +52,9 @@ public class ApplicationUser implements UserDetails {
     @Column(unique = true)
     private String providerId;
 
+    @OneToOne(mappedBy = "user", cascade = {CascadeType.ALL}, orphanRemoval = true)
+    private pl.studia.InstaCar.model.UserDetails userDetails;
+
     @Transient
     private static PasswordEncoder passwordEncoder;
 
