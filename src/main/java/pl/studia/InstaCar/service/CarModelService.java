@@ -43,7 +43,7 @@ public class CarModelService {
 
     @Caching(
             put = {
-                    @CachePut(value = "carModels", key = "#carModel.id"),
+                    @CachePut(value = "carModels", key = "#result.id"),
                     @CachePut(value = "carModelsByName", key = "#carModel.modelName"),
                     @CachePut(value = "carModelsByBrand", key = "#carModel.brand")
             },

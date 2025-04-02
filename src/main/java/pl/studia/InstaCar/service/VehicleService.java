@@ -47,14 +47,14 @@ public class VehicleService {
     }
 
     @Caching(
-            put = @CachePut(value = "cars", key = "#vehicle.id"),
+            put = @CachePut(value = "cars", key = "#result.id"),
             evict = @CacheEvict(value = "allCars", allEntries = true)
     )
-    public void save(Vehicle vehicle) {
+    public Vehicle save(Vehicle vehicle) {
         if (vehicle instanceof CityCar cityCar) {
-            cityCarRepository.save(cityCar);
+            return cityCarRepository.save(cityCar);
         } else if (vehicle instanceof SportCar sportCar) {
-            sportCarRepository.save(sportCar);
+            return sportCarRepository.save(sportCar);
         } else {
             throw new IllegalArgumentException("Vehicle type is not supported");
         }
