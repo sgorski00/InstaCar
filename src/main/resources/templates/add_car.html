@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="~{/fragments/headerFragments :: head('Dodawanie pojazdu')}"></th:block>
+<body>
+<div class="container">
+    <h2>Dodaj pojazd</h2>
+    <form th:action="@{/cars/add}" method="post" th:object="${carDto}">
+        <label for="type">Typ pojazdu:</label>
+        <select id="type" name="type" th:field="*{type}" onchange="changeType()">
+            <option value="sport">Sportowy</option>
+            <option value="city" selected>Miejski</option>
+        </select>
+        <br>
+        <div>
+            <h3>Model</h3>
+            <label for="brand">Marka:</label>
+            <input type="text" id="brand" name="brand" th:field="*{carModel.brand}" required>
+            <br>
+            <label for="modelName">Model:</label>
+            <input type="text" id="modelName" name="modelName" th:field="*{carModel.modelName}" required>
+            <br>
+            <label for="carType">Typ:</label>
+            <select id="carType" name="carType" required>
+                <option th:each="carType : ${carTypes}" th:value="${carType}" th:text="${carType}"></option>
+            </select>
+            <br>
+            <label for="seats">Liczba miejsc (niewymagane)</label>
+            <input type="number" id="seats" name="seats">
+            <br>
+            <label for="doors">Liczba drzwi (niewymagane)</label>
+            <input type="number" id="doors" name="doors">
+            <br>
+            <label for="transmission">Rodzaj skrzyni biegów:</label>
+            <select id="transmission" name="transmission" required>
+                <option th:each="transmission : ${trasnmissions}" th:value="${transmission}"
+                        th:text="${transmission}"></option>
+            </select>
+        </div>
+        <div id="city">
+            <div>
+                <h3>Pojazd miejski</h3>
+            </div>
+            <label for="licensePlate">Nr rejestracyjny:</label>
+            <input type="text" id="licensePlate" name="licensePlate" th:field="*{cityCar.licensePlate}" required>
+            <br>
+            <label for="vin">VIN:</label>
+            <input type="text" id="vin" name="vin" th:field="*{cityCar.vin}" required>
+            <br>
+            <label for="color">Kolor (niewymagane):</label>
+            <input type="text" id="color" name="color" th:field="*{cityCar.color}">
+            <br>
+            <label for="productionYear">Rok produkcji:</label>
+            <input type="number" id="productionYear" name="productionYear" th:field="*{cityCar.productionYear}"
+                   required>
+            <br>
+            <label for="engine">Silnik:</label>
+            <input type="number" id="engine" name="engine" th:field="*{cityCar.engine}" required>
+            <br>
+            <label for="price">Cena:</label>
+            <input type="number" id="price" name="price" th:field="*{cityCar.price}" required>
+            <br>
+            <label for="tc">Cena:</label>
+            <input type="number" id="tc" name="tc" th:field="*{cityCar.trunkCapacity}" required>
+            <br>
+        </div>
+        <div id="sport">
+            <div>
+                <h3>Pojazd sportowy</h3>
+            </div>
+            <label for="licensePlateS">Nr rejestracyjny:</label>
+            <input type="text" id="licensePlateS" name="licensePlateS" th:field="*{sportCar.licensePlate}" required>
+            <br>
+            <label for="vinS">VIN:</label>
+            <input type="text" id="vinS" name="vinS" th:field="*{sportCar.vin}" required>
+            <br>
+            <label for="colorS">Kolor (niewymagane):</label>
+            <input type="text" id="colorS" name="colorS" th:field="*{sportCar.color}">
+            <br>
+            <label for="productionYearS">Rok produkcji:</label>
+            <input type="number" id="productionYearS" name="productionYearS" th:field="*{sportCar.productionYear}"
+                   required>
+            <br>
+            <label for="engineS">Silnik:</label>
+            <input type="number" id="engineS" name="engineS" th:field="*{sportCar.engine}" required>
+            <br>
+            <label for="priceS">Cena:</label>
+            <input type="number" id="priceS" name="priceS" th:field="*{sportCar.price}" required>
+            <br>
+            <label for="hp">Konie mechaniczne:</label>
+            <input type="number" id="hp" name="hp" th:field="*{sportCar.horsePower}" required>
+            <br>
+            <label for="topSpeed">Maksymalna prędkość:</label>
+            <input type="number" id="topSpeed" name="topSpeed" th:field="*{sportCar.topSpeed}">
+            <br>
+            <label for="acc">Przyspieszenie:</label>
+            <input type="number" id="acc" name="acc" th:field="*{sportCar.acceleration}">
+            <br>
+        </div>
+        <button type="submit">Dodaj</button>
+    </form>
+</div>
+<script>
+    function changeType() {
+        const type = document.getElementById("type").value;
+        const city = document.getElementById("city");
+        const sport = document.getElementById("sport");
+        city.style.display = "none";
+        sport.style.display = "none";
+        if (type === "city") {
+            console.log("city");
+            city.style.display = "block";
+        } else if (type === "sport") {
+            console.log("sport");
+            sport.style.display = "block";
+        }
+    }
+    changeType();
+</script>
+</body>
+</html>

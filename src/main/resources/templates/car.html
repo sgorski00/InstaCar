@@ -1,7 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-<th:block th:replace="~{/fragments/headerFragments :: head}"></th:block>
+<th:block th:replace="~{/fragments/headerFragments :: head(${car.model} + ' ' + car.productionYear)}"></th:block>
 <body>
-
+<div class="container">
+    <h2 th:text="${car.model}"></h2>
+    <p th:text="'Car color:' + ${car.color}"></p>
+    <p th:text="'Car year:' + ${car.productionYear}"></p>
+    <p th:text="'Car price:' + ${car.price}"></p>
+    <div th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
+        <p th:text="'HP: ' + ${car.horsePower}"></p>
+    </div>
+    <div th:if="${car.class.name == 'pl.studia.InstaCar.model.CityCar'}">
+        <p th:text="'Trunk capacity: ' + ${car.trunkCapacity}"></p>
+    </div>
+</div>
 </body>
 </html>

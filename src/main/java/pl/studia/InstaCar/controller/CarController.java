@@ -1,0 +1,100 @@
+package pl.studia.InstaCar.controller;
+
+import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import pl.studia.InstaCar.config.exceptions.EntityValidationException;
+import pl.studia.InstaCar.model.CarModel;
+import pl.studia.InstaCar.model.CityCar;
+import pl.studia.InstaCar.model.SportCar;
+import pl.studia.InstaCar.model.Vehicle;
+import pl.studia.InstaCar.model.dto.NewCarDto;
+import pl.studia.InstaCar.model.enums.CarType;
+import pl.studia.InstaCar.model.enums.Transmission;
+import pl.studia.InstaCar.service.CarModelService;
+import pl.studia.InstaCar.service.VehicleService;
+
+import java.util.List;
+
+@Controller
+@RequestMapping("/cars")
+public class CarController {
+
+    private final VehicleService vehicleService;
+    private final CarModelService carModelService;
+
+    @Autowired
+    public CarController(VehicleService vehicleService, CarModelService carModelService) {
+        this.vehicleService = vehicleService;
+        this.carModelService = carModelService;
+    }
+
+    @GetMapping
+    public String showCars(
+            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "page", defaultValue = "1") Integer page,
+            Model model
+    ) {
+        List<Vehicle> cars = vehicleService.getAllCars();
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        Page<Vehicle> carsPage = new PageImpl<>(cars, pageRequest, cars.size());
+
+        model.addAttribute("cars" , carsPage);
+        return "cars";
+    }
+
+    @GetMapping("{id}")
+    public String showCar(
+            @PathVariable(value = "id") Long id,
+            Model model
+    ) {
+        Vehicle car = vehicleService.getCarById(id);
+        if(car instanceof SportCar sportCar) {
+            model.addAttribute("car", sportCar);
+        } else if (car instanceof CityCar cityCar){
+            model.addAttribute("car", cityCar);
+        }else {
+            model.addAttribute("car", car);
+        }
+        return "car";
+    }
+
+    @GetMapping("/add")
+    public String showAddForm(
+            Model model
+    ) {
+        model.addAttribute("carDto", new NewCarDto());
+        model.addAttribute("carModels", carModelService.getAllCarModels());
+        model.addAttribute("carTypes", CarType.values());
+        model.addAttribute("trasnmissions", Transmission.values());
+        return "add_car";
+    }
+
+    @PostMapping("/add")
+    public String addCar(
+            @ModelAttribute NewCarDto car,
+            RedirectAttributes redirectAttributes
+    ) {
+        CarModel model = carModelService.save(car.getCarModel());
+        switch (car.getType()) {
+            case "sport" -> {
+                car.getSportCar().setModel(model);
+                vehicleService.save(car.getSportCar());
+            }
+            case "city" -> {
+                car.getCityCar().setModel(model);
+                vehicleService.save(car.getCityCar());
+            }
+            default -> throw new EntityValidationException("Zły typ pojazdu", "/cars/add");
+        }
+        redirectAttributes.addFlashAttribute("info", "Pojazd został zapisany");
+        return "redirect:/cars";
+    }
+}

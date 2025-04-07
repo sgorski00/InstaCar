@@ -5,6 +5,7 @@ import jakarta.validation.constraints.Positive;
 import lombok.*;
 import pl.studia.InstaCar.model.enums.RentalStatus;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class Vehicle implements Rental {
+public abstract class Vehicle implements Rental, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -10,13 +10,15 @@ import pl.studia.InstaCar.model.enums.CarType;
 import pl.studia.InstaCar.model.enums.FuelType;
 import pl.studia.InstaCar.model.enums.Transmission;
 
+import java.io.Serializable;
+
 @Entity
 @Table(name = "car_models")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CarModel {
+public class CarModel implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -48,4 +50,9 @@ public class CarModel {
 
     @Enumerated(EnumType.STRING)
     private Transmission transmission;
+
+    @Override
+    public String toString() {
+        return this.brand + " " + this.modelName;
+    }
 }
