@@ -44,4 +44,9 @@ public class UserDetails {
 
     @Size(max = 10)
     private String postalCode;
+
+    @Override
+    public String toString() {
+        return this.firstName + " " + this.lastName;
+    }
 }

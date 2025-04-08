@@ -37,7 +37,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(request -> request
                         .requestMatchers("/images/**", "/styles.css", "/error" , "/api/**", "/activate/**").permitAll()
                         .requestMatchers("/login", "/login/**", "/register", "/register/**").not().authenticated()
-                        .requestMatchers("/logout").authenticated()
+                        .requestMatchers(HttpMethod.POST, "cars/**").hasRole("ADMIN")
+                        .requestMatchers("/users/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo

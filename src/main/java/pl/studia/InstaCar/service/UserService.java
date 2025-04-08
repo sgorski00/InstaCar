@@ -3,6 +3,9 @@ package pl.studia.InstaCar.service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -80,5 +83,13 @@ public class UserService implements UserDetailsService {
         return user.orElseThrow(
                 () -> new UsernameNotFoundException("Nie odnaleziono użytkownika: " + identifier)
         );
+    }
+
+    public List<ApplicationUser> findAll() {
+        return userRepository.findAll();
+    }
+
+    public Page<ApplicationUser> findAllPaged(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }
