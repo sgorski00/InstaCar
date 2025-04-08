@@ -1,6 +1,7 @@
 package pl.studia.InstaCar.controller;
 
 import lombok.extern.log4j.Log4j2;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -9,7 +10,9 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.config.exceptions.TokenIllegalArgumentException;
 import pl.studia.InstaCar.model.authentication.tokens.PasswordResetToken;
+import pl.studia.InstaCar.service.FileUploadService;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -49,6 +52,15 @@ public class ExceptionController {
             return ex.getRedirectUrl();
         }
         return "redirect:" + ex.getRedirectUrl();
+    }
+
+    @ExceptionHandler(FileUploadException.class)
+    public String fileUploadExceptionHandler(
+            FileUploadException ex,
+            RedirectAttributes redirectAttributes
+    ) {
+        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/cars";
     }
 
     @ExceptionHandler(Exception.class)

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="~{/fragments/headerFragments :: head('Pojazdy')}"></th:block>
+<body>
+<div class="container">
+    <h2>Cars</h2>
+    <h3><a th:href="@{/cars/add}">Dodaj samochód</a></h3>
+    <table style="border: 1px solid black">
+        <tbody>
+            <tr th:each="car : ${cars}" th:if="${car.available}" style="padding: 10px; border-bottom: 1px solid black">
+                <td style="padding: 10px" th:text="${car.model}"></td>
+                <td style="padding: 10px" th:text="${car.color}"></td>
+                <td style="padding: 10px" th:text="${car.productionYear}"></td>
+                <td style="padding: 10px" th:text="${car.engine}"></td>
+                <td style="padding: 10px" th:text="${car.price}"></td>
+                <td><a th:href="@{/cars/{id}(id=${car.id})}">Zobacz</a></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
