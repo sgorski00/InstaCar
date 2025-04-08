@@ -26,7 +26,7 @@ public class HomeController {
 
     @GetMapping("/car")
     public String showCar(){
-        return "car";
+        return "cars";
     }
 
     @GetMapping("/save")
