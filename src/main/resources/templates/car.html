@@ -4,6 +4,9 @@
 <body>
 <div class="container">
     <h2 th:text="${car.model}"></h2>
+    <div>
+        <img th:src="${car.imageUrl}" alt="Car photo">
+    </div>
     <p th:text="'Car color:' + ${car.color}"></p>
     <p th:text="'Car year:' + ${car.productionYear}"></p>
     <p th:text="'Car price:' + ${car.price}"></p>

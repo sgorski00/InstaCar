@@ -1,5 +1,6 @@
 package pl.studia.InstaCar.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -37,13 +38,15 @@ public class CarModel implements Serializable {
     @Column(nullable = false)
     private CarType carType;
 
+    @Nullable
     @Min(2)
     @Max(9)
-    private int seats;
+    private Integer seats;
 
+    @Nullable
     @Min(2)
     @Max(5)
-    private int doors;
+    private Integer doors;
 
     @Enumerated(EnumType.STRING)
     private FuelType fuelType;
