@@ -2,7 +2,6 @@ package pl.studia.InstaCar.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.service.RoleService;
 import pl.studia.InstaCar.service.UserService;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/users")

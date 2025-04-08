@@ -1,5 +1,6 @@
 package pl.studia.InstaCar.controller;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -22,10 +23,12 @@ import pl.studia.InstaCar.model.enums.Transmission;
 import pl.studia.InstaCar.service.CarModelService;
 import pl.studia.InstaCar.service.FileUploadService;
 import pl.studia.InstaCar.service.VehicleService;
+import pl.studia.InstaCar.utils.ListPaginator;
 
 import java.io.IOException;
 import java.util.List;
 
+@Log4j2
 @Controller
 @RequestMapping("/cars")
 public class CarController {
@@ -33,12 +36,14 @@ public class CarController {
     private final VehicleService vehicleService;
     private final CarModelService carModelService;
     private final FileUploadService fileUploadService;
+    private final ListPaginator<Vehicle> listPaginator;
 
     @Autowired
-    public CarController(VehicleService vehicleService, CarModelService carModelService, FileUploadService fileUploadService) {
+    public CarController(VehicleService vehicleService, CarModelService carModelService, FileUploadService fileUploadService, ListPaginator<Vehicle> listPaginator) {
         this.vehicleService = vehicleService;
         this.carModelService = carModelService;
         this.fileUploadService = fileUploadService;
+        this.listPaginator = listPaginator;
     }
 
     @GetMapping
@@ -47,9 +52,10 @@ public class CarController {
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             Model model
     ) {
-        List<Vehicle> cars = vehicleService.getAllCars();
+        List<Vehicle> allCars = vehicleService.getAllCars();
+        List<Vehicle> carsPaginatedList = listPaginator.getPaginatedList(allCars,page, size);
         PageRequest pageRequest = PageRequest.of(page - 1, size);
-        Page<Vehicle> carsPage = new PageImpl<>(cars, pageRequest, cars.size());
+        Page<Vehicle> carsPage = new PageImpl<>(carsPaginatedList, pageRequest, allCars.size());
 
         model.addAttribute("cars" , carsPage);
         return "cars";

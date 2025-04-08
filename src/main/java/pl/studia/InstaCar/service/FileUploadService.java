@@ -16,6 +16,13 @@ public class FileUploadService {
     @Value("${upload.directory}")
     private String uploadDirectory;
 
+    /**
+     * Uploads the file to the uploadDirectory path adn returns a saved path with file name.
+     *
+     * @param file the file to save
+     * @return a unique saved file name
+     * @throws FileUploadException when file is empty or any other error occurred
+     */
     public String uploadFile(MultipartFile file) throws FileUploadException {
         if(file.isEmpty()) {
             throw new FileUploadException("Plik jest pusty");
@@ -35,14 +42,35 @@ public class FileUploadService {
         }
     }
 
+    /**
+     * Returns a unique name with the given extension. The name is generated
+     * using {@link UUID#randomUUID()} and appended with the given extension.
+     *
+     * @param extension the extension to append
+     * @return a unique name with the given extension
+     */
     private static String getUniqueName(String extension) {
         return UUID.randomUUID() + extension;
     }
 
+
+    /**
+     * Returns a path starting from the static directory (but not including it).
+     * So if the full path is /static/uploads/name.ext, it will return /uploads/name.ext
+     *
+     * @param fullPath a full path to a file
+     * @return a path starting from the static directory (but not including it)
+     */
     private String getUploadDir(String fullPath) {
         return fullPath.substring(fullPath.indexOf("static") + "static".length());
     }
 
+    /**
+     * Returns the extension of a given file name with "." sign.
+     *
+     * @param fileName a file name
+     * @return the extension of the file name
+     */
     private String getExtension(String fileName) {
         return fileName.substring(fileName.lastIndexOf("."));
     }
