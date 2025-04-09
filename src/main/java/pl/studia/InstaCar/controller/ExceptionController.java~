@@ -65,6 +65,15 @@ public class ExceptionController {
         return "redirect:/cars";
     }
 
+    @ExceptionHandler(ApiRequestException.class)
+    public String apiRequestExceptionHandler(
+            ApiRequestException ex,
+            RedirectAttributes redirectAttributes
+    ) {
+        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/api";
+    }
+
     @ExceptionHandler(Exception.class)
     public String exceptionHandler(
             Exception ex,
