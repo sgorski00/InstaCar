@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import pl.studia.InstaCar.config.exceptions.ApiRequestException;
 import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.config.exceptions.TokenIllegalArgumentException;
 import pl.studia.InstaCar.model.authentication.tokens.PasswordResetToken;
