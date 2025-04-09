@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -20,7 +21,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "app_users")
-public class ApplicationUser implements UserDetails {
+public class ApplicationUser implements UserDetails, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

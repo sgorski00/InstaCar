@@ -2,6 +2,7 @@ package pl.studia.InstaCar.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -75,6 +76,7 @@ public class ExceptionController {
         if(ex.getClass().equals(NoResourceFoundException.class)){
             messages.add("Strona nie istnieje");
             redirectAttributes.addFlashAttribute("code", 404);
+            return "redirect:/";
         }
 
         if(ex.getClass().equals(NoSuchElementException.class)){
@@ -84,6 +86,12 @@ public class ExceptionController {
         if(ex.getClass().equals(IllegalArgumentException.class)){
             messages.add("Nieprawidłowe dane");
         }
+
+        if(ex.getClass().equals(AuthorizationDeniedException.class)) {
+            messages.add("Brak uprawnień do żądanych zasobów");
+        }
+
+        ex.printStackTrace();
         redirectAttributes.addFlashAttribute("messages", messages);
         return "redirect:/error";
     }

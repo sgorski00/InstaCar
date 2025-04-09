@@ -1,8 +1,12 @@
 package pl.studia.InstaCar.service;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -79,6 +83,26 @@ public class UserService implements UserDetailsService {
         user = userRepository.findByEmailIgnoreCase(identifier);
         return user.orElseThrow(
                 () -> new UsernameNotFoundException("Nie odnaleziono użytkownika: " + identifier)
+        );
+    }
+
+    public List<ApplicationUser> findAll() {
+        return userRepository.findAll();
+    }
+
+    public Page<ApplicationUser> findAllPaged(Pageable pageable) {
+        return userRepository.findAll(pageable);
+    }
+
+    public ApplicationUser findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("Nie odnaleziono użytkownika o id: " + id)
+        );
+    }
+
+    public ApplicationUser findUserByUsername(String username) {
+        return userRepository.findByUsernameIgnoreCase(username).orElseThrow(
+                () -> new NoSuchElementException("Nie odnaleziono użytkownika: " + username)
         );
     }
 }
