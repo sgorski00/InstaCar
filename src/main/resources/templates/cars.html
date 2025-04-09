@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.w3.org/1999/xhtml">
 <th:block th:replace="~{/fragments/headerFragments :: head('Pojazdy')}"></th:block>
 <body>
 <div class="container">
     <h2>Cars</h2>
-    <h3><a th:href="@{/cars/add}">Dodaj samochód</a></h3>
+    <h3><a th:href="@{/cars/add}" sec:authorize="hasRole('ADMIN')">Dodaj samochód</a></h3>
     <table style="border: 1px solid black">
         <tbody>
             <tr th:each="car : ${cars}" style="padding: 10px; border-bottom: 1px solid black">

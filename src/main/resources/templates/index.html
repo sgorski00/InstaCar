@@ -6,5 +6,8 @@
     <p th:text="${info}"></p>
     <div th:if="${car != null}" th:text="${car.id} + ' ' + ${car.model}"></div>
     <div sec:authorize="hasRole('ADMIN')">ZALOGOWANO JAKO ADMINISTRATOR</div>
+    <form sec:authorize="isAuthenticated()" th:action="@{/logout}" method="post">
+        <button type="submit">Wyloguj</button>
+    </form>
 </body>
 </html>

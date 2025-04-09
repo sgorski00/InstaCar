@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<th:block th:replace="~{/fragments/headerFragments :: head(
+    ${user.userDetails != null ? user.userDetails : user.username}
+)}"></th:block>
+<body>
+<div class="container">
+    <h2 th:text="${user.userDetails != null ? user.userDetails : user.username}"></h2>
+    <p th:text="'Login:' + ${user.username}"></p>
+    <p th:text="'Email:' + ${user.email}"></p>
+    <div th:if="${user.userDetails != null}">
+        <p th:text="'Nazwa:' + ${user.userDetails}"></p>
+        <p th:if="${user.userDetails.postalCode != null && user.userDetails.postalCode != '' &&
+           user.userDetails.city != null && user.userDetails.city != ''}"
+           th:text="'Miasto:' + ${user.userDetails.postalCode} + ' ' + ${user.userDetails.city}"></p>
+        <p th:if="${user.userDetails.address != null && user.userDetails.address != ''}"
+           th:text="'Adres:' + ${user.userDetails.address}"></p>
+        <p th:if="${user.userDetails.phoneNumber != null && user.userDetails.phoneNumber != ''}"
+           th:text="'Numer tel:' + ${user.userDetails.phoneNumber}"></p>
+    </div>
+    <div th:if="${user.username.equals(#authentication.principal.username)}">
+        <form th:action="@{/users/user_details}" method="post" th:object="${user_details}" id="detailsForm" style="display: none">
+            <label for="firstName">Imię:</label>
+            <input type="text" id="firstName" th:field="*{firstName}" required>
+            <br>
+            <label for="lastName">Nazwisko:</label>
+            <input type="text" id="lastName" th:field="*{lastName}" required>
+            <br>
+            <label for="phoneNumber">Numer tel:</label>
+            <input type="tel" id="phoneNumber" th:field="*{phoneNumber}">
+            <br>
+            <label for="address">Ulica i nr domu/mieszkania:</label>
+            <input type="text" id="address" th:field="*{address}">
+            <br>
+            <label for="postalCode">Kod pocztowy:</label>
+            <input type="text" id="postalCode" th:field="*{postalCode}">
+            <br>
+            <label for="city">Miasto:</label>
+            <input type="text" id="city" th:field="*{city}">
+            <br>
+            <button type="submit">Zapisz</button>
+        </form>
+        <button th:text="${user_details == null ? 'Dodaj dane kontaktowe' : 'Edytuj dane kontaktowe'}"
+                onclick="toggleDetailsForm()"></button>
+    </div>
+</div>
+<script>
+    function toggleDetailsForm() {
+        const detailsForm = document.getElementById("detailsForm");
+        detailsForm.style.display = detailsForm.style.display === "block" ? "none" : "block"
+    }
+</script>
+</body>
+</html>

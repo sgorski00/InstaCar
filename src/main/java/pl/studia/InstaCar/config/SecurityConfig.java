@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
@@ -19,6 +20,7 @@ import pl.studia.InstaCar.service.UserService;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfig {
 
     private final PasswordEncoder passwordEncoder;
@@ -35,11 +37,11 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
-                        .requestMatchers("/images/**", "/styles.css", "/error" , "/api/**", "/activate/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "cars/**","/images/**", "/styles.css", "/error" , "/api/**", "/activate/**", "/").permitAll()
                         .requestMatchers("/login", "/login/**", "/register", "/register/**").not().authenticated()
-                        .requestMatchers(HttpMethod.POST, "cars/**").hasRole("ADMIN")
-                        .requestMatchers("/users/**").hasRole("ADMIN")
-                        .anyRequest().authenticated())
+                        .requestMatchers("/users").hasRole("ADMIN")
+                        .requestMatchers("/users/**").authenticated()
+                        .anyRequest().hasRole("ADMIN"))
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oAuth2UserService))

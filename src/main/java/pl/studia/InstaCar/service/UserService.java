@@ -1,5 +1,6 @@
 package pl.studia.InstaCar.service;
 
+import com.fasterxml.jackson.annotation.JacksonInject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -91,5 +92,17 @@ public class UserService implements UserDetailsService {
 
     public Page<ApplicationUser> findAllPaged(Pageable pageable) {
         return userRepository.findAll(pageable);
+    }
+
+    public ApplicationUser findUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("Nie odnaleziono użytkownika o id: " + id)
+        );
+    }
+
+    public ApplicationUser findUserByUsername(String username) {
+        return userRepository.findByUsernameIgnoreCase(username).orElseThrow(
+                () -> new NoSuchElementException("Nie odnaleziono użytkownika: " + username)
+        );
     }
 }

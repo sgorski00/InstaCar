@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.extern.log4j.Log4j2;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Log4j2
@@ -13,7 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public abstract class BaseToken {
+public abstract class BaseToken implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
