@@ -6753,7 +6753,7 @@ button.bg-dark:focus {
   padding-left: 1.5rem !important; }
 
 .p-5 {
-  padding: 3rem !important; }
+  padding: 2rem !important; }
 
 .pt-5,
 .py-5 {
@@ -9946,3 +9946,26 @@ textarea.form-control {
   100% {
     stroke-dasharray: 89, 200;
     stroke-dashoffset: -136px; } }
+
+    .google-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 20px;
+      background-color: #ffffff;
+      border: 1px solid #dfdfdf;
+      border-radius: 4px;
+      color: #333333;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+  }
+  
+  .google-btn img {
+      width: 30px;
+      margin-right: 10px;
+  }
+  
+  .google-btn:hover {
+      background-color: #f1f1f1;
+  }
