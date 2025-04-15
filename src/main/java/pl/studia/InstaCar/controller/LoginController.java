@@ -6,10 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
@@ -18,10 +15,9 @@ import pl.studia.InstaCar.service.PasswordResetService;
 import pl.studia.InstaCar.service.tokens.PasswordTokenService;
 import pl.studia.InstaCar.service.UserService;
 
-import java.util.NoSuchElementException;
-
 @Log4j2
 @Controller
+@RequestMapping("/login")
 public class LoginController {
 
     private final PasswordResetService passwordResetService;
@@ -35,7 +31,7 @@ public class LoginController {
         this.passwordTokenService = passwordTokenService;
     }
 
-    @GetMapping("/login")
+    @GetMapping
     public String showLoginPage(
             @RequestParam(required = false, name = "error") String error,
             Model model
@@ -46,7 +42,7 @@ public class LoginController {
         return "login";
     }
 
-    @GetMapping("/login/reset")
+    @GetMapping("/reset")
     public String showPasswordResetPage(
             @RequestParam(required = false, name = "error") String error,
             Model model
@@ -57,7 +53,7 @@ public class LoginController {
         return "password_reset";
     }
 
-    @PostMapping("/login/reset")
+    @PostMapping("/reset")
     public String sendResetPasswordMail(
             @RequestParam(name = "identify") String identifier,
             RedirectAttributes redirectAttributes
@@ -68,7 +64,7 @@ public class LoginController {
         return "redirect:/login";
     }
 
-    @GetMapping("/login/reset/form")
+    @GetMapping("/reset/form")
     public String showPasswordResetForm(
             @RequestParam(name = "token") String token,
             Model model
@@ -80,7 +76,7 @@ public class LoginController {
         return "password_reset_form";
     }
 
-    @PostMapping("/login/reset/form")
+    @PostMapping("/reset/form")
     public String sendPasswordResetForm(
             @RequestParam(name = "token") String token,
             @Valid @ModelAttribute("pwdResetDto") PasswordResetDto passwordResetDto,

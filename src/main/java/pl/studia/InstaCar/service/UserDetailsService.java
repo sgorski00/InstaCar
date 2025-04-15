@@ -27,7 +27,17 @@ public class UserDetailsService {
 
     @CachePut(value = "userDetails", key = "#result.id")
     public UserDetails save(UserDetails userDetails) {
-        return userDetailsRepository.save(userDetails);
+        return userDetailsRepository.findByUser(userDetails.getUser()).map(
+                    ud -> {
+                        ud.setAddress(userDetails.getAddress());
+                        ud.setCity(userDetails.getCity());
+                        ud.setFirstName(userDetails.getFirstName());
+                        ud.setLastName(userDetails.getLastName());
+                        ud.setPhoneNumber(userDetails.getPhoneNumber());
+                        ud.setPostalCode(userDetails.getPostalCode());
+                        return userDetailsRepository.save(ud);
+                    }
+        ).orElseGet(() -> userDetailsRepository.save(userDetails));
     }
 
     @Cacheable(value = "userDetails", key = "#id")
