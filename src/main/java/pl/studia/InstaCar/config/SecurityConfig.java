@@ -41,7 +41,7 @@ public class SecurityConfig {
                         .requestMatchers("/login", "/login/**", "/register", "/register/**").not().authenticated()
                         .requestMatchers("/users").hasRole("ADMIN")
                         .requestMatchers("/users/**").authenticated()
-                        .anyRequest().hasRole("ADMIN"))
+                        .anyRequest().permitAll())
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(oAuth2UserService))
