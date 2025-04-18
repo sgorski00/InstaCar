@@ -25,7 +25,6 @@ import pl.studia.InstaCar.service.FileUploadService;
 import pl.studia.InstaCar.service.VehicleService;
 import pl.studia.InstaCar.utils.ListPaginator;
 
-import java.io.IOException;
 import java.util.List;
 
 @Log4j2
@@ -74,74 +73,6 @@ public class CarController {
         }else {
             model.addAttribute("car", car);
         }
-        return "car";
-    }
-
-    @GetMapping("/add")
-    public String showAddForm(
-            Model model
-    ) {
-        model.addAttribute("carDto", new NewCarDto());
-        model.addAttribute("carModels", carModelService.getAllCarModels());
-        model.addAttribute("carTypes", CarType.values());
-        model.addAttribute("transmissions", Transmission.values());
-        model.addAttribute("fuels", FuelType.values());
-        return "add_car";
-    }
-
-    @PostMapping("/add")
-    public String addCar(
-            @ModelAttribute("carDto") NewCarDto car,
-            @RequestParam("file") MultipartFile file,
-            RedirectAttributes redirectAttributes
-    ) throws FileUploadException {
-        String imgUrl = fileUploadService.uploadFile(file);
-        CarModel model = carModelService.save(car.getCarModel());
-        switch (car.getType()) {
-            case "sport" -> {
-                car.getSportCar().setModel(model);
-                car.getSportCar().setImageUrl(imgUrl);
-                vehicleService.save(car.getSportCar());
-            }
-            case "city" -> {
-                car.getCityCar().setModel(model);
-                car.getCityCar().setImageUrl(imgUrl);
-                vehicleService.save(car.getCityCar());
-            }
-            default -> throw new EntityValidationException("Zły typ pojazdu", "/cars/add");
-        }
-        redirectAttributes.addFlashAttribute("info", "Pojazd został zapisany");
-        return "redirect:/cars";
-    }
-
-    @PostMapping("/delete/{id}")
-    public String deleteCar(
-            @PathVariable(value = "id") Long id,
-            RedirectAttributes redirectAttributes
-    ) {
-        vehicleService.deleteById(id);
-        redirectAttributes.addFlashAttribute("info", "Pojazd został usunięty");
-        return "redirect:/cars";
-    }
-
-    @PostMapping("/edit/{id}")
-    public String editCar(
-            @ModelAttribute("carDto") NewCarDto car,
-            @PathVariable(value = "id") Long id,
-            Model model
-    ) {
-        switch(car.getType()) {
-            case "sport" -> {
-                car.getSportCar().setId(id);
-                vehicleService.save(car.getSportCar());
-            }
-            case "city" -> {
-                car.getCityCar().setId(id);
-                vehicleService.save(car.getCityCar());
-            }
-            default -> throw new EntityValidationException("Zły typ pojazdu", "/cars/add");
-        }
-        model.addAttribute("info", "Pojazd został zapisany");
-        return "redirect:/cars";
+        return "cars";
     }
 }

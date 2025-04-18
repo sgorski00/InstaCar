@@ -1,5 +1,6 @@
 package pl.studia.InstaCar.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.UUID;
 
+@Log4j2
 @Service
 public class FileUploadService {
 
@@ -24,6 +26,8 @@ public class FileUploadService {
      * @throws FileUploadException when file is empty or any other error occurred
      */
     public String uploadFile(MultipartFile file) throws FileUploadException {
+        log.debug("Plik wgrany: {}", file.getOriginalFilename());
+        log.debug("Rozmiar pliku: {}", file.getSize());
         if(file.isEmpty()) {
             throw new FileUploadException("Plik jest pusty");
         }
