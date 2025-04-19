@@ -13,7 +13,10 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.model.CarModel;
+import pl.studia.InstaCar.model.CityCar;
+import pl.studia.InstaCar.model.SportCar;
 import pl.studia.InstaCar.model.Vehicle;
+import pl.studia.InstaCar.model.dto.EditCarDto;
 import pl.studia.InstaCar.model.dto.NewCarDto;
 import pl.studia.InstaCar.model.enums.CarType;
 import pl.studia.InstaCar.model.enums.FuelType;
@@ -75,7 +78,6 @@ public class AdminCarController {
     @GetMapping("/add")
     public String showAddForm(Model model) {
         model.addAttribute("carDto", new NewCarDto());
-        model.addAttribute("carModels", carModelService.getAllCarModels());
         model.addAttribute("carTypes", CarType.values());
         model.addAttribute("transmissions", Transmission.values());
         model.addAttribute("fuels", FuelType.values());
@@ -117,28 +119,36 @@ public class AdminCarController {
         return "redirect:/admin/cars";
     }
 
-    @GetMapping("/edit")
-    public String showEditForm() {
-        //TODO(formularz edycji pojazdu)
+    @GetMapping("/edit/{id}")
+    public String showEditForm(
+            @PathVariable Long id,
+            Model model
+    ) {
+        EditCarDto carDto = new EditCarDto(vehicleService.getCarById(id));
+        log.debug("edit carDto GET method: {}", carDto);
+        model.addAttribute("car", carDto);
+        model.addAttribute("carTypes", CarType.values());
+        model.addAttribute("transmissions", Transmission.values());
+        model.addAttribute("fuels", FuelType.values());
         return "admin_panel/edit_car";
     }
 
-    @PostMapping("/edit/{id}")
+    @PostMapping("/edit")
     public String editCar(
-            @ModelAttribute("carDto") NewCarDto car,
-            @PathVariable(value = "id") Long id,
+            @ModelAttribute("car") EditCarDto carDto,
             Model model
     ) {
-        switch(car.getType()) {
-            case "sport" -> {
-                car.getSportCar().setId(id);
-                vehicleService.save(car.getSportCar());
+        log.debug("edit carDto POST method: {}", carDto);
+        switch(carDto.getCarType().toUpperCase()) {
+            case "SPORT" -> {
+                SportCar car = (SportCar) vehicleService.getCarById(carDto.getId());
+                vehicleService.save(carDto.mapToCar(car));
             }
-            case "city" -> {
-                car.getCityCar().setId(id);
-                vehicleService.save(car.getCityCar());
+            case "CITY" -> {
+                CityCar car = (CityCar) vehicleService.getCarById(carDto.getId());
+                vehicleService.save(carDto.mapToCar(car));
             }
-            default -> throw new EntityValidationException("Zły typ pojazdu", "/admin/cars/add");
+            default -> throw new EntityValidationException("Zły typ pojazdu", "/admin/cars/edit/" + carDto.getId());
         }
         model.addAttribute("info", "Pojazd został zapisany");
         return "redirect:/admin/cars";

@@ -39,11 +39,11 @@
                             </div>
                             <div class="mb-3">
                                 <label for="seats" class="form-label">Liczba miejsc (niewymagane):</label>
-                                <input type="number" min="2" max="9" id="seats" name="seats" class="form-control">
+                                <input type="number" min="2" max="9" id="seats" th:field="*{carModel.seats}" name="seats" class="form-control">
                             </div>
                             <div class="mb-3">
                                 <label for="doors" class="form-label">Liczba drzwi (niewymagane):</label>
-                                <input type="number" min="2" max="5" id="doors" name="doors" class="form-control">
+                                <input type="number" min="2" max="5" id="doors" th:field="*{carModel.doors}" name="doors" class="form-control">
                             </div>
                             <div class="mb-3">
                                 <label for="transmission" class="form-label">Rodzaj skrzyni biegów:</label>

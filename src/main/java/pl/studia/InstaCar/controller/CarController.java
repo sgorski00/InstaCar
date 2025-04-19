@@ -1,7 +1,6 @@
 package pl.studia.InstaCar.controller;
 
 import lombok.extern.log4j.Log4j2;
-import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -9,17 +8,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.studia.InstaCar.config.exceptions.EntityValidationException;
-import pl.studia.InstaCar.model.CarModel;
 import pl.studia.InstaCar.model.CityCar;
 import pl.studia.InstaCar.model.SportCar;
 import pl.studia.InstaCar.model.Vehicle;
-import pl.studia.InstaCar.model.dto.NewCarDto;
-import pl.studia.InstaCar.model.enums.CarType;
-import pl.studia.InstaCar.model.enums.FuelType;
-import pl.studia.InstaCar.model.enums.Transmission;
 import pl.studia.InstaCar.service.CarModelService;
 import pl.studia.InstaCar.service.FileUploadService;
 import pl.studia.InstaCar.service.VehicleService;
