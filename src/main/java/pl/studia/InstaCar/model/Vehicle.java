@@ -3,6 +3,7 @@ package pl.studia.InstaCar.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
+import pl.studia.InstaCar.model.dto.CarUpdateDto;
 import pl.studia.InstaCar.model.enums.RentalStatus;
 
 import java.io.Serializable;
@@ -72,5 +73,14 @@ public abstract class Vehicle implements Rental, Serializable {
         } else {
             throw new IllegalStateException("Vehicle is not rented");
         }
+    }
+
+    public void updateCarDetails(CarUpdateDto carDto) {
+        this.color = carDto.getColor();
+        this.engine = carDto.getEngine();
+        this.licensePlate = carDto.getLicensePlate();
+        this.price = carDto.getPrice();
+        this.productionYear = carDto.getProductionYear();
+        this.vin = carDto.getVin();
     }
 }
