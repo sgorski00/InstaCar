@@ -5,6 +5,9 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.CityCar;
 import pl.studia.InstaCar.model.SportCar;
@@ -30,7 +33,6 @@ public class VehicleService {
         this.cityCarRepository = cityCarRepository;
     }
 
-    @Cacheable(value = "allCars")
     public List<Vehicle> getAllCars() {
         return vehicleRepository.findAll();
     }
@@ -68,5 +70,9 @@ public class VehicleService {
     )
     public void deleteById(long id) {
         vehicleRepository.deleteById(id);
+    }
+
+    public List<Vehicle> getAllCarsByQuery(String query) {
+        return vehicleRepository.findAllByQuery(query.toLowerCase());
     }
 }
