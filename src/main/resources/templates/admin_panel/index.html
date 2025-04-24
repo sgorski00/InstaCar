@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="pl">
+<th:block th:replace="~{/fragments/adminFragments :: head('Strona główna')}"></th:block>
+<body class="d-flex flex-column min-vh-100">
+
+<div class="container-fluid flex-grow-1 d-flex">
+    <div class="row flex-grow-1 w-100">
+        <th:block th:replace="~{/fragments/adminFragments :: navigation}"></th:block>
+
+        <div class="col-lg-9 col-md-8 p-4 d-flex flex-column">
+            <h4 class="text-muted">Strona główna</h4>
+            <hr>
+            <h2>Witaj w panelu administratora</h2>
+            <p class="mt-3">Po lewej stronie możesz wybrać co dzisiaj robimy.</p>
+            <hr class="my-5">
+            <h4 class="text-muted">Możliwe operacje:</h4>
+            <p class="mt-3">Zarządzanie użytkownikami</p>
+            <p class="mt-3">Zarządzanie pojazdami</p>
+        </div>
+    </div>
+</div>
+
+<th:block th:replace="~{/fragments/adminFragments :: footer}"></th:block>
+</body>
+</html>

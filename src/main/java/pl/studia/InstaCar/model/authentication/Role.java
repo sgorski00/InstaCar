@@ -3,6 +3,7 @@ package pl.studia.InstaCar.model.authentication;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,6 +19,7 @@ public class Role implements Serializable {
 
     @NotBlank
     @Column(name = "name", nullable = false, unique = true)
+    @EqualsAndHashCode.Include
     private String name;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.MERGE, orphanRemoval = true)

@@ -6,6 +6,7 @@
 # 4. Zainstalować make przy użyciu komendy:
 # choco install make
 
+SHELL := cmd.exe
 .PHONY: logs
 
 up:
@@ -19,6 +20,10 @@ build:
 
 logs:
 	docker compose logs -f
+
+# Działa tylko na Windows
+stop-all:
+	powershell -Command "docker ps -q | ForEach-Object { docker stop $$_ }"
 
 psql:
 	docker exec -it db psql -U root -d InstaCar

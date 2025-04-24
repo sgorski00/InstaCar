@@ -61,7 +61,7 @@ public class ExceptionController {
             RedirectAttributes redirectAttributes
     ) {
         redirectAttributes.addFlashAttribute("error", ex.getMessage());
-        return "redirect:/cars";
+        return "redirect:/admin/cars";
     }
 
     @ExceptionHandler(Exception.class)

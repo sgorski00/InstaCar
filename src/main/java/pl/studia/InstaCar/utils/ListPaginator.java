@@ -2,6 +2,7 @@ package pl.studia.InstaCar.utils;
 
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Component
@@ -21,6 +22,10 @@ public class ListPaginator<T> {
     public List<T> getPaginatedList(List<T> list, int page, int pageSize) throws IndexOutOfBoundsException, IllegalArgumentException {
         int start = (page - 1) * pageSize;
         int end = Math.min(start + pageSize, list.size());
-        return list.subList(start, end);
+        try{
+            return list.subList(start, end);
+        } catch (IndexOutOfBoundsException | IllegalArgumentException e) {
+            return new ArrayList<>();
+        }
     }
 }

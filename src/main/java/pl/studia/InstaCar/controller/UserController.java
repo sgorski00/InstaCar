@@ -24,26 +24,12 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
-    private final RoleService roleService;
     private final UserDetailsService userDetailsService;
 
     @Autowired
-    public UserController(UserService userService, RoleService roleService, UserDetailsService userDetailsService) {
+    public UserController(UserService userService, UserDetailsService userDetailsService) {
         this.userService = userService;
-        this.roleService = roleService;
         this.userDetailsService = userDetailsService;
-    }
-
-    @GetMapping
-    public String showUsers(
-            @RequestParam(value = "size", defaultValue = "50") Integer size,
-            @RequestParam(value = "page", defaultValue = "1") Integer page,
-            Model model
-    ) {
-        PageRequest pageRequest = PageRequest.of(page - 1, size);
-        Page<ApplicationUser> usersPage = userService.findAllPaged(pageRequest);
-        model.addAttribute("users", usersPage);
-        return "users";
     }
 
     @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")

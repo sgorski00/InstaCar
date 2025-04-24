@@ -9,7 +9,6 @@ import lombok.Setter;
 import pl.studia.InstaCar.model.CarModel;
 import pl.studia.InstaCar.model.CityCar;
 import pl.studia.InstaCar.model.SportCar;
-import pl.studia.InstaCar.model.Vehicle;
 
 @AllArgsConstructor
 @NoArgsConstructor

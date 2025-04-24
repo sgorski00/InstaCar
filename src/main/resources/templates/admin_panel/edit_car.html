@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pl">
+<th:block th:replace="~{/fragments/adminFragments :: head('Edycja')}"></th:block>
+<body class="d-flex flex-column min-vh-100">
+<div class="container-fluid flex-grow-1 d-flex">
+    <div class="row flex-grow-1 w-100">
+        <th:block th:replace="~{/fragments/adminFragments :: navigation}"></th:block>
+
+        <div class="col-lg-9 col-md-8 p-4 d-flex flex-column">
+            <h4 class="text-muted">Edytuj pojazd</h4>
+            <hr>
+
+            <div class="container">
+                <form th:action="@{/admin/cars/edit}" method="post" th:object="${car}" enctype="multipart/form-data">
+                    <div class="row">
+                        <!-- Lewa kolumna: Model -->
+                        <div class="col-md-6">
+                            <h3>Model</h3>
+                            <div class="mb-3">
+                                <label for="brand" class="form-label">Marka:</label>
+                                <input type="text" id="brand" name="brand" th:field="*{model.brand}"
+                                       class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="modelName" class="form-label">Model:</label>
+                                <input type="text" id="modelName" name="modelName" th:field="*{model.modelName}"
+                                       class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="carType" class="form-label">Typ:</label>
+                                <select id="carType" name="carType" th:field="*{model.carType}" class="form-select"
+                                        required>
+                                    <option th:selected="${car.model.carType == carType}"
+                                            th:each="carType : ${carTypes}" th:value="${carType}"
+                                            th:text="${carType}"></option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="seats" class="form-label">Liczba miejsc (niewymagane):</label>
+                                <input type="number" min="2" max="9" id="seats" th:field="*{model.seats}"
+                                       name="seats" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="doors" class="form-label">Liczba drzwi (niewymagane):</label>
+                                <input type="number" min="2" max="5" id="doors" th:field="*{model.doors}"
+                                       name="doors" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="transmission" class="form-label">Rodzaj skrzyni biegów:</label>
+                                <select id="transmission" name="transmission" th:field="*{model.transmission}"
+                                        class="form-select" required>
+                                    <option th:each="transmission : ${transmissions}" th:value="${transmission}"
+                                            th:text="${transmission}"></option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="fuelType" class="form-label">Rodzaj paliwa:</label>
+                                <select id="fuelType" name="fuelType" th:field="*{model.fuelType}"
+                                        class="form-select" required>
+                                    <option th:each="fuel : ${fuels}" th:value="${fuel}" th:text="${fuel}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Prawa kolumna: Szczegóły pojazdu -->
+                        <div class="col-md-6">
+                            <h3>Szczegóły pojazdu</h3>
+                            <div class="mb-3">
+                                <label for="licensePlate" class="form-label">Nr rejestracyjny:</label>
+                                <input type="text" id="licensePlate" name="licensePlate"
+                                       th:field="*{licensePlate}" class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="vin" class="form-label">VIN:</label>
+                                <input type="text" id="vin" name="vin" th:field="*{vin}" class="form-control"
+                                       required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="color" class="form-label">Kolor (niewymagane):</label>
+                                <input type="text" id="color" name="color" th:field="*{color}"
+                                       class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="productionYear" class="form-label">Rok produkcji:</label>
+                                <input type="number" min="1950" th:max="${#dates.year(#dates.createNow())}"
+                                       id="productionYear" name="productionYear" th:field="*{productionYear}"
+                                       class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="engine" class="form-label">Pojemność silnika w cm^3:</label>
+                                <input type="text" id="engine" name="engine" th:field="*{engine}"
+                                       class="form-control" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="price" class="form-label">Cena (zł/dzień):</label>
+                                <input type="number" min="1" max="1000" id="price" name="price"
+                                       th:field="*{price}" class="form-control" required>
+                            </div>
+
+                            <div class="mb-3" th:if="${car.carType == 'CITY'}">
+                                <label for="tc" class="form-label">Pojemność bagażnika (l):</label>
+                                <input th:enabled="${car.carType == 'CITY'}"
+                                       type="number" min="50" max="1000" id="tc" name="tc"
+                                       th:field="*{trunkCapacity}" class="form-control" required>
+                            </div>
+                            <div th:if="${car.carType == 'sport'}">
+                                <div class="mb-3">
+                                    <label for="hp" class="form-label">Konie mechaniczne:</label>
+                                    <input th:enabled="${car.carType == 'SPORT'}"
+                                           type="number" min="50" max="800" id="hp" name="hp"
+                                           th:field="*{horsePower}" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="topSpeed" class="form-label">Maksymalna prędkość (km/h):</label>
+                                    <input th:enabled="${car.carType == 'SPORT'}"
+                                           type="number" min="100" max="400" id="topSpeed" name="topSpeed"
+                                           th:field="*{topSpeed}" class="form-control">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="acc" class="form-label">Przyspieszenie (w sekundach, 0-100
+                                        km/h):</label>
+                                    <input th:enabled="${car.carType == 'SPORT'}"
+                                           type="number" step="0.1" min="0.1" max="30" id="acc" name="acc"
+                                           th:field="*{acceleration}" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" th:field="*{id}">
+                    <input type="hidden" th:field="*{model}">
+                    <input type="hidden" th:field="*{carType}">
+                    <input type="hidden" th:field="*{imageUrl}">
+                    <div class="mb-3">
+                        <button type="submit" class="btn btn-primary">Edytuj</button>
+                        <button type="reset" class="btn btn-secondary">Wyczyść</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<th:block th:replace="~{/fragments/adminFragments :: footer}"></th:block>
+
+</body>
+</html>
