@@ -90,8 +90,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findAll();
     }
 
-    public Page<ApplicationUser> findAllPaged(Pageable pageable) {
-        return userRepository.findAll(pageable);
+    public Page<ApplicationUser> findAllPaged(String query, Pageable pageable) {
+        query = query == null || query.isBlank() ? null : "%" + query.toLowerCase() + "%";
+        return userRepository.findAllBySearch(query, pageable);
     }
 
     public ApplicationUser findUserById(Long id) {
@@ -104,5 +105,9 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsernameIgnoreCase(username).orElseThrow(
                 () -> new NoSuchElementException("Nie odnaleziono użytkownika: " + username)
         );
+    }
+
+    public void deleteUserById(Long userId) {
+        userRepository.deleteById(userId);
     }
 }

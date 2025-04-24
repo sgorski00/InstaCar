@@ -27,6 +27,7 @@ import pl.studia.InstaCar.service.VehicleService;
 import pl.studia.InstaCar.utils.ListPaginator;
 import pl.studia.InstaCar.utils.PaginationUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 @Log4j2
 @Controller
@@ -53,25 +54,26 @@ public class AdminCarController {
             @RequestParam(value = "search", required = false) String query,
             Model model
     ) {
-        int totalPages = 1;
+        PageRequest pageRequest = PageRequest.of(page - 1, size);
+        List<Vehicle> cars;
         if(query != null && !query.trim().isBlank()) {
-            List<Vehicle> queriedCars = vehicleService.getAllCarsByQuery(query);
-            model.addAttribute("cars" , queriedCars);
+            cars = vehicleService.getAllCarsByQuery(query);
         } else {
-            PageRequest pageRequest = PageRequest.of(page - 1, size);
-            List<Vehicle>allCars = vehicleService.getAllCars();
-            List<Vehicle> carsPaginatedList = listPaginator.getPaginatedList(allCars,page, size);
-            Page<Vehicle> carsPage = new PageImpl<>(carsPaginatedList, pageRequest, allCars.size());
-            totalPages = carsPage.getTotalPages();
-            int visiblePages = 5;
-            int[] pageNumbers = PaginationUtils.getPageNumbers(page, visiblePages, totalPages);
-            model.addAttribute("pageNumbers", pageNumbers);
-            model.addAttribute("cars" , carsPage);
+            cars = vehicleService.getAllCars();
         }
 
+        List<Vehicle> carsPaginatedList = listPaginator.getPaginatedList(cars,page, size);
+        Page<Vehicle> carsPage = new PageImpl<>(carsPaginatedList, pageRequest, cars.size());
+        int totalPages = carsPage.getTotalPages();
+        int visiblePages = 5;
+        int[] pageNumbers = PaginationUtils.getPageNumbers(page, visiblePages, totalPages);
+
+        model.addAttribute("pageNumbers", pageNumbers);
+        model.addAttribute("cars" , carsPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("currentSize", size);
         model.addAttribute("totalPages", totalPages);
+        model.addAttribute("search", query);
         return "admin_panel/cars";
     }
 

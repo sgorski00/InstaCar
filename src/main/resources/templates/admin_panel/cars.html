@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
-<th:block th:replace="~{/fragments/adminFragments :: head('Strona główna')}"></th:block>
+<th:block th:replace="~{/fragments/adminFragments :: head('Pojazdy')}"></th:block>
 <body class="d-flex flex-column min-vh-100">
 <div class="container-fluid flex-grow-1 d-flex">
     <div class="row flex-grow-1 w-100">
@@ -11,7 +11,7 @@
             <hr>
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <form class="d-flex" th:action="@{/admin/cars}" method="get">
-                    <input type="text" name="search" class="form-control me-2" placeholder="Szukaj pojazdu...">
+                    <input type="text" name="search" th:value="${search}" class="form-control me-2" placeholder="Szukaj pojazdu...">
                     <input type="hidden" name="page" th:value="${currentPage}">
                     <input type="hidden" name="size" th:value="${currentSize}">
                     <button type="submit" class="btn btn-outline-primary">Szukaj</button>
@@ -51,22 +51,22 @@
             <nav>
                 <ul th:if="${totalPages > 1}" class="pagination justify-content-center">
                     <li class="page-item">
-                        <a class="page-link" th:href="@{/admin/cars(page=${1}, size=${currentSize})}">&laquo;</a>
+                        <a class="page-link" th:href="@{/admin/cars(page=${1}, size=${currentSize}, search=${search})}">&laquo;</a>
                     </li>
 
                     <th:block th:each="pageNum : ${pageNumbers}">
                         <li class="page-item active" th:if="${currentPage} == ${pageNum}">
                         <a class="page-link"
-                               th:href="@{/admin/cars(page=${pageNum}, size=${currentSize})}"
+                               th:href="@{/admin/cars(page=${pageNum}, size=${currentSize}, search=${search})}"
                                th:text="${pageNum}"></a>
                         </li>
                         <li class="page-item" th:unless="${currentPage} == ${pageNum}">
-                        <a class="page-link" th:href="@{/admin/cars(page=${pageNum}, size=${currentSize})}"
+                        <a class="page-link" th:href="@{/admin/cars(page=${pageNum}, size=${currentSize}, search=${search})}"
                            th:text="${pageNum}"></a>
                         </li>
                     </th:block>
                     <li class="page-item">
-                        <a class="page-link" th:href="@{/admin/cars(page=${totalPages}, size=${currentSize})}">&raquo;</a>
+                        <a class="page-link" th:href="@{/admin/cars(page=${totalPages}, size=${currentSize}, search=${search})}">&raquo;</a>
                     </li>
                 </ul>
             </nav>
