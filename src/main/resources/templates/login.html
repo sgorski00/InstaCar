@@ -26,7 +26,7 @@
 			          	<div class="icon mr-3">
 			          		<span class="icon-map-o"></span>
 			          	</div>
-			            <p><span>Nie masz konta?</span> <a href="register.html">Zarejestruj się</p>
+			            <p><span>Nie masz konta?</span> <a th:href="@{/register}">Zarejestruj się</a></p>
 			          </div>
 		          </div>
 		          
@@ -70,7 +70,7 @@
               </div>
               <div class="col-4 d-flex align-items-center justify-content-center">
                 <!-- Simple link -->
-                <a href="#!">Zapomniałeś hasła?</a>
+                <a th:href="@{/login/reset}">Zapomniałeś hasła?</a>
               </div>
             </div>
 
@@ -78,7 +78,6 @@
             <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Zaloguj</button>
 
           </form>
-          
           </div>
         </div>
       </div>
@@ -88,7 +87,6 @@
 
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
-
 
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
