@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailSender;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
+import pl.studia.InstaCar.model.dto.EmailDto;
 
 @Service
 public class EmailService {
@@ -15,12 +16,8 @@ public class EmailService {
         this.mailSender = mailSender;
     }
 
-    public void sendEmail(String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("noreply@instacar.pl");
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
+    public void sendEmail(EmailDto email) {
+        SimpleMailMessage message = email.mapToSimpleMailMessage();
         mailSender.send(message);
     }
 }

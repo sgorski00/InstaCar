@@ -11,12 +11,6 @@ public class SimpleRouter {
         return "about";
     }
 
-    //TODO(send mails in standalone contact controller)
-    @GetMapping("/contact")
-    public String showContact(){
-        return "contact";
-    }
-
     @GetMapping("/services")
     public String showServices(){
         return "services";
