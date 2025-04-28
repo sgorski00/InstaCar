@@ -1,0 +1,37 @@
+﻿<!DOCTYPE html>
+<html lang="pl">
+<th:block th:replace="~{/fragments/headerFragments :: head('Błąd')}"></th:block>
+<body>
+    <th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
+
+    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/error.jpg');" data-stellar-background-ratio="0.5">
+        <div class="overlay"></div>
+        <div class="container">
+            <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+                <div class="col-md-9 ftco-animate pb-5">
+
+                    <h1 class="mb-3 bread">Błąd</h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container text-center mt-5 mb-5">
+        <h1 class="display-1 text-danger">404</h1>
+        <h2 class="mb-3">Ups! Strona nie znaleziona</h2>
+        <p class="lead text-muted">Przepraszamy, wystąpił błąd, żądana strona nie została znaleziona!</p>
+        <div class="btn-group mt-4">
+            <a href="/" class="btn btn-primary">
+                <i class="bi bi-house-fill"></i> Wróć na stronę główną
+            </a>
+            <a href="/contact" class="btn btn-secondary">
+                <i class="bi bi-envelope-fill"></i> Skontaktuj się z pomocą
+            </a>
+        </div>
+    </div>
+
+    <th:block th:replace="~{/fragments/bodyFragments :: footer}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragments :: loader}"></th:block>
+    <th:block th:replace="~{/fragments/bodyFragments :: scripts}"></th:block>
+</body>
+</html>
