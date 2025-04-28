@@ -9969,3 +9969,41 @@ textarea.form-control {
   .google-btn:hover {
       background-color: #f1f1f1;
   }
+
+label[for="pickup-location"] {
+    color: white; /* np. czerwony */
+}
+
+label[for="return-location"] {
+    color: white; /* np. czerwony */
+}
+/* Stylizacja samego pola select */
+#pickup-location {
+    background-color: #1e90ff; /* t³o pola (np. niebieski) */
+    color: #fff; /* kolor tekstu w polu */
+    border: 2px solid #000080; /* obramowanie (ciemnoniebieskie) */
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+    /* Stylizacja opcji w liœcie */
+    #pickup-location option {
+        background-color: #f8f9fa; /* t³o opcji (jasnoszare lub bia³e) */
+        color: #000; /* kolor tekstu opcji */
+        padding: 0.5rem;
+    }
+
+#return-location {
+    background-color: #1e90ff; /* t³o pola (np. niebieski) */
+    color: #fff; /* kolor tekstu w polu */
+    border: 2px solid #000080; /* obramowanie (ciemnoniebieskie) */
+    padding: 0.5rem;
+    border-radius: 0.25rem;
+}
+
+    /* Stylizacja opcji w liœcie */
+    #return-location option {
+        background-color: #f8f9fa; /* t³o opcji (jasnoszare lub bia³e) */
+        color: #000; /* kolor tekstu opcji */
+        padding: 0.5rem;
+    }

@@ -20,66 +20,92 @@
     </div>
 </div>
 
-     <section class="ftco-section ftco-no-pt bg-light">
-    	<div class="container">
-    		<div class="row no-gutters">
-    			<div class="col-md-12	featured-top">
-    				<div class="row no-gutters">
-	  					<div class="col-md-4 d-flex align-items-center">
-	  						<form action="#" class="request-form ftco-animate bg-primary">
-		          		<h2>Zaplanuj swoją podróż</h2>
-			    				<div class="d-flex">
-			    					<div class="form-group mr-2">
-			                <label for="" class="label">Data odbioru</label>
-			                <input type="text" class="form-control" id="book_pick_date" placeholder="Data">
-			              </div>
-			              <div class="form-group ml-2">
-			                <label for="" class="label">Data zwrotu</label>
-			                <input type="text" class="form-control" id="book_off_date" placeholder="Data">
-			              </div>
-		              </div>
-			            <div class="form-group">
-			              <input type="submit" value="Wypożycz" class="btn btn-secondary py-3 px-4">
-			            </div>
-			    			</form>
-	  					</div>
-	  					<div class="col-md-8 d-flex align-items-center">
-	  						<div class="services-wrap rounded-right rounded-left w-100">
-	  							<h3 class="heading-section mb-4">Znajdź swój wymarzony samochód</h3>
-	  							<div class="row d-flex mb-4">
-					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
-					            <div class="services w-100 text-center">
-				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-route"></span></div>
-				              	<div class="text w-100">
-					                <h3 class="heading mb-2">Wybierz lokalizację</h3>
-				                </div>
-					            </div>
-					          </div>
-					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
-					            <div class="services w-100 text-center">
-				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-handshake"></span></div>
-				              	<div class="text w-100">
-					                <h3 class="heading mb-2">Wybierz najlepszą ofertę</h3>
-					              </div>
-					            </div>
-					          </div>
-					          <div class="col-md-4 d-flex align-self-stretch ftco-animate">
-					            <div class="services w-100 text-center">
-				              	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-rent"></span></div>
-				              	<div class="text w-100">
-					                <h3 class="heading mb-2">Zarezerwuj furę</h3>
-					              </div>
-					            </div>
-					          </div>
-					        </div>
-					        <p><a th:href="@{/cars}" class="btn btn-primary py-3 px-4">Wymarzone samochody</a></p>
-	  						</div>
-	  					</div>
-	  				</div>
-				</div>
-  		</div>
+<section class="ftco-section ftco-no-pt bg-light">
+    <div class="container">
+        <div class="row no-gutters">
+            <div class="col-md-12	featured-top">
+                <div class="row no-gutters">
+                    <div class="col-md-4 d-flex align-items-center">
+                        <form action="#" class="request-form ftco-animate bg-primary">
+                            <h2>Zaplanuj swoją podróż</h2>
+                            <div class="mb-3">
+                                <label for="pickup-location" class="form-label">Miejscowość odbior</label>
+                                <select id="pickup-location" class="form-control">
+                                    <option value="" disabled selected>Wybierz miasto</option>
+                                    <option value="Warszawa">Warszawa</option>
+                                    <option value="Warszawa">Legnica</option>
+                                    <option value="Kraków">Kraków</option>
+                                    <option value="Gdańsk">Gdańsk</option>
+                                    <option value="Wrocław">Wrocław</option>
+                                    <option value="Poznań">Poznań</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="return-location" class="form-label">Miejscowość zwrot</label>
+                                <select id="return-location" class="form-control">
+                                    <option value="" disabled selected>Wybierz miasto</option>
+                                    <option value="Warszawa">Warszawa</option>
+                                    <option value="Warszawa">Legnica</option>
+                                    <option value="Kraków">Kraków</option>
+                                    <option value="Gdańsk">Gdańsk</option>
+                                    <option value="Wrocław">Wrocław</option>
+                                    <option value="Poznań">Poznań</option>
+                                </select>
+                            </div>
+
+                            <div class="d-flex">
+
+                                <div class="form-group mr-2">
+                                    <label for="" class="label">Data odbioru</label>
+                                    <input type="text" class="form-control" id="book_pick_date" placeholder="Data">
+                                </div>
+                                <div class="form-group ml-2">
+                                    <label for="" class="label">Data zwrotu</label>
+                                    <input type="text" class="form-control" id="book_off_date" placeholder="Data">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input type="submit" value="Wypożycz" class="btn btn-secondary py-3 px-4">
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-8 d-flex align-items-center">
+                        <div class="services-wrap rounded-right rounded-left w-100">
+                            <h3 class="heading-section mb-4">Znajdź swój wymarzony samochód</h3>
+                            <div class="row d-flex mb-4">
+                                <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+                                    <div class="services w-100 text-center">
+                                        <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-route"></span></div>
+                                        <div class="text w-100">
+                                            <h3 class="heading mb-2">Wybierz lokalizację</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+                                    <div class="services w-100 text-center">
+                                        <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-handshake"></span></div>
+                                        <div class="text w-100">
+                                            <h3 class="heading mb-2">Wybierz najlepszą ofertę</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 d-flex align-self-stretch ftco-animate">
+                                    <div class="services w-100 text-center">
+                                        <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-rent"></span></div>
+                                        <div class="text w-100">
+                                            <h3 class="heading mb-2">Zarezerwuj furę</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <p><a th:href="@{/cars}" class="btn btn-primary py-3 px-4">Wymarzone samochody</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </section>
+    </div>
+</section>
 
 
 		<section class="ftco-section">
