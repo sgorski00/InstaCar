@@ -20,7 +20,7 @@ import pl.studia.InstaCar.service.UserService;
 import java.security.Principal;
 
 @Controller
-@RequestMapping("/users")
+@RequestMapping("/user")
 public class UserController {
 
     private final UserService userService;
@@ -32,13 +32,12 @@ public class UserController {
         this.userDetailsService = userDetailsService;
     }
 
-    @PreAuthorize("#id == authentication.principal.id or hasRole('ADMIN')")
-    @GetMapping("{id}")
+    @GetMapping
     public String showUserDetails(
-            @PathVariable("id") Long id,
-            Model model
+            Model model,
+            Principal principal
     ) {
-        ApplicationUser user = userService.findUserById(id);
+        ApplicationUser user = userService.findUserByUsername(principal.getName());
         UserDetails userDetails = user.getUserDetails();
         model.addAttribute("user", user);
         model.addAttribute("user_details",
@@ -61,6 +60,6 @@ public class UserController {
         userDetails.setUser(user);
         userDetailsService.save(userDetails);
         redirectAttributes.addFlashAttribute("info", "Dane kontaktowe zapisane pomyślnie");
-        return "redirect:/users/" + user.getId();
+        return "redirect:/user";
     }
 }

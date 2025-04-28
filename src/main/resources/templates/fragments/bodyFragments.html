@@ -1,20 +1,41 @@
 <!DOCTYPE html>
-<html lang="pl">
-<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
+<html lang="pl" xmlns:sec="http://www.w3.org/1999/xhtml">
+<nav th:fragment="navbar" class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light"
+     id="ftco-navbar">
     <div class="container">
         <a class="navbar-brand" href="index.html">Insta<span>Car</span></a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav" aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
+                aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="oi oi-menu"></span> Menu
         </button>
 
         <div class="collapse navbar-collapse" id="ftco-nav">
             <ul class="navbar-nav ml-auto">
+                <li sec:authorize="hasRole('ADMIN')" class="nav-item"><a th:href="@{/admin}" class="nav-link">Panel administratora</a></li>
                 <li class="nav-item"><a th:href="@{/}" class="nav-link">Strona główna</a></li>
                 <li class="nav-item"><a th:href="@{/about}" class="nav-link">O nas</a></li>
                 <li class="nav-item"><a th:href="@{/services}" class="nav-link">Usługi</a></li>
                 <li class="nav-item"><a th:href="@{/cars}" class="nav-link">Samochody</a></li>
                 <li class="nav-item"><a th:href="@{/contact}" class="nav-link">Kontakt</a></li>
-                <li class="nav-item active"><a th:href="@{/login}" class="nav-link">Zaloguj się</a></li>
+                <li class="nav-item" sec:authorize="!isAuthenticated()">
+                    <a th:href="@{/login}" class="nav-link">Zaloguj się</a>
+                </li>
+                <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                       th:text="${#authentication.principal.userDetails == null ?
+                          #authentication.principal.username :
+                          #authentication.principal.userDetails}">
+                        Użytkownik
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" th:href="@{/user}">Profil</a>
+                        <div class="dropdown-divider"></div>
+                        <form th:action="@{/logout}" method="post">
+                            <button type="submit" class="dropdown-item">Wyloguj</button>
+                        </form>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>
@@ -81,4 +102,36 @@
         </div>
     </div>
 </footer>
+
+<th:block th:fragment="scripts">
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery-migrate-3.0.1.min.js"></script>
+    <script src="/js/popper.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jquery.easing.1.3.js"></script>
+    <script src="/js/jquery.waypoints.min.js"></script>
+    <script src="/js/jquery.stellar.min.js"></script>
+    <script src="/js/owl.carousel.min.js"></script>
+    <script src="/js/jquery.magnific-popup.min.js"></script>
+    <script src="/js/aos.js"></script>
+    <script src="/js/jquery.animateNumber.min.js"></script>
+    <script src="/js/bootstrap-datepicker.js"></script>
+    <script src="/js/jquery.timepicker.min.js"></script>
+    <script src="/js/scrollax.min.js"></script>
+    <script src="/js/main.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBVWaKrjvy3MaE7SQ74_uJiULgl1JY0H2s&sensor=false"></script>
+    <script src="/js/google-map.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.bundle.min.js"></script>
+</th:block>
+
+<div th:fragment="loader" id="ftco-loader" class="show fullscreen">
+    <svg class="circular" width="48px" height="48px">
+        <circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/>
+        <circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10"
+                stroke="#F96D00"/>
+    </svg>
+</div>
+
 </html>
