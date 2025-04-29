@@ -17,6 +17,7 @@ import pl.studia.InstaCar.repository.SportCarRepository;
 import pl.studia.InstaCar.repository.VehicleRepository;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 
 @Service
@@ -74,5 +75,10 @@ public class VehicleService {
 
     public List<Vehicle> getAllCarsByQuery(String query) {
         return vehicleRepository.findAllByQuery(query.toLowerCase());
+    }
+
+    public List<Vehicle> getAllCarsByQueryAndType(String query, String type) {
+        query = query == null ?  "" : query;
+        return vehicleRepository.findAllByQueryAndType(query.toLowerCase(), type.toLowerCase());
     }
 }

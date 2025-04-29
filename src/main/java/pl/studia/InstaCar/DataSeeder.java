@@ -84,11 +84,11 @@ public class DataSeeder implements CommandLineRunner {
         vehicle.setEngine(faker.number().numberBetween(3000, 5000) + "cc");
         vehicle.setLicensePlate(faker.letterify("??? #####").toUpperCase());
         vehicle.setModel(faker.options().option(models.toArray(new CarModel[0])));
-        vehicle.setPrice(faker.number().numberBetween(500, 5000));
+        vehicle.setPrice(faker.number().numberBetween(1, 1000));
         vehicle.setProductionYear(faker.number().numberBetween(2016, 2025));
         vehicle.setStatus(faker.options().option(RentalStatus.values()));
         vehicle.setVin(faker.bothify("1HGCM82633A######"));
-        vehicle.setImageUrl(faker.internet().url());
+        vehicle.setImageUrl("/uploads/car-" + faker.number().numberBetween(1, 12) + ".jpg");
     }
 
     private List<CarModel> generateCarModels(int quantity) {
