@@ -17,7 +17,7 @@
     </section>
 
     <div class="container text-center mt-5 mb-5">
-        <h1 class="display-1 text-danger" th:text="${code}">404</h1>
+        <h1 class="display-1 text-danger" th:text="${code == null ? '500' : code}">404</h1>
         <h2 class="mb-3">Ups! Wystąpił błąd</h2>
         <p class="lead text-muted" th:if="${messages != null && !messages.isEmpty()}" th:each="message: ${messages}" th:text="${message}">Przepraszamy, wystąpił błąd!</p>
         <p class="lead text-muted" th:unless="${messages != null}">Wystąpił nieoczekiwany błąd!</p>
