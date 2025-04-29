@@ -3,6 +3,7 @@ package pl.studia.InstaCar.controller.admin_panel;
 import lombok.extern.log4j.Log4j2;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -39,6 +40,9 @@ public class AdminCarController {
     private final FileUploadService fileUploadService;
     private final ListPaginator<Vehicle> listPaginator;
 
+    @Value("${default.pagination.pages.size}")
+    private int visiblePages;
+
     @Autowired
     public AdminCarController(VehicleService vehicleService, CarModelService carModelService, FileUploadService fileUploadService, ListPaginator<Vehicle> listPaginator) {
         this.vehicleService = vehicleService;
@@ -65,7 +69,6 @@ public class AdminCarController {
         List<Vehicle> carsPaginatedList = listPaginator.getPaginatedList(cars,page, size);
         Page<Vehicle> carsPage = new PageImpl<>(carsPaginatedList, pageRequest, cars.size());
         int totalPages = carsPage.getTotalPages();
-        int visiblePages = 5;
         int[] pageNumbers = PaginationUtils.getPageNumbers(page, visiblePages, totalPages);
 
         model.addAttribute("pageNumbers", pageNumbers);

@@ -1,6 +1,8 @@
 package pl.studia.InstaCar.controller;
 
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,10 @@ import pl.studia.InstaCar.service.EmailService;
 public class ContactController {
 
     private final EmailService emailService;
+
+    @Getter
+    @Value("${contact.email}")
+    private String contactEmail;
 
     @Autowired
     public ContactController(EmailService emailService) {
@@ -35,7 +41,7 @@ public class ContactController {
             @ModelAttribute EmailDto email,
             RedirectAttributes redirectAttributes
     ) {
-        email.setEmailTo("pomoc@instacar.com");
+        email.setEmailTo(contactEmail);
         emailService.sendEmail(email);
         redirectAttributes.addFlashAttribute("info", "Wiadomość wysłana pomyślnie");
         return "redirect:/contact";
