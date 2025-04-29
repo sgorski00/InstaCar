@@ -2,13 +2,13 @@ package pl.studia.InstaCar.controller.admin_panel;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.studia.InstaCar.model.UserDetails;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.Role;
 import pl.studia.InstaCar.model.dto.EditUserDto;
@@ -23,6 +23,9 @@ public class AdminUserController {
 
     private final UserService userService;
     private final RoleService roleService;
+
+    @Value("${default.pagination.pages.size}")
+    private int visiblePages;
 
     @Autowired
     public AdminUserController(UserService userService, RoleService roleService) {
@@ -40,7 +43,6 @@ public class AdminUserController {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         Page<ApplicationUser> usersPage = userService.findAllPaged(query, pageRequest);
 
-        int visiblePages = 5;
         int[] pageNumbers = PaginationUtils.getPageNumbers(page, visiblePages, usersPage.getTotalPages());
 
         model.addAttribute("users", usersPage);

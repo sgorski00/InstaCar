@@ -1,8 +1,12 @@
 package pl.studia.InstaCar.model.builders;
 
+import org.springframework.beans.factory.annotation.Value;
 import pl.studia.InstaCar.model.dto.EmailDto;
 
 public class ResetPasswordEmailBuilder {
+
+    @Value("${contact.email}")
+    private static String contactEmail;
 
     public static EmailDto build(String email, String token) {
         String serverAddress = "localhost";
@@ -10,7 +14,7 @@ public class ResetPasswordEmailBuilder {
         String message = getMessage(resetLink);
 
         return EmailDto.builder()
-                .emailFrom("pomoc@instacar.com")
+                .emailFrom(contactEmail)
                 .emailTo(email)
                 .topic("InstaCar - resetowanie hasła")
                 .message(message)

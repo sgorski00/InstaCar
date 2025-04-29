@@ -2,6 +2,7 @@ package pl.studia.InstaCar.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -25,6 +26,9 @@ public class CarController {
     private final VehicleService vehicleService;
     private final ListPaginator<Vehicle> listPaginator;
 
+    @Value("${default.pagination.pages.size}")
+    private int visiblePages;
+
     @Autowired
     public CarController(VehicleService vehicleService, ListPaginator<Vehicle> listPaginator) {
         this.vehicleService = vehicleService;
@@ -45,7 +49,6 @@ public class CarController {
         Page<Vehicle> carsPage = new PageImpl<>(carsPaginatedList, pageRequest, allCars.size());
 
         int totalPages = carsPage.getTotalPages();
-        int visiblePages = 5;
         int[] pageNumbers = PaginationUtils.getPageNumbers(page, visiblePages, totalPages);
 
         model.addAttribute("type", type);
