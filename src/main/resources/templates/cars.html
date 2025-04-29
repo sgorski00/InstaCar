@@ -4,7 +4,7 @@
 <body>
 <th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
 
-<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/bg_3.jpg');"
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/bg_3.jpg');"
          data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
     <div class="container">
@@ -18,6 +18,42 @@
 
 <section class="ftco-section bg-light">
     <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="search-wrap-1 ftco-animate p-4">
+                    <form th:action="@{/cars}" method="get" class="search-property">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <label for="keyword">Szukaj po nazwie</label>
+                                    <input type="text" class="form-control py-2" id="keyword" name="keyword" th:value="${keyword}">
+                                </div>
+                            </div>
+                            <div class="col-lg-4 col-md-4 col-sm-6">
+                                <div class="form-group">
+                                    <label for="type">Typ pojazdu</label>
+                                    <select name="type" id="type" class="form-control py-2">
+                                        <option value="all" th:selected="${type == 'all'}">Wszystkie</option>
+                                        <option value="city" th:selected="${type == 'city'}">Miejski</option>
+                                        <option value="sport" th:selected="${type == 'sport'}">Sportowy</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-3 d-flex align-items-end">
+                                <div class="form-group w-100">
+                                    <button type="reset" class="btn btn-secondary py-2 w-100">Wyczyść</button>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-2 col-sm-3 d-flex align-items-end">
+                                <div class="form-group w-100">
+                                    <button type="submit" class="btn btn-primary py-2 w-100">Szukaj</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
         <div class="row">
             <div th:each="car : ${cars}" class="col-md-4">
                 <div class="car-wrap rounded ftco-animate">
@@ -41,18 +77,18 @@
             <div class="col text-center">
                 <div class="block-27">
                     <ul th:if="${totalPages > 1}">
-                        <li><a th:href="@{/cars(page=${1}, size=${currentSize})}">&laquo;</a></li>
+                        <li><a th:href="@{/cars(page=${1}, size=${currentSize}, type=${type}, keyword=${keyword})}">&laquo;</a></li>
                         <th:block th:each="pageNum : ${pageNumbers}">
                             <li th:if="${currentPage} == ${pageNum}" class="active">
-                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize})}"
+                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize}, type=${type}, keyword=${keyword})}"
                                    th:text="${pageNum}"></a>
                             </li>
                             <li th:unless="${currentPage} == ${pageNum}">
-                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize})}"
+                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize}, type=${type}, keyword=${keyword})}"
                                    th:text="${pageNum}"></a>
                             </li>
                         </th:block>
-                        <li><a th:href="@{/cars(page=${totalPages}, size=${currentSize})}">&raquo;</a></li>
+                        <li><a th:href="@{/cars(page=${totalPages}, size=${currentSize}, type=${type}, keyword=${keyword})}">&raquo;</a></li>
                     </ul>
                 </div>
             </div>
