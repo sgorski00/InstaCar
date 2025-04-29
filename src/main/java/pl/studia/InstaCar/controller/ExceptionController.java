@@ -76,19 +76,26 @@ public class ExceptionController {
         if(ex.getClass().equals(NoResourceFoundException.class)){
             messages.add("Strona nie istnieje");
             redirectAttributes.addFlashAttribute("code", 404);
-            return "redirect:/";
         }
 
         if(ex.getClass().equals(NoSuchElementException.class)){
             messages.add("Wybrany element nie istnieje");
+            redirectAttributes.addFlashAttribute("code", 500);
         }
 
         if(ex.getClass().equals(IllegalArgumentException.class)){
             messages.add("Nieprawidłowe dane");
+            redirectAttributes.addFlashAttribute("code", 500);
         }
 
         if(ex.getClass().equals(AuthorizationDeniedException.class)) {
             messages.add("Brak uprawnień do żądanych zasobów");
+            redirectAttributes.addFlashAttribute("code", 403);
+        }
+
+        if(ex.getClass().equals(NullPointerException.class)) {
+            messages.add("Brak żądanych zasobów");
+            redirectAttributes.addFlashAttribute("code", 500);
         }
 
         ex.printStackTrace();
