@@ -15,4 +15,9 @@ public class SimpleRouter {
     public String showServices(){
         return "services";
     }
+
+    @GetMapping("/error")
+    public String show() {
+        return "error";
+    }
 }

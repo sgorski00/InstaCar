@@ -38,10 +38,10 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.authorizeHttpRequests(request -> request
 //                        .requestMatchers(HttpMethod.GET, "cars/**","/images/**", "/styles.css", "/error" , "/api/**", "/activate/**", "/").permitAll()
-//                        .requestMatchers("/login", "/login/**", "/register", "/register/**").not().authenticated()
+                        .requestMatchers("/login", "/login/**", "/register", "/register/**").not().authenticated()
 //                        .requestMatchers("/users").hasRole("ADMIN")
 //                        .requestMatchers("/users/**").authenticated()
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().permitAll())
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
