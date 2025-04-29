@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="pl">
-  <head>
+<head>
     <title>InstaCar</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    
+
     <link href="https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="css/open-iconic-bootstrap.min.css">
     <link rel="stylesheet" href="css/animate.css">
-    
+
     <link rel="stylesheet" href="css/owl.carousel.min.css">
     <link rel="stylesheet" href="css/owl.theme.default.min.css">
     <link rel="stylesheet" href="css/magnific-popup.css">
@@ -21,12 +21,12 @@
     <link rel="stylesheet" href="css/bootstrap-datepicker.css">
     <link rel="stylesheet" href="css/jquery.timepicker.css">
 
-    
+
     <link rel="stylesheet" href="css/flaticon.css">
     <link rel="stylesheet" href="css/icomoon.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" href="images/favicon.png" type="image/x-icon">
-  </head>
+</head>
   <body>
     
 	  <nav class="navbar navbar-expand-lg navbar-dark ftco_navbar bg-dark ftco-navbar-light" id="ftco-navbar">
@@ -70,22 +70,46 @@
     			<div class="col-md-12	featured-top">
     				<div class="row no-gutters">
 	  					<div class="col-md-4 d-flex align-items-center">
-	  						<form action="#" class="request-form ftco-animate bg-primary">
-		          		<h2>Zaplanuj swoją podróż</h2>
-			    				<div class="d-flex">
-			    					<div class="form-group mr-2">
-			                <label for="" class="label">Data odbioru</label>
-			                <input type="text" class="form-control" id="book_pick_date" placeholder="Data">
-			              </div>
-			              <div class="form-group ml-2">
-			                <label for="" class="label">Data zwrotu</label>
-			                <input type="text" class="form-control" id="book_off_date" placeholder="Data">
-			              </div>
-		              </div>
-			            <div class="form-group">
-			              <input type="submit" value="Wypożycz" class="btn btn-secondary py-3 px-4">
-			            </div>
-			    			</form>
+                            <form action="#" class="request-form ftco-animate bg-primary">
+                                <h2>Zaplanuj swoją podróż</h2>
+                                    <div class="mb-3">
+                                        <label for="pickup-location" class="form-label">Miejscowość odbior</label>
+                                        <select id="pickup-location" class="form-control">
+                                            <option value="" disabled selected>Wybierz miasto</option>
+                                            <option value="Warszawa">Warszawa</option>
+                                            <option value="Kraków">Kraków</option>
+                                            <option value="Gdańsk">Gdańsk</option>
+                                            <option value="Wrocław">Wrocław</option>
+                                            <option value="Poznań">Poznań</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="return-location" class="form-label">Miejscowość zwrot</label>
+                                        <select id="return-location" class="form-control">
+                                            <option value="" disabled selected>Wybierz miasto</option>
+                                            <option value="Warszawa">Warszawa</option>
+                                            <option value="Kraków">Kraków</option>
+                                            <option value="Gdańsk">Gdańsk</option>
+                                            <option value="Wrocław">Wrocław</option>
+                                            <option value="Poznań">Poznań</option>
+                                        </select>
+                                    </div>
+                                
+                                <div class="d-flex">
+
+                                    <div class="form-group mr-2">
+                                        <label for="" class="label">Data odbioru</label>
+                                        <input type="text" class="form-control" id="book_pick_date" placeholder="Data">
+                                    </div>
+                                    <div class="form-group ml-2">
+                                        <label for="" class="label">Data zwrotu</label>
+                                        <input type="text" class="form-control" id="book_off_date" placeholder="Data">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Wypożycz" class="btn btn-secondary py-3 px-4">
+                                </div>
+                            </form>
 	  					</div>
 	  					<div class="col-md-8 d-flex align-items-center">
 	  						<div class="services-wrap rounded-right rounded-left w-100">
@@ -275,7 +299,7 @@
   <!-- loader -->
   <div id="ftco-loader" class="show fullscreen"><svg class="circular" width="48px" height="48px"><circle class="path-bg" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke="#eeeeee"/><circle class="path" cx="24" cy="24" r="22" fill="none" stroke-width="4" stroke-miterlimit="10" stroke="#F96D00"/></svg></div>
 
-
+  
   <script src="js/jquery.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/popper.min.js"></script>

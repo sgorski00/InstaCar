@@ -16,76 +16,332 @@
     </div>
 </section>
 
-<section class="ftco-section contact-section">
-    <div class="container">
-        <div class="row d-flex mb-5 contact-info">
-            <div class="col-md-4">
-                <div class="row mb-5">
-                    <div class="col-md-12">
-                        <div class="border w-100 p-4 rounded mb-2 d-flex">
-                            <div class="icon mr-3">
-                                <span class="icon-map-o"></span>
+<div id="interfejs1" class="card">
+    <div class="card-body">
+        <section class="ftco-section contact-section">
+            <div class="container">
+                <div class="row d-flex mb-5 contact-info">
+                    <div class="col-md-4">
+                        <div class="row mb-5">
+                            <div class="col-md-12">
+                                <div class="border w-100 p-4 rounded mb-2 d-flex">
+                                    <div class="icon mr-3">
+                                        <span class="icon-map-o"></span>
+                                    </div>
+                                    <p><span>Nie masz konta?</span> <a th:href="@{register}">Zarejestruj się</a></p>
+                                </div>
                             </div>
-                            <p><span>Nie masz konta?</span> <a th:href="@{/register}">Zarejestruj się</a></p>
+
+                            <div class="col-md-12">
+                                <div class="border w-100 p-4 rounded mb-2 d-flex">
+                                    <div class="icon mr-3">
+                                        <span class="icon-envelope-o"></span>
+                                    </div>
+                                    <p><span>Problemy z logowanie?</span> <a href="mailto:pomoc@instacar.com">pomoc@instacar.com</a>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 block-9 mb-md-5">
+                        <form>
+                            <!-- Email input -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input type="email" id="form2Example1" class="form-control"/>
+                                <label class="form-label" for="form2Example1">Adres email</label>
+                            </div>
+
+                            <!-- Password input -->
+                            <div data-mdb-input-init class="form-outline mb-4">
+                                <input type="password" id="form2Example2" class="form-control"/>
+                                <label class="form-label" for="form2Example2">Hasło</label>
+                            </div>
+
+                            <!-- 2 column grid layout for inline styling -->
+                            <div class="row mb-4">
+                                <div class="col d-flex justify-content-center">
+                                    <!-- Checkbox -->
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" value="" id="form2Example31"
+                                               checked/>
+                                        <label class="form-check-label" for="form2Example31"> Zapamiętaj mnie </label>
+                                    </div>
+                                </div>
+                                <div class="col-4 d-flex align-items-center justify-content-center">
+                                    <button class="google-btn">
+                                        <img src="https://img.icons8.com/color/48/000000/google-logo.png"
+                                             alt="Google Logo">
+                                    </button>
+                                </div>
+                                <div class="col-4 d-flex align-items-center justify-content-center">
+                                    <!-- Simple link -->
+                                    <a th:href="@{/login/reset}">Zapomniałeś hasła?</a>
+                                </div>
+                            </div>
+
+                            <!-- Submit button -->
+                            <button type="button" data-mdb-button-init data-mdb-ripple-init
+                                    class="btn btn-primary btn-block mb-4">Zaloguj
+                            </button>
+
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </section>
+        <button class="btn btn-primary" onclick="pokazInterfejs('interfejs2')">Przejdź do Interfejsu 2</button>
+    </div>
+</div>
+
+<div id="interfejs2" class="card d-none">
+    <div class="card-body">
+        <section class="ftco-section bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-1.jpg);">
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Mercedes Grand Sedan</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Cheverolet</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-2.jpg);">
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Range Rover</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Subaru</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-3.jpg);">
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Mercedes Grand Sedan</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Cheverolet</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-md-12">
-                        <div class="border w-100 p-4 rounded mb-2 d-flex">
-                            <div class="icon mr-3">
-                                <span class="icon-envelope-o"></span>
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-4.jpg);">
                             </div>
-                            <p><span>Problemy z logowanie?</span> <a
-                                    href="mailto:pomoc@instacar.com">pomoc@instacar.com</a></p>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Mercedes Grand Sedan</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Cheverolet</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-5.jpg);">
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Range Rover</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Subaru</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-6.jpg);">
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Mercedes Grand Sedan</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Cheverolet</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-7.jpg);">
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Mercedes Grand Sedan</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Cheverolet</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-8.jpg);">
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Range Rover</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Subaru</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-9.jpg);">
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Mercedes Grand Sedan</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Cheverolet</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-10.jpg);">
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Mercedes Grand Sedan</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Cheverolet</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-11.jpg);">
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Range Rover</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Subaru</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="car-wrap rounded ftco-animate">
+                            <div class="img rounded d-flex align-items-end"
+                                 style="background-image: url(images/car-12.jpg);">
+                            </div>
+                            <div class="text">
+                                <h2 class="mb-0"><a href="car-single.html">Mercedes Grand Sedan</a></h2>
+                                <div class="d-flex mb-3">
+                                    <span class="cat">Cheverolet</span>
+                                    <p class="price ml-auto">$500 <span>/day</span></p>
+                                </div>
+                                <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Book
+                                    now</a> <a href="car-single.html" class="btn btn-secondary py-2 ml-1">Details</a>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-5">
+                    <div class="col text-center">
+                        <div class="block-27">
+                            <ul>
+                                <li><a href="#">&lt;</a></li>
+                                <li class="active"><span>1</span></li>
+                                <li><a href="#">2</a></li>
+                                <li><a href="#">3</a></li>
+                                <li><a href="#">4</a></li>
+                                <li><a href="#">5</a></li>
+                                <li><a href="#">&gt;</a></li>
+                            </ul>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-8 block-9 mb-md-5">
-                <form>
-                    <!-- Email input -->
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <input type="email" id="form2Example1" class="form-control"/>
-                        <label class="form-label" for="form2Example1">Adres email</label>
-                    </div>
-
-                    <!-- Password input -->
-                    <div data-mdb-input-init class="form-outline mb-4">
-                        <input type="password" id="form2Example2" class="form-control"/>
-                        <label class="form-label" for="form2Example2">Hasło</label>
-                    </div>
-
-                    <!-- 2 column grid layout for inline styling -->
-                    <div class="row mb-4">
-                        <div class="col d-flex justify-content-center">
-                            <!-- Checkbox -->
-                            <div class="form-check">
-                                <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked/>
-                                <label class="form-check-label" for="form2Example31"> Zapamiętaj mnie </label>
-                            </div>
-                        </div>
-                        <div class="col-4 d-flex align-items-center justify-content-center">
-                            <button class="google-btn">
-                                <img src="https://img.icons8.com/color/48/000000/google-logo.png" alt="Google Logo">
-                            </button>
-                        </div>
-                        <div class="col-4 d-flex align-items-center justify-content-center">
-                            <!-- Simple link -->
-                            <a th:href="@{/login/reset}">Zapomniałeś hasła?</a>
-                        </div>
-                    </div>
-
-                    <!-- Submit button -->
-                    <button type="button" onclick="window.location.href='order1.html'" data-mdb-button-init
-                            data-mdb-ripple-init class="btn btn-primary btn-block mb-4">Zaloguj
-                    </button>
-                </form>
-            </div>
-        </div>
+        </section>
+        <button class="btn btn-secondary" onclick="pokazInterfejs('interfejs3')">Dalej</button>
     </div>
-</section>
+</div>
+<div id="interfejs3" class="card d-none">
+    <div class="card-body">
+        <p>To jest trzeci interfejs.</p>
+        <button class="btn btn-secondary" onclick="pokazInterfejs('interfejs1')">Wróć do Interfejsu 1</button>
+    </div>
+</div>
+
 <th:block th:replace="~{/fragments/bodyFragments :: footer}"></th:block>
 <th:block th:replace="~{/fragments/bodyFragments :: loader}"></th:block>
 <th:block th:replace="~{/fragments/bodyFragments :: scripts}"></th:block>
+<script>
+    function pokazInterfejs(id) {
+        document.querySelectorAll('.card').forEach(el => el.classList.add('d-none'));
+        document.getElementById(id).classList.remove('d-none');
+    }
+</script>
 </body>
 </html>
