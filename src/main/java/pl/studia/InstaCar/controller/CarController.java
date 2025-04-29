@@ -15,6 +15,7 @@ import pl.studia.InstaCar.service.CarModelService;
 import pl.studia.InstaCar.service.FileUploadService;
 import pl.studia.InstaCar.service.VehicleService;
 import pl.studia.InstaCar.utils.ListPaginator;
+import pl.studia.InstaCar.utils.PaginationUtils;
 
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class CarController {
 
     @GetMapping
     public String showCars(
-            @RequestParam(value = "size", defaultValue = "10") Integer size,
+            @RequestParam(value = "size", defaultValue = "15") Integer size,
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             Model model
     ) {
@@ -47,7 +48,16 @@ public class CarController {
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         Page<Vehicle> carsPage = new PageImpl<>(carsPaginatedList, pageRequest, allCars.size());
 
+
+        int totalPages = carsPage.getTotalPages();
+        int visiblePages = 5;
+        int[] pageNumbers = PaginationUtils.getPageNumbers(page, visiblePages, totalPages);
+
         model.addAttribute("cars" , carsPage);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("currentSize", size);
+        model.addAttribute("totalPages", totalPages);
+        model.addAttribute("pageNumbers", pageNumbers);
         return "cars";
     }
 

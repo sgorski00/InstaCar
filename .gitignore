@@ -5,7 +5,8 @@ target/
 !**/src/test/**/target/
 docker-files/logs
 application-prod.properties
-uploads/
+**/uploads/**
+!**/uploads/car-*.jpg
 *~*
 
 ### STS ###

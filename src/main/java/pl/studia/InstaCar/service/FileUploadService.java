@@ -23,7 +23,7 @@ public class FileUploadService {
      *
      * @param file the file to save
      * @return a unique saved file name
-     * @throws FileUploadException when file is empty or any other error occurred
+     * @throws FileUploadException when file is empty, not an image or any other error occurred
      */
     public String uploadFile(MultipartFile file) throws FileUploadException {
         log.debug("Plik wgrany: {}", file.getOriginalFilename());
@@ -33,6 +33,11 @@ public class FileUploadService {
         }
 
         try {
+            String contet = file.getContentType();
+            if(contet == null || !contet.startsWith("image")) {
+                throw new FileUploadException("Plik nie jest obrazem");
+            }
+
             //noinspection DataFlowIssue
             String ext = getExtension(file.getOriginalFilename());
             String uniqueName = getUniqueName(ext);

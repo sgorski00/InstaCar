@@ -9,6 +9,7 @@ import pl.studia.InstaCar.model.enums.RentalStatus;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "vehicles")
@@ -82,5 +83,9 @@ public abstract class Vehicle implements Rental, Serializable {
         this.price = carDto.getPrice();
         this.productionYear = carDto.getProductionYear();
         this.vin = carDto.getVin();
+    }
+
+    public String getImageUrl() {
+        return Objects.requireNonNullElse(imageUrl, "/images/no_image.png");
     }
 }
