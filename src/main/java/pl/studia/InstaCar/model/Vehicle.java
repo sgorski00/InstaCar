@@ -1,5 +1,8 @@
 package pl.studia.InstaCar.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
@@ -15,6 +18,11 @@ import java.util.Objects;
 @Table(name = "vehicles")
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn(name = "vehicle_type")
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = SportCar.class, name = "SPORT"),
+        @JsonSubTypes.Type(value = CityCar.class, name = "CITY")
+})
 @Getter
 @Setter
 @NoArgsConstructor
@@ -51,6 +59,7 @@ public abstract class Vehicle implements Rental, Serializable {
     private String imageUrl;
 
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Rent> rents = new ArrayList<>();
 
     @Override
