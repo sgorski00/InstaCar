@@ -42,11 +42,7 @@ public class CarModelService {
     }
 
     @Caching(
-            put = {
-                    @CachePut(value = "carModels", key = "#result.id"),
-                    @CachePut(value = "carModelsByName", key = "#carModel.modelName"),
-                    @CachePut(value = "carModelsByBrand", key = "#carModel.brand")
-            },
+            put = @CachePut(value = "carModels", key = "#result.id"),
             evict = @CacheEvict(value = "allCarModels", allEntries = true)
     )
     public CarModel save(CarModel carModel) {
@@ -56,22 +52,10 @@ public class CarModelService {
     @Caching(
             evict = {
                     @CacheEvict(value = "carModels", key = "#id"),
-                    @CacheEvict(value = "allCarModels", allEntries = true),
-                    @CacheEvict(value = "carModelsByName", key = "#carModel.modelName"),
-                    @CacheEvict(value = "carModelsByBrand", key = "#carModel.brand")
+                    @CacheEvict(value = "allCarModels", allEntries = true)
             }
     )
     public void deleteById(Long id) {
         carModelRepository.deleteById(id);
-    }
-
-    @Cacheable(value = "carModelsByName", key = "#name")
-    public List<CarModel> getCarModelsByName(String name) {
-        return carModelRepository.findAllByModelName(name);
-    }
-
-    @Cacheable(value = "carModelsByBrand", key = "#name")
-    public List<CarModel> getModelsByBrandName(String name) {
-        return carModelRepository.findAllByBrand(name);
     }
 }
