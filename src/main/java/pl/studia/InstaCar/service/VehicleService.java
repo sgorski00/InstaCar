@@ -83,8 +83,8 @@ public class VehicleService {
         vehicle.setModel(null);
         vehicleRepository.deleteById(vehicle.getId());
         boolean modelUnused = vehicleRepository.countByModel(carModel) == 0;
-        log.info("modelUnused: {}", modelUnused);
-        log.info("carModel: {}", carModel);
+        log.debug("modelUnused: {}", modelUnused);
+        log.debug("carModel: {}", carModel);
         if(modelUnused) {
             carModelService.deleteById(carModel.getId());
         }
