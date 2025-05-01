@@ -20,7 +20,7 @@ public class NewCarDto {
     private String type;
 
     @NotNull
-    private CarModel carModel;
+    private CarModel carModel = new CarModel();
 
     private SportCar sportCar;
     private CityCar cityCar;

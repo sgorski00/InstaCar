@@ -28,8 +28,10 @@ import pl.studia.InstaCar.service.VehicleService;
 import pl.studia.InstaCar.utils.ListPaginator;
 import pl.studia.InstaCar.utils.PaginationUtils;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 @Log4j2
 @Controller
 @RequestMapping("/admin/cars")
@@ -82,7 +84,12 @@ public class AdminCarController {
 
     @GetMapping("/add")
     public String showAddForm(Model model) {
+        List<CarModel> allModels = carModelService.getAllCarModels();
+        Map<Long, String> modelMap = new HashMap<>();
+        allModels.forEach(m -> modelMap.put(m.getId(), m.toString()));
+
         model.addAttribute("carDto", new NewCarDto());
+        model.addAttribute("models", modelMap);
         model.addAttribute("carTypes", CarType.values());
         model.addAttribute("transmissions", Transmission.values());
         model.addAttribute("fuels", FuelType.values());
@@ -96,7 +103,12 @@ public class AdminCarController {
             RedirectAttributes redirectAttributes
     ) throws FileUploadException {
         String imgUrl = fileUploadService.uploadFile(file);
-        CarModel model = carModelService.save(car.getCarModel());
+        CarModel model;
+        if(car.getCarModel().getId() == null) {
+            model = carModelService.save(car.getCarModel());
+        } else {
+            model = carModelService.getCarModelById(car.getCarModel().getId());
+        }
         switch (car.getType()) {
             case "sport" -> {
                 car.getSportCar().setModel(model);
@@ -108,7 +120,7 @@ public class AdminCarController {
                 car.getCityCar().setImageUrl(imgUrl);
                 vehicleService.save(car.getCityCar());
             }
-            default -> throw new EntityValidationException("Zły typ pojazdu", "admin//cars/add");
+            default -> throw new EntityValidationException("Zły typ pojazdu", "admin/cars/add");
         }
         redirectAttributes.addFlashAttribute("info", "Pojazd został zapisany");
         return "redirect:/admin/cars";
@@ -141,7 +153,7 @@ public class AdminCarController {
     @PostMapping("/edit")
     public String editCar(
             @ModelAttribute("car") EditCarDto carDto,
-            Model model
+            RedirectAttributes redirectAttributes
     ) {
         log.debug("edit carDto POST method: {}", carDto);
         switch(carDto.getCarType().toUpperCase()) {
@@ -155,7 +167,7 @@ public class AdminCarController {
             }
             default -> throw new EntityValidationException("Zły typ pojazdu", "/admin/cars/edit/" + carDto.getId());
         }
-        model.addAttribute("info", "Pojazd został zapisany");
+        redirectAttributes.addAttribute("info", "Pojazd został zapisany");
         return "redirect:/admin/cars";
     }
 }

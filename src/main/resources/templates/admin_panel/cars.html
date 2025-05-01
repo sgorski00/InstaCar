@@ -8,11 +8,13 @@
 
         <div class="col-lg-9 col-md-8 p-4 d-flex flex-column">
             <h4 class="text-muted">Pojazdy</h4>
+            <p th:if="${error}" th:text="${error}"></p>
+            <p th:if="${info}" th:text="${info}"></p>
             <hr>
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <form class="d-flex" th:action="@{/admin/cars}" method="get">
                     <input type="text" name="search" th:value="${search}" class="form-control me-2" placeholder="Szukaj pojazdu...">
-                    <input type="hidden" name="page" th:value="${currentPage}">
+                    <input type="hidden" name="page" th:value="1">
                     <input type="hidden" name="size" th:value="${currentSize}">
                     <button type="submit" class="btn btn-outline-primary">Szukaj</button>
                 </form>
