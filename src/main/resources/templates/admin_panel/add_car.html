@@ -8,54 +8,83 @@
 
         <div class="col-lg-9 col-md-8 p-4 d-flex flex-column">
             <h4 class="text-muted">Dodaj pojazd</h4>
+            <p th:if="${error}" th:text="${error}"></p>
+            <p th:if="${info}" th:text="${info}"></p>
             <hr>
 
             <div class="container">
                 <form th:action="@{/admin/cars/add}" method="post" th:object="${carDto}" enctype="multipart/form-data">
                     <div class="py-3">
-                    <h3><label class="form-label" for="type">Typ pojazdu:</label></h3>
-                    <select class="form-control" id="type" name="type" th:field="*{type}" onchange="changeType()">
-                        <option value="sport">Sportowy</option>
-                        <option value="city" selected>Miejski</option>
-                    </select>
+                        <h3><label class="form-label" for="type">Typ pojazdu:</label></h3>
+                        <select class="form-control" id="type" name="type" th:field="*{type}" onchange="changeType()">
+                            <option value="sport">Sportowy</option>
+                            <option value="city" selected>Miejski</option>
+                        </select>
                     </div>
                     <div class="row">
                         <!-- Lewa kolumna: Model -->
                         <div class="col-md-6">
+
                             <h3>Model</h3>
                             <div class="mb-3">
+                                <label for="model" class="form-label">Wybierz model:</label>
+                                <input type="text" list="models" id="model" class="form-control"
+                                       placeholder="Wybierz istniejący model lub utwórz nowy">
+                                <datalist id="models">
+                                    <option value="new">Utwórz nowy</option>
+                                    <option th:each="model : ${models}" th:value="${model.key}" th:text="${model.value}"
+                                            th:data-id="${model.key}"></option>
+                                </datalist>
+                                <input type="hidden" id="modelId" name="modelId" th:field="*{carModel.id}">
+                                <small class="form-text text-muted">Wybierz "Utwórz nowy" aby dodać nowy model lub
+                                    wybierz istniejący model z listy.</small>
+                            </div>
+
+                            <div class="mb-3">
                                 <label for="brand" class="form-label">Marka:</label>
-                                <input type="text" id="brand" name="brand" th:field="*{carModel.brand}" class="form-control" required>
+                                <input type="text" id="brand" name="brand" th:field="*{carModel.brand}"
+                                       class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label for="modelName" class="form-label">Model:</label>
-                                <input type="text" id="modelName" name="modelName" th:field="*{carModel.modelName}" class="form-control" required>
+                                <input type="text" id="modelName" name="modelName" th:field="*{carModel.modelName}"
+                                       class="form-control" required>
                             </div>
                             <div class="mb-3">
                                 <label for="carType" class="form-label">Typ:</label>
-                                <select id="carType" name="carType" th:field="*{carModel.carType}" class="form-select" required>
-                                    <option th:each="carType : ${carTypes}" th:value="${carType}" th:text="${carType}"></option>
+                                <select id="carType" name="carType" th:field="*{carModel.carType}" class="form-select"
+                                        required>
+                                    <option th:each="carType : ${carTypes}" th:value="${carType}"
+                                            th:text="${carType}"></option>
                                 </select>
+                                <input type="hidden" id="carType_hidden" name="carType">
                             </div>
                             <div class="mb-3">
                                 <label for="seats" class="form-label">Liczba miejsc (niewymagane):</label>
-                                <input type="number" min="2" max="9" id="seats" th:field="*{carModel.seats}" name="seats" class="form-control">
+                                <input type="number" min="2" max="9" id="seats" th:field="*{carModel.seats}"
+                                       name="seats" class="form-control">
                             </div>
                             <div class="mb-3">
                                 <label for="doors" class="form-label">Liczba drzwi (niewymagane):</label>
-                                <input type="number" min="2" max="5" id="doors" th:field="*{carModel.doors}" name="doors" class="form-control">
+                                <input type="number" min="2" max="5" id="doors" th:field="*{carModel.doors}"
+                                       name="doors" class="form-control">
                             </div>
                             <div class="mb-3">
                                 <label for="transmission" class="form-label">Rodzaj skrzyni biegów:</label>
-                                <select id="transmission" name="transmission" th:field="*{carModel.transmission}" class="form-select" required>
-                                    <option th:each="transmission : ${transmissions}" th:value="${transmission}" th:text="${transmission}"></option>
+                                <select id="transmission" name="transmission" th:field="*{carModel.transmission}"
+                                        class="form-select" required>
+                                    <option th:each="transmission : ${transmissions}" th:value="${transmission}"
+                                            th:text="${transmission}"></option>
                                 </select>
+                                <input type="hidden" id="transmission_hidden" name="transmission">
                             </div>
                             <div class="mb-3">
                                 <label for="fuelType" class="form-label">Rodzaj paliwa:</label>
-                                <select id="fuelType" name="fuelType" th:field="*{carModel.fuelType}" class="form-select" required>
+                                <select id="fuelType" name="fuelType" th:field="*{carModel.fuelType}"
+                                        class="form-select" required>
                                     <option th:each="fuel : ${fuels}" th:value="${fuel}" th:text="${fuel}"></option>
                                 </select>
+                                <input type="hidden" id="fuelType_hidden" name="fuelType">
                             </div>
                         </div>
 
@@ -65,70 +94,89 @@
                                 <h3>Pojazd miejski</h3>
                                 <div class="mb-3">
                                     <label for="licensePlate" class="form-label">Nr rejestracyjny:</label>
-                                    <input type="text" id="licensePlate" name="licensePlate" th:field="*{cityCar.licensePlate}" class="form-control" required>
+                                    <input type="text" id="licensePlate" name="licensePlate"
+                                           th:field="*{cityCar.licensePlate}" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="vin" class="form-label">VIN:</label>
-                                    <input type="text" id="vin" name="vin" th:field="*{cityCar.vin}" class="form-control" required>
+                                    <input type="text" id="vin" name="vin" th:field="*{cityCar.vin}"
+                                           class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="color" class="form-label">Kolor (niewymagane):</label>
-                                    <input type="text" id="color" name="color" th:field="*{cityCar.color}" class="form-control">
+                                    <input type="text" id="color" name="color" th:field="*{cityCar.color}"
+                                           class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label for="productionYear" class="form-label">Rok produkcji:</label>
-                                    <input type="number" min="1950" th:max="${#dates.year(#dates.createNow())}" id="productionYear" name="productionYear" th:field="*{cityCar.productionYear}" class="form-control" required>
+                                    <input type="number" min="1950" th:max="${#dates.year(#dates.createNow())}"
+                                           id="productionYear" name="productionYear"
+                                           th:field="*{cityCar.productionYear}" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="engine" class="form-label">Pojemność silnika w cm^3:</label>
-                                    <input type="text" id="engine" name="engine" th:field="*{cityCar.engine}" class="form-control" required>
+                                    <input type="text" id="engine" name="engine" th:field="*{cityCar.engine}"
+                                           class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="price" class="form-label">Cena (zł/dzień):</label>
-                                    <input type="number" min="1" max="1000" id="price" name="price" th:field="*{cityCar.price}" class="form-control" required>
+                                    <input type="number" min="1" max="1000" id="price" name="price"
+                                           th:field="*{cityCar.price}" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="tc" class="form-label">Pojemność bagażnika (l):</label>
-                                    <input type="number" min="50" max="1000" id="tc" name="tc" th:field="*{cityCar.trunkCapacity}" class="form-control" required>
+                                    <input type="number" min="50" max="1000" id="tc" name="tc"
+                                           th:field="*{cityCar.trunkCapacity}" class="form-control" required>
                                 </div>
                             </div>
                             <div id="sport">
                                 <h3>Pojazd sportowy</h3>
                                 <div class="mb-3">
                                     <label for="licensePlateS" class="form-label">Nr rejestracyjny:</label>
-                                    <input type="text" id="licensePlateS" name="licensePlateS" th:field="*{sportCar.licensePlate}" class="form-control" required>
+                                    <input type="text" id="licensePlateS" name="licensePlateS"
+                                           th:field="*{sportCar.licensePlate}" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="vinS" class="form-label">VIN:</label>
-                                    <input type="text" id="vinS" name="vinS" th:field="*{sportCar.vin}" class="form-control" required>
+                                    <input type="text" id="vinS" name="vinS" th:field="*{sportCar.vin}"
+                                           class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="colorS" class="form-label">Kolor (niewymagane):</label>
-                                    <input type="text" id="colorS" name="colorS" th:field="*{sportCar.color}" class="form-control">
+                                    <input type="text" id="colorS" name="colorS" th:field="*{sportCar.color}"
+                                           class="form-control">
                                 </div>
                                 <div class="mb-3">
                                     <label for="productionYearS" class="form-label">Rok produkcji:</label>
-                                    <input type="number" min="1950" th:max="${#dates.year(#dates.createNow())}" id="productionYearS" name="productionYearS" th:field="*{sportCar.productionYear}" class="form-control" required>
+                                    <input type="number" min="1950" th:max="${#dates.year(#dates.createNow())}"
+                                           id="productionYearS" name="productionYearS"
+                                           th:field="*{sportCar.productionYear}" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="engineS" class="form-label">Pojemność silnika w cm^3:</label>
-                                    <input type="text" id="engineS" name="engineS" th:field="*{sportCar.engine}" class="form-control" required>
+                                    <input type="text" id="engineS" name="engineS" th:field="*{sportCar.engine}"
+                                           class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="priceS" class="form-label">Cena:</label>
-                                    <input type="number" min="1" max="1000" id="priceS" name="priceS" th:field="*{sportCar.price}" class="form-control" required>
+                                    <input type="number" min="1" max="1000" id="priceS" name="priceS"
+                                           th:field="*{sportCar.price}" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="hp" class="form-label">Konie mechaniczne:</label>
-                                    <input type="number" min="50" max="800" id="hp" name="hp" th:field="*{sportCar.horsePower}" class="form-control" required>
+                                    <input type="number" min="50" max="800" id="hp" name="hp"
+                                           th:field="*{sportCar.horsePower}" class="form-control" required>
                                 </div>
                                 <div class="mb-3">
                                     <label for="topSpeed" class="form-label">Maksymalna prędkość (km/h):</label>
-                                    <input type="number" min="100" max="400" id="topSpeed" name="topSpeed" th:field="*{sportCar.topSpeed}" class="form-control">
+                                    <input type="number" min="100" max="400" id="topSpeed" name="topSpeed"
+                                           th:field="*{sportCar.topSpeed}" class="form-control">
                                 </div>
                                 <div class="mb-3">
-                                    <label for="acc" class="form-label">Przyspieszenie (w sekundach, 0-100 km/h):</label>
-                                    <input type="number" step="0.1" min="0.1" max="30" id="acc" name="acc" th:field="*{sportCar.acceleration}" class="form-control">
+                                    <label for="acc" class="form-label">Przyspieszenie (w sekundach, 0-100
+                                        km/h):</label>
+                                    <input type="number" step="0.1" min="0.1" max="30" id="acc" name="acc"
+                                           th:field="*{sportCar.acceleration}" class="form-control">
                                 </div>
                             </div>
                         </div>
@@ -151,31 +199,99 @@
 <th:block th:replace="~{/fragments/adminFragments :: footer}"></th:block>
 
 <script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const modelInput = document.getElementById("model");
+        const modelId = document.getElementById("modelId");
+        const brand = document.getElementById("brand");
+        const modelName = document.getElementById("modelName");
+        const carType = document.getElementById("carType");
+        const seats = document.getElementById("seats");
+        const doors = document.getElementById("doors");
+        const transmission = document.getElementById("transmission");
+        const fuelType = document.getElementById("fuelType");
+        const fields = [brand, modelName, carType, seats, doors, transmission, fuelType];
+
+        const modelMap = {};
+        document.querySelectorAll("#models option").forEach(opt => {
+            if (opt.value !== "new") modelMap[opt.value] = true;
+        });
+
+        const toggleFields = (enable) => {
+            fields.forEach(field => {
+                field.disabled = !enable;
+                field.readOnly = !enable;
+                if (!enable) field.classList.add("bg-light");
+                else field.classList.remove("bg-light");
+            });
+        };
+
+        const fillSelect = (select, value) => {
+            Array.from(select.options).forEach(opt => {
+                if (opt.value === value) select.value = value;
+            });
+        };
+
+        const fetchModel = (name) => {
+            fetch(`/api/models/${encodeURIComponent(name)}`)
+                .then(res => res.ok ? res.json() : Promise.reject())
+                .then(data => {
+                    brand.value = data.brand;
+                    modelName.value = data.modelName;
+                    fillSelect(carType, data.carType);
+                    fillSelect(transmission, data.transmission);
+                    fillSelect(fuelType, data.fuelType);
+                    seats.value = data.seats || '';
+                    doors.value = data.doors || '';
+                    modelId.value = data.id;
+                    toggleFields(false);
+                })
+                .catch(() => toggleFields(true));
+        };
+
+        modelInput.addEventListener("change", () => {
+            const val = modelInput.value;
+            if (val === "new") {
+                toggleFields(true);
+                fields.forEach(f => f.value = '');
+                modelId.value = '';
+            } else if (modelMap[val]) {
+                fetchModel(val);
+            } else {
+                toggleFields(true);
+            }
+        });
+
+        modelInput.addEventListener("input", () => {
+            if (!modelMap[modelInput.value] && modelInput.value !== "new") {
+                toggleFields(true);
+            }
+        });
+
+        toggleFields(true);
+        changeType();
+    });
+
     function changeType() {
         const type = document.getElementById("type").value;
         const city = document.getElementById("city");
         const sport = document.getElementById("sport");
 
-        const toggleFields = (container, enabled) => {
-            Array.from(container.querySelectorAll("input, select")).forEach(el => {
-                if (enabled) {
-                    el.disabled = false;
+        const toggle = (container, show) => {
+            container.style.display = show ? "block" : "none";
+            container.querySelectorAll("input, select").forEach(el => {
+                el.disabled = !show;
+                if (show) {
                     if (el.dataset.required === "true") el.required = true;
                 } else {
                     if (el.required) el.dataset.required = "true";
                     el.required = false;
-                    el.disabled = true;
                 }
             });
-            container.style.display = enabled ? "block" : "none";
-        }
+        };
 
-        toggleFields(city, type === "city");
-        toggleFields(sport, type === "sport");
+        toggle(city, type === "city");
+        toggle(sport, type === "sport");
     }
-
-    window.addEventListener("DOMContentLoaded", changeType);
 </script>
-
 </body>
 </html>

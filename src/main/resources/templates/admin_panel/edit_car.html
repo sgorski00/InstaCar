@@ -8,6 +8,8 @@
 
         <div class="col-lg-9 col-md-8 p-4 d-flex flex-column">
             <h4 class="text-muted">Edytuj pojazd</h4>
+            <p th:if="${error}" th:text="${error}"></p>
+            <p th:if="${info}" th:text="${info}"></p>
             <hr>
 
             <div class="container">
