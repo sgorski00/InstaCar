@@ -18,25 +18,32 @@
 
 <section class="ftco-section bg-light">
     <div class="container">
-        <div class="row">
-            <div class="d-flex">
-                <div class="form-group col-lg-4 col-md-4 col-sm-6">
-                    <label for="" class="label">Data odbioru</label>
-                    <input type="text" class="form-control" id="book_pick_date" placeholder="Data">
+        <form th:action="@{/cars}" method="get" class="search-property">
+            <div class="row">
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="form-group">
+                        <label for="pickDate" class="label">Data odbioru</label>
+                        <input type="date" class="form-control" id="pickDate" name="pickDate"
+                               th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" th:value="${pickDate}">
+                    </div>
                 </div>
-                <div class="form-group col-lg-4 col-md-4 col-sm-6">
-                    <label for="" class="label">Data zwrotu</label>
-                    <input type="text" class="form-control" id="book_off_date" placeholder="Data">
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="form-group">
+                        <label for="returnDate" class="label">Data zwrotu</label>
+                        <input type="date" class="form-control" id="returnDate" name="returnDate"
+                               th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" th:value="${returnDate}">
+                    </div>
                 </div>
             </div>
-            <div class="col-md-12">
-                <div class="mb-4">
-                    <form th:action="@{/cars}" method="get" class="search-property">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="mb-4">
                         <div class="row">
                             <div class="col-lg-4 col-md-4 col-sm-6">
                                 <div class="form-group">
                                     <label for="keyword">Szukaj po nazwie</label>
-                                    <input type="text" class="form-control py-2" id="keyword" name="keyword" th:value="${keyword}">
+                                    <input type="text" class="form-control py-2" id="keyword" name="keyword"
+                                           th:value="${keyword}">
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-6">
@@ -60,10 +67,10 @@
                                 </div>
                             </div>
                         </div>
-                    </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
         <div class="row">
             <div th:each="car : ${cars}" class="col-md-4">
                 <div class="car-wrap rounded ftco-animate">
@@ -87,18 +94,21 @@
             <div class="col text-center">
                 <div class="block-27">
                     <ul th:if="${totalPages > 1}">
-                        <li><a th:href="@{/cars(page=${1}, size=${currentSize}, type=${type}, keyword=${keyword})}">&laquo;</a></li>
+                        <li><a th:href="@{/cars(page=${1}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate})}">&laquo;</a>
+                        </li>
                         <th:block th:each="pageNum : ${pageNumbers}">
                             <li th:if="${currentPage} == ${pageNum}" class="active">
-                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize}, type=${type}, keyword=${keyword})}"
+                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate})}"
                                    th:text="${pageNum}"></a>
                             </li>
                             <li th:unless="${currentPage} == ${pageNum}">
-                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize}, type=${type}, keyword=${keyword})}"
+                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate})}"
                                    th:text="${pageNum}"></a>
                             </li>
                         </th:block>
-                        <li><a th:href="@{/cars(page=${totalPages}, size=${currentSize}, type=${type}, keyword=${keyword})}">&raquo;</a></li>
+                        <li>
+                            <a th:href="@{/cars(page=${totalPages}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate})}">&raquo;</a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -109,5 +119,38 @@
 <th:block th:replace="~{/fragments/bodyFragments :: footer}"></th:block>
 <th:block th:replace="~{/fragments/bodyFragments :: loader}"></th:block>
 <th:block th:replace="~{/fragments/bodyFragments :: scripts}"></th:block>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const pickDate = document.getElementById('pickDate');
+        const returnDate = document.getElementById('returnDate');
+
+        const formatDateToInput = (date) => date.toISOString().split('T')[0];
+
+        const updateMinMax = () => {
+            if (pickDate.value) {
+                const date = new Date(pickDate.value);
+                date.setDate(date.getDate() + 1);
+                returnDate.min = formatDateToInput(date);
+                if (returnDate.value && returnDate.value < returnDate.min) {
+                    returnDate.value = '';
+                }
+            }
+            if (returnDate.value) {
+                const date = new Date(returnDate.value);
+                date.setDate(date.getDate() - 1);
+                pickDate.max = formatDateToInput(date);
+                if (pickDate.value && pickDate.value > pickDate.max) {
+                    pickDate.value = '';
+                }
+            }
+        };
+
+        pickDate.addEventListener('change', updateMinMax);
+        returnDate.addEventListener('change', updateMinMax);
+
+        updateMinMax();
+    });
+</script>
+
 </body>
 </html>

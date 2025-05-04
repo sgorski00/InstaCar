@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
-import pl.studia.InstaCar.model.dto.CarUpdateDto;
 import pl.studia.InstaCar.model.enums.RentalStatus;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -58,6 +59,11 @@ public abstract class Vehicle implements Rental, Serializable {
 
     private String imageUrl;
 
+    @NotNull
+    @Column(nullable = false)
+    //TODO(w serwisie - dodanie i edycja opisu)
+    private String description = "No description yet.";
+
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Rent> rents = new ArrayList<>();
@@ -68,8 +74,17 @@ public abstract class Vehicle implements Rental, Serializable {
     }
 
     @Override
+    public boolean isAvailableInDate(LocalDate startDate, LocalDate endDate) {
+        if (rents == null || rents.isEmpty()) return true;
+        return rents.stream()
+                .noneMatch(rent -> rent.getRentDate().isBefore(endDate)
+                        && rent.getReturnDate().isAfter(startDate)
+                );
+    }
+
+    @Override
     public void rent() {
-        if(isAvailable()) {
+        if (isAvailable()) {
             this.status = RentalStatus.RENTED;
         } else {
             throw new IllegalStateException("Vehicle is not available for rent");
@@ -78,20 +93,11 @@ public abstract class Vehicle implements Rental, Serializable {
 
     @Override
     public void returnRental() {
-        if(status.equals(RentalStatus.RENTED)){
+        if (status.equals(RentalStatus.RENTED)) {
             this.status = RentalStatus.AVAILABLE;
         } else {
             throw new IllegalStateException("Vehicle is not rented");
         }
-    }
-
-    public void updateCarDetails(CarUpdateDto carDto) {
-        this.color = carDto.getColor();
-        this.engine = carDto.getEngine();
-        this.licensePlate = carDto.getLicensePlate();
-        this.price = carDto.getPrice();
-        this.productionYear = carDto.getProductionYear();
-        this.vin = carDto.getVin();
     }
 
     public String getImageUrl() {

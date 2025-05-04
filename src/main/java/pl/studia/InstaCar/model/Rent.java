@@ -33,5 +33,13 @@ public class Rent {
 
     private LocalDate returnDate;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "pickup_city_id", nullable = false)
+    private City pickUpCity;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "return_city_id", nullable = false)
+    private City returnCity;
+
     private double totalCost;
 }

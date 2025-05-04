@@ -16,6 +16,7 @@ import pl.studia.InstaCar.service.VehicleService;
 import pl.studia.InstaCar.utils.ListPaginator;
 import pl.studia.InstaCar.utils.PaginationUtils;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Log4j2
@@ -41,18 +42,23 @@ public class CarController {
             @RequestParam(value = "page", defaultValue = "1") Integer page,
             @RequestParam(value = "keyword", required = false) String keyword,
             @RequestParam(value = "type", defaultValue = "all") String type,
+            @RequestParam(value = "pickDate", required = false) LocalDate pickDate,
+            @RequestParam(value = "returnDate", required = false) LocalDate returnDate,
             Model model
     ) {
-        List<Vehicle> allCars = vehicleService.getAllCarsByQueryAndType(keyword, type);
+        if(pickDate == null) pickDate = LocalDate.now();
+        if(returnDate == null) returnDate = LocalDate.now().plusDays(7);
+        List<Vehicle> allCars = vehicleService.getAllCarsByQueryAndTypeAvailableInDate(keyword, type, pickDate, returnDate);
         List<Vehicle> carsPaginatedList = listPaginator.getPaginatedList(allCars,page, size);
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         Page<Vehicle> carsPage = new PageImpl<>(carsPaginatedList, pageRequest, allCars.size());
-
         int totalPages = carsPage.getTotalPages();
         int[] pageNumbers = PaginationUtils.getPageNumbers(page, visiblePages, totalPages);
 
         model.addAttribute("type", type);
         model.addAttribute("keyword", keyword);
+        model.addAttribute("pickDate", pickDate);
+        model.addAttribute("returnDate", returnDate);
         model.addAttribute("cars" , carsPage);
         model.addAttribute("currentPage", page);
         model.addAttribute("currentSize", size);
@@ -74,6 +80,6 @@ public class CarController {
         }else {
             model.addAttribute("car", car);
         }
-        return "cars";
+        return "car-single";
     }
 }

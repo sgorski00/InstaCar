@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
-import pl.studia.InstaCar.model.CarModel;
-import pl.studia.InstaCar.model.CityCar;
-import pl.studia.InstaCar.model.SportCar;
-import pl.studia.InstaCar.model.Vehicle;
+import pl.studia.InstaCar.model.*;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.AuthProvider;
 import pl.studia.InstaCar.model.authentication.Role;
@@ -38,14 +35,16 @@ public class DataSeeder implements CommandLineRunner {
             "Mondeo","Corolla","Stilo","911","Passat","Ceed","Sandero","Ibiza","i30", "E47", "A4", "3008"
     };
     private final VehicleService vehicleService;
+    private final CityService cityService;
 
     @Autowired
-    public DataSeeder(UserService userService, RoleService roleService, CarModelService carModelService, VehicleService vehicleService) {
+    public DataSeeder(UserService userService, RoleService roleService, CarModelService carModelService, VehicleService vehicleService, CityService cityService) {
         this.userService = userService;
         this.roleService = roleService;
         this.carModelService = carModelService;
         this.faker = new Faker();
         this.vehicleService = vehicleService;
+        this.cityService = cityService;
     }
 
     @Override
@@ -53,6 +52,20 @@ public class DataSeeder implements CommandLineRunner {
         generateFakeUsers(100);
         List<CarModel> models = generateCarModels(15);
         List<Vehicle> vehicles = generateVehicle(20, 30, models);
+        List<City> cities = generateCities(10);
+    }
+
+    private List<City> generateCities(int numOfCities) {
+        List<City> cities = new ArrayList<>();
+        if (cityService.count() < 3) {
+            for (int i = 0; i < numOfCities; i++) {
+                City city = new City();
+                city.setName(faker.address().cityName());
+                cities.add(city);
+            }
+            cityService.saveAll(cities);
+        }
+        return cities;
     }
 
     private List<Vehicle> generateVehicle(int numOfSportCars, int numOfCityCars, List<CarModel> models) {
