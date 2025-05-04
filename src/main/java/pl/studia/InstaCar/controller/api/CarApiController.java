@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.studia.InstaCar.config.exceptions.ApiResponseException;
-import pl.studia.InstaCar.model.CarModel;
 import pl.studia.InstaCar.model.Vehicle;
 import pl.studia.InstaCar.model.dto.CarUpdateDto;
 import pl.studia.InstaCar.service.VehicleService;
@@ -67,7 +66,7 @@ public class CarApiController {
             @RequestBody CarUpdateDto carDto
     ) {
         Vehicle exisitngVehicle = vehicleService.getCarById(id);
-        exisitngVehicle.updateCarDetails(carDto);
+        carDto.updateCar(exisitngVehicle);
         vehicleService.save(exisitngVehicle);
         return ResponseEntity.status(201)
                 .body("Pojazd został zapisany");

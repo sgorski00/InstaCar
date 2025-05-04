@@ -16,6 +16,7 @@ import pl.studia.InstaCar.repository.CityCarRepository;
 import pl.studia.InstaCar.repository.SportCarRepository;
 import pl.studia.InstaCar.repository.VehicleRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -94,8 +95,11 @@ public class VehicleService {
         return vehicleRepository.findAllByQuery(query.toLowerCase());
     }
 
-    public List<Vehicle> getAllCarsByQueryAndType(String query, String type) {
+    public List<Vehicle> getAllCarsByQueryAndTypeAvailableInDate(String query, String type, LocalDate dateFrom, LocalDate dateTo) {
         query = query == null ?  "" : query;
-        return vehicleRepository.findAllByQueryAndType(query.toLowerCase(), type.toLowerCase());
+        List<Vehicle> vehicles = vehicleRepository.findAllByQueryAndType(query.toLowerCase(), type.toLowerCase());
+        return vehicles.stream()
+                .filter(vehicle -> vehicle.isAvailableInDate(dateFrom, dateTo))
+                .toList();
     }
 }
