@@ -2,174 +2,197 @@
 <html lang="pl">
 <th:block th:replace="~{/fragments/headerFragments :: head('O nas')}"></th:block>
 <body>
-    <th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
-    <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/bg_3.jpg');"
-             data-stellar-background-ratio="0.5">
-        <div class="overlay"></div>
-        <div class="container">
-            <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
-                <div class="col-md-9 ftco-animate pb-5">
-                    <h1 class="mb-3 bread">Samochód</h1>
+<th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/bg_3.jpg');"
+         data-stellar-background-ratio="0.5">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
+            <div class="col-md-9 ftco-animate pb-5">
+                <h1 class="mb-3 bread">Samochód</h1>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="ftco-section ftco-car-details">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-12">
+                <div class="car-details">
+                    <div class="img rounded" th:style="'background-image: url(' + ${car.getImageUrl()} +');'"></div>
+                    <div class="text text-center">
+                        <span class="subheading" th:text="${car.model.brand}"></span>
+                        <h2 th:text="${car.model}"></h2>
+                    </div>
                 </div>
             </div>
         </div>
-    </section>
 
-    <section class="ftco-section ftco-car-details">
-        <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-md-12">
-                    <div class="car-details">
-                        <div class="img rounded" th:style="'background-image: url(' + ${car.getImageUrl()} +');'"></div>
-                        <div class="text text-center">
-                            <span class="subheading" th:text="${car.model.brand}"></span>
-                            <h2 th:text="${car.model}"></h2>
-                        </div>
-                    </div>
-                </div>
+        <div class="container text-center my-4">
+            <div class="d-flex flex-wrap gap-3 justify-content-center">
+                <div class="box col-3">PLN</div>
+                <div class="box col-3" th:each="price : ${prices}" th:text="${price.key}">Euro</div>
             </div>
-
-            <div class="container text-center my-4">
-                <div class="d-flex flex-wrap gap-3 justify-content-center">
-                    <div class="box col-3">Euro</div>
-                    <div class="box col-3">Dolary</div>
-                    <div class="box col-3">Franki</div>
-                </div>
-
-                <div class="d-flex flex-wrap gap-3 justify-content-center mt-3">
-                    <div class="box col-3">E</div>
-                    <div class="box col-3">$</div>
-                    <div class="box col-3">FR</div>
-                </div>
+            <div class="d-flex flex-wrap gap-3 justify-content-center mt-3">
+                <div class="box col-3" th:text="${#numbers.formatDecimal(car.price,1,2,'POINT')}">PLN</div>
+                <div class="box col-3" th:each="price : ${prices}" th:text="${price.value}">E</div>
             </div>
+        </div>
 
-            <div class="row">
-                <div class="col-md d-flex align-self-stretch ftco-animate">
-                    <div class="media block-6 services">
-                        <div class="media-body py-md-4">
-                            <div class="d-flex mb-3 align-items-center">
-                                <div class="icon d-flex align-items-center justify-content-center">
-                                    <span class="flaticon-pistons"></span>
-                                </div>
-                                <div class="text">
-                                    <h3 class="heading mb-0 pl-3">
-                                        Transmission
-                                        <span th:text="${car.model.transmission}"></span>
-                                    </h3>
-                                </div>
+        <div class="row">
+            <div class="col-md d-flex align-self-stretch ftco-animate justify-content-start justify-content-md-center">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <span class="flaticon-pistons"></span>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md d-flex align-self-stretch ftco-animate">
-                    <div class="media block-6 services">
-                        <div class="media-body py-md-4">
-                            <div class="d-flex mb-3 align-items-center">
-                                <div class="icon d-flex align-items-center justify-content-center">
-                                    <span class="flaticon-car-seat"></span>
-                                </div>
-                                <div class="text">
-                                    <h3 class="heading mb-0 pl-3">
-                                        Seats
-                                        <span th:text="${car.model.seats}"></span>
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md d-flex align-self-stretch ftco-animate">
-                    <div class="media block-6 services">
-                        <div class="media-body py-md-4">
-                            <div class="d-flex mb-3 align-items-center">
-                                <div class="icon d-flex align-items-center justify-content-center">
-                                    <span class="flaticon-diesel"></span>
-                                </div>
-                                <div class="text">
-                                    <h3 class="heading mb-0 pl-3">
-                                        Fuel
-                                        <span th:text="${car.model.fuelType}"></span>
-                                    </h3>
-                                </div>
+                            <div class="text">
+                                <h3 class="heading mb-0 pl-3">
+                                    Transmission
+                                    <span th:text="${car.model.transmission}"></span>
+                                </h3>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-12 pills">
-                    <div class="bd-example bd-example-tabs">
-                        <div class="d-flex justify-content-center">
-                            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
-                                <li class="nav-item">
-                                    <a class="nav-link active" id="pills-description-tab" data-toggle="pill"
-                                       href="#pills-description" role="tab" aria-controls="pills-description"
-                                       aria-expanded="true">Features</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill"
-                                       href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer"
-                                       aria-expanded="true">Description</a>
-                                </li>
-                            </ul>
-                        </div>
-
-                        <div class="tab-content" id="pills-tabContent">
-                            <div class="tab-pane fade show active" id="pills-description" role="tabpanel"
-                                 aria-labelledby="pills-description-tab">
-                                <div class="row">
-                                    <div class="col-md-3">
-                                        <ul class="features">
-                                            <li class="text-dark">Drzwi</li>
-                                            <li>⠀</li>
-                                            <li class="text-dark">Okna</li>
-                                            <li>⠀</li>
-                                            <li class="text-dark">Radio</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <ul class="features">
-                                            <li>5</li>
-                                            <li>⠀</li>
-                                            <li>10</li>
-                                            <li>⠀</li>
-                                            <li>Jest</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <ul class="features">
-                                            <li class="text-dark">Opony</li>
-                                            <li>⠀</li>
-                                            <li class="text-dark">ręczny</li>
-                                            <li>⠀</li>
-                                            <li class="text-dark">Klimatyzacja</li>
-                                        </ul>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <ul class="features">
-                                            <li>zimowe</li>
-                                            <li>⠀</li>
-                                            <li>działa</li>
-                                            <li>⠀</li>
-                                            <li>po lewej stronie w drzwiach</li>
-                                        </ul>
-                                    </div>
-                                </div>
+            <div class="col-md d-flex align-self-stretch ftco-animate justify-content-start justify-content-md-center">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <span class="flaticon-car-seat"></span>
                             </div>
-
-                            <div class="tab-pane fade" id="pills-manufacturer" role="tabpanel"
-                                 aria-labelledby="pills-manufacturer-tab">
-                                <p th:text="${car.description}"></p>
+                            <div class="text">
+                                <h3 class="heading mb-0 pl-3">
+                                    Seats
+                                    <span th:text="${car.model.seats}"></span>
+                                </h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md d-flex align-self-stretch ftco-animate justify-content-start justify-content-md-center">
+                <div class="media block-6 services">
+                    <div class="media-body py-md-4">
+                        <div class="d-flex mb-3 align-items-center">
+                            <div class="icon d-flex align-items-center justify-content-center">
+                                <span class="flaticon-diesel"></span>
+                            </div>
+                            <div class="text">
+                                <h3 class="heading mb-0 pl-3">
+                                    Fuel
+                                    <span th:text="${car.model.fuelType}"></span>
+                                </h3>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </section>
-    <th:block th:replace="~{/fragments/bodyFragments :: footer}"></th:block>
-    <th:block th:replace="~{/fragments/bodyFragments :: loader}"></th:block>
-    <th:block th:replace="~{/fragments/bodyFragments :: scripts}"></th:block>
+        <div class="row">
+            <div class="col-md-12 pills">
+                <div class="bd-example bd-example-tabs">
+                    <div class="d-flex justify-content-center">
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-description-tab" data-toggle="pill"
+                                   href="#pills-description" role="tab" aria-controls="pills-description"
+                                   aria-expanded="true">Features</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill"
+                                   href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer"
+                                   aria-expanded="true">Description</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-description" role="tabpanel"
+                             aria-labelledby="pills-description-tab">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <ul class="features">
+                                        <li class="text-dark">Drzwi</li>
+                                        <li>⠀</li>
+                                        <li class="text-dark">Typ pojazdu</li>
+                                        <li>⠀</li>
+                                        <li class="text-dark">Rok produkcji</li>
+                                        <br />
+                                        <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
+                                            <li class="text-dark">Konie mechaniczne</li>
+                                            <li>⠀</li>
+                                            <li class="text-dark">Przyspieszenie (0-100 km/h)</li></li>
+                                        </th:block>
+                                        <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.CityCar'}">
+                                            <li class="text-dark">Pojemność bagażnika (l)</li>
+                                        </th:block>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3">
+                                    <ul class="features">
+                                        <li th:text="${car.model.doors} == null ? 'Brak danych' : ${car.model.doors}">5</li>
+                                        <li>⠀</li>
+                                        <li th:text="${car.model.carType}">10</li>
+                                        <li>⠀</li>
+                                        <li th:text="${car.productionYear} == null ? 'Brak danych' : ${car.productionYear}"></li>
+                                        <br />
+                                        <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
+                                            <li th:text="${car.horsePower}">Konie mechaniczne</li>
+                                            <li>⠀</li>
+                                            <li th:text="${car.acceleration}">Przyspieszenie</li>
+                                        </th:block>
+                                        <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.CityCar'}">
+                                            <li th:text="${car.trunkCapacity}">Pojemność bagażnika</li>
+                                        </th:block>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3">
+                                    <ul class="features">
+                                        <li class="text-dark">Silnik (cm<sup>3</sup>)</li>
+                                        <li>⠀</li>
+                                        <li class="text-dark">Kolor</li>
+                                        <li>⠀</li>
+                                        <li class="text-dark">VIN</li>
+                                        <br />
+                                        <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
+                                            <li class="text-dark">Prędkość max. (km/h)</li>
+                                        </th:block>
+                                    </ul>
+                                </div>
+                                <div class="col-md-3">
+                                    <ul class="features">
+                                        <li th:text="${car.engine} == null ? 'Brak danych' : ${car.engine}"></li>
+                                        <li>⠀</li>
+                                        <li th:text="${car.color} == null ? 'Brak danych' : ${car.color}"></li>
+                                        <li>⠀</li>
+                                        <li th:text="${car.vin}"></li>
+                                        <br />
+                                        <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
+                                            <li th:text="${car.topSpeed}">Prędkość max. (km/h)</li>
+                                        </th:block>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="pills-manufacturer" role="tabpanel"
+                             aria-labelledby="pills-manufacturer-tab">
+                            <p th:text="${car.description}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<th:block th:replace="~{/fragments/bodyFragments :: footer}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragments :: loader}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragments :: scripts}"></th:block>
 
 </body>
 </html>
