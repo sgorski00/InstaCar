@@ -20,9 +20,12 @@ public class RateResponse {
     private List<Rate> rates;
 
     public double getNewestPrice(double price) {
-        NumberFormat nf = new DecimalFormat("#0.00");
+        return Double.parseDouble(rates.getLast().getMid()) * price;
+    }
+
+    public String getNewestPriceFormatted(double price) {
+        NumberFormat nf = new DecimalFormat("0.00");
         nf.setRoundingMode(RoundingMode.HALF_EVEN);
-        double result = Double.parseDouble(rates.getLast().getMid()) * price;
-        return Double.parseDouble(nf.format(result));
+        return nf.format(getNewestPrice(price));
     }
 }

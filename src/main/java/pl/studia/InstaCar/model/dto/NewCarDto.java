@@ -2,6 +2,7 @@ package pl.studia.InstaCar.model.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,4 +25,8 @@ public class NewCarDto {
 
     private SportCar sportCar;
     private CityCar cityCar;
+
+    @NotNull
+    @Size(max = 250)
+    private String description = "No description yet.";
 }

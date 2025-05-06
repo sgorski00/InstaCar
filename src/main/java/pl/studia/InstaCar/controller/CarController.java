@@ -80,9 +80,9 @@ public class CarController {
     ) {
         Vehicle car = vehicleService.getCarById(id);
         List<String> currencies = List.of("EUR", "USD", "GBP");
-        Map<String, Double> prices = new HashMap<>();
+        Map<String, String> prices = new HashMap<>();
         webClientService.getRates(currencies)
-                .forEach(r -> prices.put(r.getCode(), r.getNewestPrice(car.getPrice())));
+                .forEach(r -> prices.put(r.getCode(), r.getNewestPriceFormatted(car.getPrice())));
         if(car instanceof SportCar sportCar) {
             model.addAttribute("car", sportCar);
         } else if (car instanceof CityCar cityCar){
