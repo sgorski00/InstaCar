@@ -113,11 +113,13 @@ public class AdminCarController {
             case "sport" -> {
                 car.getSportCar().setModel(model);
                 car.getSportCar().setImageUrl(imgUrl);
+                car.getSportCar().setDescription(car.getDescription());
                 vehicleService.save(car.getSportCar());
             }
             case "city" -> {
                 car.getCityCar().setModel(model);
                 car.getCityCar().setImageUrl(imgUrl);
+                car.getCityCar().setDescription(car.getDescription());
                 vehicleService.save(car.getCityCar());
             }
             default -> throw new EntityValidationException("Zły typ pojazdu", "admin/cars/add");

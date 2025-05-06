@@ -40,15 +40,14 @@ public class WebClientService {
     }
 
     /**
-     * This method retrieves rates for multiple currencies asynchronously.
+     * This method retrieves rates for multiple currencies.
      * @param currencies 3-letter currency codes
-     * @return CompletableFuture<List<RateResponse>> a future holding a list of rate responses
+     * @return List<RateResponse> a list of rate responses
      */
-    @Async
-    public CompletableFuture<List<RateResponse>> getRates(String... currencies) {
-        Flux<RateResponse> rateFlux = Flux.fromArray(currencies)
-                .flatMap(this::getNbpResponse);
-
-        return rateFlux.collectList().toFuture();
+    public List<RateResponse> getRates(Iterable<String> currencies) {
+        return Flux.fromIterable(currencies)
+                .flatMap(this::getNbpResponse)
+                .collectList()
+                .block();
     }
 }

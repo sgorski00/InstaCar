@@ -13,11 +13,15 @@ import pl.studia.InstaCar.model.CityCar;
 import pl.studia.InstaCar.model.SportCar;
 import pl.studia.InstaCar.model.Vehicle;
 import pl.studia.InstaCar.service.VehicleService;
+import pl.studia.InstaCar.service.WebClientService;
 import pl.studia.InstaCar.utils.ListPaginator;
 import pl.studia.InstaCar.utils.PaginationUtils;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @Log4j2
 @Controller
@@ -26,14 +30,16 @@ public class CarController {
 
     private final VehicleService vehicleService;
     private final ListPaginator<Vehicle> listPaginator;
+    private final WebClientService webClientService;
 
     @Value("${default.pagination.pages.size}")
     private int visiblePages;
 
     @Autowired
-    public CarController(VehicleService vehicleService, ListPaginator<Vehicle> listPaginator) {
+    public CarController(VehicleService vehicleService, ListPaginator<Vehicle> listPaginator, WebClientService webClientService) {
         this.vehicleService = vehicleService;
         this.listPaginator = listPaginator;
+        this.webClientService = webClientService;
     }
 
     @GetMapping
@@ -73,6 +79,10 @@ public class CarController {
             Model model
     ) {
         Vehicle car = vehicleService.getCarById(id);
+        List<String> currencies = List.of("EUR", "USD", "GBP");
+        Map<String, String> prices = new HashMap<>();
+        webClientService.getRates(currencies)
+                .forEach(r -> prices.put(r.getCode(), r.getNewestPriceFormatted(car.getPrice())));
         if(car instanceof SportCar sportCar) {
             model.addAttribute("car", sportCar);
         } else if (car instanceof CityCar cityCar){
@@ -80,6 +90,7 @@ public class CarController {
         }else {
             model.addAttribute("car", car);
         }
+        model.addAttribute("prices", prices);
         return "car-single";
     }
 }

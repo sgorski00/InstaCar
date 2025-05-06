@@ -94,8 +94,8 @@ public class DataSeeder implements CommandLineRunner {
 
     private void setVehicleGenericFields(Vehicle vehicle, List<CarModel> models) {
         vehicle.setColor(faker.color().name());
-        vehicle.setEngine(faker.number().numberBetween(3000, 5000) + "cc");
-        vehicle.setLicensePlate(faker.letterify("??? #####").toUpperCase());
+        vehicle.setEngine(faker.number().numberBetween(1800, 4700) + "cc");
+        vehicle.setLicensePlate(faker.letterify("??? ?????").toUpperCase());
         vehicle.setModel(faker.options().option(models.toArray(new CarModel[0])));
         vehicle.setPrice(faker.number().numberBetween(1, 1000));
         vehicle.setProductionYear(faker.number().numberBetween(2016, 2025));

@@ -129,6 +129,11 @@
                         </div>
                     </div>
 
+                    <div class="mb-3">
+                        <label for="description" class="form-label">Opis:</label>
+                        <textarea rows="4" maxlength="250" th:field="*{description}" id="description" class="form-control" required></textarea>
+                    </div>
+
                     <input type="hidden" th:field="*{id}">
                     <input type="hidden" th:field="*{model}">
                     <input type="hidden" th:field="*{carType}">

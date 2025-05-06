@@ -13,6 +13,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -55,7 +56,7 @@ public abstract class Vehicle implements Rental, Serializable {
     private RentalStatus status = RentalStatus.AVAILABLE;
 
     @Positive
-    private double price; // per day
+    private double price; // per day in PLN
 
     private String imageUrl;
 

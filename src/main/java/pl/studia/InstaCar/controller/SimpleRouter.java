@@ -17,7 +17,12 @@ public class SimpleRouter {
     }
 
     @GetMapping("/error")
-    public String show() {
+    public String showError() {
         return "error";
+    }
+
+    @GetMapping("/")
+    public String showHome() {
+        return "index";
     }
 }

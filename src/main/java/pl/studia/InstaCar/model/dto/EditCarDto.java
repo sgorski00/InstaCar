@@ -26,6 +26,7 @@ public class EditCarDto {
     private int topSpeed;
     private int horsePower;
     private double trunkCapacity;
+    private String description;
 
     public EditCarDto(Vehicle vehicle) {
         this.id = vehicle.getId();
@@ -38,6 +39,7 @@ public class EditCarDto {
         this.price = vehicle.getPrice();
         this.engine = vehicle.getEngine();
         this.imageUrl = vehicle.getImageUrl();
+        this.description = vehicle.getDescription();
         if (vehicle instanceof SportCar sportCar) {
             this.acceleration = sportCar.getAcceleration();
             this.topSpeed = sportCar.getTopSpeed();
@@ -57,6 +59,7 @@ public class EditCarDto {
         vehicle.setPrice(price);
         vehicle.setEngine(engine);
         vehicle.setImageUrl(imageUrl);
+        vehicle.setDescription(description);
         return switch (carType.toUpperCase()) {
             case "SPORT" -> {
                 SportCar sportCar = (SportCar) vehicle;
