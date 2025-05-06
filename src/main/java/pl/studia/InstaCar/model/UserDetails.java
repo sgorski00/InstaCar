@@ -30,26 +30,26 @@ public class UserDetails implements Serializable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private ApplicationUser user;
 
-    @Size(max = 50)
+    @Size(max = 50, message = "Imię nie może przekraczać 50 znaków")
     private String firstName;
 
-    @Size(max = 50)
+    @Size(max = 50, message = "Nazwisko nie może przekraczać 50 znaków")
     private String lastName;
 
     @Nullable
-    @Size(max = 50)
+    @Size(max = 50, message = "Numer telefonu nie może przekraczać 50 znaków")
     private String phoneNumber;
 
     @Nullable
-    @Size(max = 255)
+    @Size(max = 255, message = "Adres nie może przekraczać 255 znaków")
     private String address;
 
     @Nullable
-    @Size(max = 50)
+    @Size(max = 50, message = "Nazwa miasta nie może przekraczać 50 znaków")
     private String city;
 
     @Nullable
-    @Size(max = 10)
+    @Size(max = 10, message = "Kod pocztowy nie może przekraczać 10 znaków")
     private String postalCode;
 
     @Override

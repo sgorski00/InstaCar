@@ -25,27 +25,27 @@ public class CarModel implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "Marka nie może być pusta")
     @Column(nullable = false)
     private String brand;
 
-    @NotBlank
+    @NotBlank(message = "Model nie może być pusty")
     @Column(nullable = false)
     private String modelName;
 
-    @NotNull
+    @NotNull(message = "Typ samochodu nie może być pusty")
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private CarType carType;
 
     @Nullable
-    @Min(2)
-    @Max(9)
+    @Min(value = 2, message = "Minimalna liczba miejsc to 2")
+    @Max(value = 9, message = "Maksymalna liczba miejsc to 9")
     private Integer seats;
 
     @Nullable
-    @Min(2)
-    @Max(5)
+    @Min(value = 2, message = "Minimalna liczba drzwi to 2")
+    @Max(value = 5, message = "Maksymalna liczba drzwi to 5")
     private Integer doors;
 
     @Enumerated(EnumType.STRING)

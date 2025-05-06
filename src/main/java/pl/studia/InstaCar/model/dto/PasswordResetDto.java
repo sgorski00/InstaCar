@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 public class PasswordResetDto implements PasswordEquals {
 
-    @NotBlank
-    @Size(min = 5)
+    @NotBlank(message = "Hasło jest wymagane")
+    @Size(min = 5, message = "Hasło musi mieć co najmniej 5 znaków")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "Hasło jest wymagane")
     private String repeatPassword;
 
     public boolean arePasswordsEqual(){

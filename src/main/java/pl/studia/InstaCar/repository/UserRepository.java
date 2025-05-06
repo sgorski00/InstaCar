@@ -23,4 +23,5 @@ public interface UserRepository extends JpaRepository<ApplicationUser, Long> {
 """)
     Page<ApplicationUser> findAllBySearch(@Param("query") String query, Pageable pageable);
 
+    boolean existsByEmailIgnoreCase(String email);
 }

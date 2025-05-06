@@ -49,7 +49,7 @@ public class RegisterController {
     ) {
         if (bindingResult.hasErrors()) {
             FieldError error = bindingResult.getFieldErrors().getFirst();
-            String message =  error.getField() + ": " + error.getDefaultMessage() + " ";
+            String message =  error.getDefaultMessage();
             log.info("Failed to create new user: {}", bindingResult.getAllErrors());
             throw new EntityValidationException(
                     message,

@@ -21,7 +21,6 @@ public abstract class TokenService<T extends BaseToken> {
      * Activates the given token by setting its 'isUsed' status to true.
      *
      * @param token the token to be activated
-     * @param tokenClass the class of the token
      * @throws TokenIllegalArgumentException if the token is already used or expired
      */
     @Transactional

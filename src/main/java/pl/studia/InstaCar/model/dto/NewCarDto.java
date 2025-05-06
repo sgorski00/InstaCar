@@ -17,16 +17,16 @@ import pl.studia.InstaCar.model.SportCar;
 @Setter
 public class NewCarDto {
 
-    @NotBlank
+    @NotBlank(message = "Typ pojazdu nie może być pusty")
     private String type;
 
-    @NotNull
+    @NotNull(message = "Model pojazdu nie może być pusty")
     private CarModel carModel = new CarModel();
 
     private SportCar sportCar;
     private CityCar cityCar;
 
-    @NotNull
-    @Size(max = 250)
+    @NotNull(message = "Opis nie może być pusty")
+    @Size(max = 250, message = "Opis nie może mieć więcej niż 250 znaków")
     private String description = "No description yet.";
 }
