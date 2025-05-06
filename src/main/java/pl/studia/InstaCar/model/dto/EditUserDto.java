@@ -18,26 +18,26 @@ public class EditUserDto {
     @NotNull
     private Long roleId;
 
-    @Size(max = 50)
+    @Size(max = 50, message = "Imię nie może być dłuższe niż 50 znaków")
     private String firstName;
 
-    @Size(max = 50)
+    @Size(max = 50, message = "Nazwisko nie może być dłuższe niż 50 znaków")
     private String lastName;
 
     @Nullable
-    @Size(max = 50)
+    @Size(max = 50, message = "Numer telefonu nie może być dłuższy niż 50 znaków")
     private String phoneNumber;
 
     @Nullable
-    @Size(max = 255)
+    @Size(max = 255, message = "Adres nie może mieć więcej niż 255 znaków")
     private String address;
 
     @Nullable
-    @Size(max = 50)
+    @Size(max = 50, message = "Nazwa miasta nie może być dłuższe niż 50 znaków")
     private String city;
 
     @Nullable
-    @Size(max = 10)
+    @Size(max = 10, message = "Kod pocztowy może mieć maksymalnie 10 znaków")
     private String postalCode;
 
     public EditUserDto(ApplicationUser user) {

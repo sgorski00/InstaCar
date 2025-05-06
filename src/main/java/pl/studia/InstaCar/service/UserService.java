@@ -86,6 +86,10 @@ public class UserService implements UserDetailsService {
         );
     }
 
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmailIgnoreCase(email);
+    }
+
     public List<ApplicationUser> findAll() {
         return userRepository.findAll();
     }

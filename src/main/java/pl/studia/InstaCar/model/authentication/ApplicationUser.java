@@ -27,13 +27,13 @@ public class ApplicationUser implements UserDetails, Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Size(min = 5, max = 50)
+    @NotBlank(message = "Nazwa użytkownika jest wymagana")
+    @Size(min = 5, max = 50, message = "Nazwa użytkownika musi mieć od 5 do 50 znaków")
     @Column(unique = true, nullable = false)
     @EqualsAndHashCode.Include
     private String username;
 
-    @Email
+    @Email(message = "Adres email jest nieprawidłowy")
     @Column(unique = true, nullable = false)
     private String email;
 

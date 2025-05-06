@@ -1,20 +1,16 @@
 package pl.studia.InstaCar.model.builders;
 
-import org.springframework.beans.factory.annotation.Value;
 import pl.studia.InstaCar.model.dto.EmailDto;
 
 public class ActivationEmailBuilder {
 
-    @Value("${contact.email}")
-    private static String contactEmail;
-
-    public static EmailDto build(String email, String token) {
+    public static EmailDto build(String emailFrom, String emailTo, String token) {
         String serverAddress = "localhost";
         String activationLink = "%s/activate?token=%s".formatted(serverAddress, token);
         String text = getMessage(activationLink);
         return EmailDto.builder()
-                .emailFrom(contactEmail)
-                .emailTo(email)
+                .emailFrom(emailFrom)
+                .emailTo(emailTo)
                 .topic("InstaCar - potwierdzenie rejestracji")
                 .message(text)
                 .name("InstaCar - prosimy nie odpowiadać na tego maila.")

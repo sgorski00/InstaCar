@@ -13,7 +13,6 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Entity
@@ -55,14 +54,13 @@ public abstract class Vehicle implements Rental, Serializable {
     @Column(name = "rent_status")
     private RentalStatus status = RentalStatus.AVAILABLE;
 
-    @Positive
+    @Positive(message = "Cena musi być większa od 0")
     private double price; // per day in PLN
 
     private String imageUrl;
 
-    @NotNull
+    @NotNull(message = "Opis nie możeb być pusty")
     @Column(nullable = false)
-    //TODO(w serwisie - dodanie i edycja opisu)
     private String description = "No description yet.";
 
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
