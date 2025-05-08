@@ -37,6 +37,7 @@ public class VehicleService {
         this.carModelService = carModelService;
     }
 
+    @Cacheable(value = "allCars")
     public List<Vehicle> getAllCars() {
         return vehicleRepository.findAll();
     }
@@ -48,6 +49,12 @@ public class VehicleService {
     @Cacheable(value = "cars", key = "#id")
     public Vehicle getCarById(long id) {
         return vehicleRepository.findById(id).orElseThrow(
+                () -> new NoSuchElementException("Car with id: " + id + " is not found.")
+        );
+    }
+
+    public Vehicle getCarByIdWithRents(long id) {
+        return vehicleRepository.findByIdWithRents(id).orElseThrow(
                 () -> new NoSuchElementException("Car with id: " + id + " is not found.")
         );
     }
@@ -99,7 +106,7 @@ public class VehicleService {
         query = query == null ?  "" : query;
         List<Vehicle> vehicles = vehicleRepository.findAllByQueryAndType(query.toLowerCase(), type.toLowerCase());
         return vehicles.stream()
-                .filter(vehicle -> vehicle.isAvailableInDate(dateFrom, dateTo))
+                .filter(vehicle -> vehicle.isAvailable(dateFrom, dateTo))
                 .toList();
     }
 }

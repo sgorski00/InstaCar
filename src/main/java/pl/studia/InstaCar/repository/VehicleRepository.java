@@ -8,6 +8,7 @@ import pl.studia.InstaCar.model.CarModel;
 import pl.studia.InstaCar.model.Vehicle;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
@@ -29,4 +30,7 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
     List<Vehicle> findAllByQueryAndType(@Param("query") String query, @Param("type") String type);
 
     long countByModel(CarModel carModel);
+
+    @Query("SELECT v FROM Vehicle v LEFT JOIN FETCH v.rents WHERE v.id = :id")
+    Optional<Vehicle> findByIdWithRents(Long id);
 }

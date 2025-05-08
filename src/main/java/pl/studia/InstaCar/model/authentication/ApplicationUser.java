@@ -21,6 +21,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "app_users")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ApplicationUser implements UserDetails, Serializable {
 
     @Id

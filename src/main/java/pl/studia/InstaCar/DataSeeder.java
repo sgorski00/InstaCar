@@ -11,7 +11,6 @@ import pl.studia.InstaCar.model.authentication.AuthProvider;
 import pl.studia.InstaCar.model.authentication.Role;
 import pl.studia.InstaCar.model.enums.CarType;
 import pl.studia.InstaCar.model.enums.FuelType;
-import pl.studia.InstaCar.model.enums.RentalStatus;
 import pl.studia.InstaCar.model.enums.Transmission;
 import pl.studia.InstaCar.service.*;
 
@@ -99,7 +98,7 @@ public class DataSeeder implements CommandLineRunner {
         vehicle.setModel(faker.options().option(models.toArray(new CarModel[0])));
         vehicle.setPrice(faker.number().numberBetween(1, 1000));
         vehicle.setProductionYear(faker.number().numberBetween(2016, 2025));
-        vehicle.setStatus(faker.options().option(RentalStatus.values()));
+//        vehicle.setStatus(faker.options().option(RentalStatus.values()));
         vehicle.setVin(faker.bothify("1HGCM82633A######"));
         vehicle.setImageUrl("/uploads/car-" + faker.number().numberBetween(1, 12) + ".jpg");
     }

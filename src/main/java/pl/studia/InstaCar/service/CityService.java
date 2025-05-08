@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.City;
 import pl.studia.InstaCar.repository.CityRepository;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -58,6 +59,8 @@ public class CityService {
 
     @Cacheable(value = "allCities")
     public List<City> getAllCities() {
-        return cityRepository.findAll();
+        List<City> cities = cityRepository.findAll();
+        cities.sort(Comparator.comparing(City::getName));
+        return cities;
     }
 }

@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public abstract class BaseToken implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

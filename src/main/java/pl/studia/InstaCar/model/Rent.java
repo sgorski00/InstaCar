@@ -1,12 +1,11 @@
 package pl.studia.InstaCar.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
+import pl.studia.InstaCar.model.enums.RentStatus;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
@@ -15,7 +14,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Rent {
+@Builder
+public class Rent implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,4 +42,10 @@ public class Rent {
     private City returnCity;
 
     private double totalCost;
+
+    private String additionalInfo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RentStatus rentStatus = RentStatus.PENDING;
 }

@@ -84,8 +84,10 @@
                             <span class="cat" th:text="${car.model.brand}">Cheverolet</span>
                             <p class="price ml-auto" th:text="${car.price} + ' zł '"></p><span class="cat">/dzień</span>
                         </div>
-                        <p class="d-flex mb-0 d-block"><a href="#" class="btn btn-primary py-2 mr-1">Wynajmij</a> <a
-                                th:href="@{'/cars/' + ${car.id}}" class="btn btn-secondary py-2 ml-1">Szczegóły</a></p>
+                        <div class="d-flex mb-0 d-block justify-content-around">
+                            <a th:href="@{/order/create(carId=${car.id}, pickDate=${pickDate}, returnDate=${returnDate})}" class="btn btn-primary py-2 mr-1">Wynajmij</a>
+                            <a th:href="@{'/cars/' + ${car.id}}" class="btn btn-secondary py-2 ml-1">Szczegóły</a>
+                        </div>
                     </div>
                 </div>
             </div>

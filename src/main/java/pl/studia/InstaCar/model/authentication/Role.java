@@ -11,6 +11,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "roles")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Role implements Serializable {
 
     @Id
