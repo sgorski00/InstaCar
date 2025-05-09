@@ -2,6 +2,7 @@ package pl.studia.InstaCar.service;
 
 import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.studia.InstaCar.model.Rent;
@@ -61,5 +62,20 @@ public class OrderService {
         Rent rent = getOrderById(orderId);
         rent.setRentStatus(RentStatus.ACTIVE);
         rentRepository.save(rent);
+    }
+
+    @PreAuthorize("@orderSecurity.isOwner(#orderId, authentication.name)")
+    public Rent getOrderIfOwner(Long orderId, String username) {
+        return getOrderById(orderId);
+    }
+
+    @PreAuthorize("@orderSecurity.isOwner(#orderId, authentication.name)")
+    public void cancelOrderByIdIfOwner(Long orderId, String username) {
+        cancelOrderById(orderId);
+    }
+
+    @PreAuthorize("@orderSecurity.isOwner(#orderId, authentication.name)")
+    public void acceptOrderByIdIfOwner(Long orderId, String username) {
+        acceptOrderById(orderId);
     }
 }

@@ -2,13 +2,10 @@ package pl.studia.InstaCar.controller;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.studia.InstaCar.model.Rent;
-import pl.studia.InstaCar.model.UserDetails;
 import pl.studia.InstaCar.model.Vehicle;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.dto.OrderDto;
@@ -73,10 +70,7 @@ public class OrderController {
             Model model,
             Principal principal
     ) {
-        Rent rent = orderService.getOrderById(orderId);
-        if(!rent.getUser().getUsername().equals(principal.getName())) {
-            return "redirect:/";
-        }
+        Rent rent = orderService.getOrderIfOwner(orderId, principal.getName());
         model.addAttribute("order", rent);
         return "order-summary";
     }
@@ -86,25 +80,16 @@ public class OrderController {
             @RequestParam(name = "orderId") Long orderId,
             Principal principal
     ) {
-        Rent rent = orderService.getOrderById(orderId);
-        if(!rent.getUser().getUsername().equals(principal.getName())) {
-            return "redirect:/";
-        }
-        orderService.cancelOrderById(orderId);
+        orderService.cancelOrderByIdIfOwner(orderId, principal.getName());
         return "redirect:/order/summary?order=" + orderId;
     }
 
     @PostMapping("/accept")
-    @PreAuthorize("")
     public String acceptOrder(
             @RequestParam(name = "orderId") Long orderId,
             Principal principal
     ) {
-        Rent rent = orderService.getOrderById(orderId);
-        if(!rent.getUser().getUsername().equals(principal.getName())) {
-            return "redirect:/";
-        }
-        orderService.acceptOrderById(orderId);
+        orderService.acceptOrderByIdIfOwner(orderId, principal.getName());
         return "redirect:/order/summary?order=" + orderId;
     }
 }
