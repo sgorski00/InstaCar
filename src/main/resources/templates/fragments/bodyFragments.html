@@ -23,9 +23,7 @@
                 <li class="nav-item dropdown" sec:authorize="isAuthenticated()">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                       th:text="${#authentication.principal.userDetails == null ?
-                          #authentication.principal.username :
-                          #authentication.principal.userDetails}">
+                       th:text="${#authentication.principal.displayName}">
                         Użytkownik
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">

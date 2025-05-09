@@ -21,6 +21,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "app_users")
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ApplicationUser implements UserDetails, Serializable {
 
     @Id
@@ -81,14 +82,22 @@ public class ApplicationUser implements UserDetails, Serializable {
     @PrePersist
     @PreUpdate
     public void encryptPassword() {
-        if(password != null && !password.startsWith("$2a$")) {
+        if (password != null && !password.startsWith("$2a$")) {
             this.password = passwordEncoder.encode(password);
         }
     }
 
     @Override
-    public boolean isEnabled(){
+    public boolean isEnabled() {
         return !this.provider.equals(AuthProvider.LOCAL) || this.emailTokens.stream()
                 .anyMatch(EmailActivationToken::getIsUsed);
+    }
+
+    @Override
+    public String toString() {
+        return this.userDetails == null || this.userDetails.getFirstName() == null || this.userDetails.getLastName() == null
+                ? this.username
+                : this.userDetails.toString();
+
     }
 }

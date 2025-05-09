@@ -1,10 +1,6 @@
 package pl.studia.InstaCar.service;
 
-import jakarta.persistence.PersistenceException;
-import jakarta.transaction.RollbackException;
 import lombok.extern.log4j.Log4j2;
-import org.hibernate.HibernateException;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -18,7 +14,6 @@ import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.model.authentication.Role;
 import pl.studia.InstaCar.service.tokens.EmailTokenService;
 
-import java.sql.SQLException;
 import java.util.NoSuchElementException;
 
 @Service

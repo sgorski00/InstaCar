@@ -11,15 +11,17 @@ import pl.studia.InstaCar.model.authentication.AuthProvider;
 import pl.studia.InstaCar.model.authentication.Role;
 import pl.studia.InstaCar.model.enums.CarType;
 import pl.studia.InstaCar.model.enums.FuelType;
-import pl.studia.InstaCar.model.enums.RentalStatus;
+import pl.studia.InstaCar.model.enums.RentStatus;
 import pl.studia.InstaCar.model.enums.Transmission;
 import pl.studia.InstaCar.service.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Component
-@Profile("dev")
+@Profile({"dev", "prod"})
 public class DataSeeder implements CommandLineRunner {
 
     private final UserService userService;
@@ -36,27 +38,62 @@ public class DataSeeder implements CommandLineRunner {
     };
     private final VehicleService vehicleService;
     private final CityService cityService;
+    private final OrderService orderService;
 
     @Autowired
-    public DataSeeder(UserService userService, RoleService roleService, CarModelService carModelService, VehicleService vehicleService, CityService cityService) {
+    public DataSeeder(UserService userService, RoleService roleService, CarModelService carModelService, VehicleService vehicleService, CityService cityService, OrderService orderService) {
         this.userService = userService;
         this.roleService = roleService;
         this.carModelService = carModelService;
         this.faker = new Faker();
         this.vehicleService = vehicleService;
         this.cityService = cityService;
+        this.orderService = orderService;
     }
 
     @Override
     public void run(String... args) throws Exception {
-        generateFakeUsers(100);
+        List<ApplicationUser> users = generateFakeUsers(100);
         List<CarModel> models = generateCarModels(15);
         List<Vehicle> vehicles = generateVehicle(20, 30, models);
         List<City> cities = generateCities(10);
+        List<Rent> rents = generateRents(50, vehicles, cities, users);
+    }
+
+    private List<Rent> generateRents(int numOfRents, List<Vehicle> vehicles, List<City> cities, List<ApplicationUser> users) {
+        List<Rent> rents = orderService.findAllRents();
+        if(rents.size() < 3) {
+            for(int i = 0; i < numOfRents; i++) {
+                Rent rent = new Rent();
+                rent.setPickUpCity(cities.get(faker.number().numberBetween(0, cities.size() - 1)));
+                rent.setReturnCity(cities.get(faker.number().numberBetween(0, cities.size() - 1)));
+                rent.setVehicle(vehicles.get(faker.number().numberBetween(0, vehicles.size() - 1)));
+                rent.setAdditionalInfo(faker.lorem().sentence());
+                rent.setUser(faker.options().option(users.toArray(new ApplicationUser[0])));
+
+                LocalDate today = LocalDate.now();
+                LocalDate rentDate = today.minusDays(faker.number().numberBetween(1, 730));
+                LocalDate returnDate = rentDate.plusDays(faker.number().numberBetween(1, 31));
+                rent.setRentDate(rentDate);
+                rent.setReturnDate(returnDate);
+
+                if (returnDate.isAfter(today)) {
+                    rent.setRentStatus(RentStatus.FINISHED);
+                }else {
+                    RentStatus[] values = Arrays.stream(RentStatus.values())
+                            .filter(status -> status != RentStatus.FINISHED)
+                            .toArray(RentStatus[]::new);
+                    rent.setRentStatus(faker.options().option(values));
+                }
+                rents.add(rent);
+            }
+            orderService.saveAll(rents);
+        }
+        return rents;
     }
 
     private List<City> generateCities(int numOfCities) {
-        List<City> cities = new ArrayList<>();
+        List<City> cities = cityService.getAllCities();
         if (cityService.count() < 3) {
             for (int i = 0; i < numOfCities; i++) {
                 City city = new City();
@@ -69,8 +106,8 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     private List<Vehicle> generateVehicle(int numOfSportCars, int numOfCityCars, List<CarModel> models) {
-        List<Vehicle> vehicles = new ArrayList<>();
-        if(vehicleService.count() < 3) {
+        List<Vehicle> vehicles = vehicleService.getAllCars();
+        if(vehicles.size() < 3) {
             for(int i = 0; i < numOfSportCars; i++) {
                 SportCar sportCar = new SportCar();
                 sportCar.setAcceleration(faker.number().randomDouble(2, 0, 8));
@@ -99,14 +136,14 @@ public class DataSeeder implements CommandLineRunner {
         vehicle.setModel(faker.options().option(models.toArray(new CarModel[0])));
         vehicle.setPrice(faker.number().numberBetween(1, 1000));
         vehicle.setProductionYear(faker.number().numberBetween(2016, 2025));
-        vehicle.setStatus(faker.options().option(RentalStatus.values()));
+//        vehicle.setStatus(faker.options().option(RentalStatus.values()));
         vehicle.setVin(faker.bothify("1HGCM82633A######"));
         vehicle.setImageUrl("/uploads/car-" + faker.number().numberBetween(1, 12) + ".jpg");
     }
 
     private List<CarModel> generateCarModels(int quantity) {
-        List<CarModel> models = new ArrayList<>();
-        if(carModelService.count() < 3) {
+        List<CarModel> models = carModelService.getAllCarModels();
+        if(models.size() < 3) {
             for (int i = 0; i < quantity; i++) {
                 CarModel carModel = new CarModel();
                 carModel.setModelName(faker.options().option(CAR_MODELS));
@@ -124,9 +161,10 @@ public class DataSeeder implements CommandLineRunner {
         return models;
     }
 
-    private void generateFakeUsers(int quantity) {
-        if(userService.count() < 2) {
-            List<ApplicationUser> users = new ArrayList<>();
+    private List<ApplicationUser> generateFakeUsers(int quantity) {
+        List<ApplicationUser> users = userService.findAll();
+        if(users.size() < 2) {
+            users = new ArrayList<>();
             Role userRole = roleService.findByName("user");
             for (int i = 0; i < quantity; i++) {
                 ApplicationUser user = new ApplicationUser();
@@ -139,5 +177,6 @@ public class DataSeeder implements CommandLineRunner {
             }
             userService.saveAll(users);
         }
+        return users;
     }
 }

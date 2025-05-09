@@ -11,9 +11,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import pl.studia.InstaCar.config.exceptions.ApiResponseException;
-import pl.studia.InstaCar.config.exceptions.EntityValidationException;
-import pl.studia.InstaCar.config.exceptions.TokenIllegalArgumentException;
+import pl.studia.InstaCar.config.exceptions.*;
 import pl.studia.InstaCar.model.authentication.tokens.PasswordResetToken;
 
 import java.util.ArrayList;
@@ -31,6 +29,24 @@ public class ExceptionController {
     ) {
         redirectAttributes.addFlashAttribute("error", ex.getMessage());
         return "redirect:/login";
+    }
+
+    @ExceptionHandler(StatusChangeException.class)
+    public String statusChangeExceptionHandler(
+            StatusChangeException ex,
+            RedirectAttributes redirectAttributes
+    ) {
+        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/admin/rents";
+    }
+
+    @ExceptionHandler(NotAvailableException.class)
+    public String notAvailableExceptionHandler(
+            UsernameNotFoundException ex,
+            RedirectAttributes redirectAttributes
+    ) {
+        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/cars";
     }
 
     @ExceptionHandler(TokenIllegalArgumentException.class)

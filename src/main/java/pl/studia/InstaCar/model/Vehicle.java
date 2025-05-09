@@ -7,7 +7,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.*;
-import pl.studia.InstaCar.model.enums.RentalStatus;
+import pl.studia.InstaCar.config.exceptions.NotAvailableException;
+import pl.studia.InstaCar.model.enums.RentStatus;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -50,10 +51,6 @@ public abstract class Vehicle implements Rental, Serializable {
 
     private String color;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "rent_status")
-    private RentalStatus status = RentalStatus.AVAILABLE;
-
     @Positive(message = "Cena musi być większa od 0")
     private double price; // per day in PLN
 
@@ -68,34 +65,21 @@ public abstract class Vehicle implements Rental, Serializable {
     private List<Rent> rents = new ArrayList<>();
 
     @Override
-    public boolean isAvailable() {
-        return status.equals(RentalStatus.AVAILABLE);
-    }
-
-    @Override
-    public boolean isAvailableInDate(LocalDate startDate, LocalDate endDate) {
+    public boolean isAvailable(LocalDate startDate, LocalDate endDate) {
         if (rents == null || rents.isEmpty()) return true;
         return rents.stream()
+                .filter(rent -> rent.getRentStatus() == RentStatus.ACTIVE || rent.getRentStatus() == RentStatus.PENDING)
                 .noneMatch(rent -> rent.getRentDate().isBefore(endDate)
                         && rent.getReturnDate().isAfter(startDate)
                 );
     }
 
     @Override
-    public void rent() {
-        if (isAvailable()) {
-            this.status = RentalStatus.RENTED;
+    public void rent(Rent rent) {
+        if (isAvailable(rent.getRentDate(), rent.getReturnDate())) {
+            this.rents.add(rent);
         } else {
-            throw new IllegalStateException("Vehicle is not available for rent");
-        }
-    }
-
-    @Override
-    public void returnRental() {
-        if (status.equals(RentalStatus.RENTED)) {
-            this.status = RentalStatus.AVAILABLE;
-        } else {
-            throw new IllegalStateException("Vehicle is not rented");
+            throw new NotAvailableException("Vehicle is not available for rent");
         }
     }
 

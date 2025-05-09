@@ -1,12 +1,12 @@
 package pl.studia.InstaCar.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import pl.studia.InstaCar.config.exceptions.StatusChangeException;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
+import pl.studia.InstaCar.model.enums.RentStatus;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Entity
@@ -15,7 +15,8 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Rent {
+@Builder
+public class Rent implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,5 +42,23 @@ public class Rent {
     @JoinColumn(name = "return_city_id", nullable = false)
     private City returnCity;
 
-    private double totalCost;
+    private double totalCost = 0;
+
+    private String additionalInfo;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private RentStatus rentStatus = RentStatus.PENDING;
+
+    @PrePersist
+    public void setTotalCost() {
+        if(totalCost != 0) return;
+        this.totalCost = vehicle.getPrice() * (returnDate.toEpochDay() - rentDate.toEpochDay() + 1);
+    }
+
+    public void setRentStatus(RentStatus status) throws StatusChangeException {
+        if(this.rentStatus == status) return;
+        if(this.rentStatus.equals(RentStatus.FINISHED)) throw new StatusChangeException("Zakończonego zamówienie nie można edytować.");
+        this.rentStatus = status;
+    }
 }

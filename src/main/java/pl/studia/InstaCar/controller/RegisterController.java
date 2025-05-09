@@ -7,18 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.studia.InstaCar.config.exceptions.EntityValidationException;
-import pl.studia.InstaCar.model.authentication.ApplicationUser;
-import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.model.dto.UserRegistrationDto;
 import pl.studia.InstaCar.service.tokens.EmailTokenService;
 import pl.studia.InstaCar.service.UserRegistrationService;
-
-import java.lang.reflect.Field;
-import java.util.List;
 
 @Controller
 @Log4j2

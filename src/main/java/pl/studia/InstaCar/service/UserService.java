@@ -1,11 +1,9 @@
 package pl.studia.InstaCar.service;
 
-import com.fasterxml.jackson.annotation.JacksonInject;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -13,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.AuthProvider;
+import pl.studia.InstaCar.model.authentication.CustomUserPrincipal;
 import pl.studia.InstaCar.repository.UserRepository;
 
 import java.util.List;
@@ -63,7 +62,7 @@ public class UserService implements UserDetailsService {
         if(user.getProvider().equals(AuthProvider.GOOGLE)) {
             throw new UsernameNotFoundException("Zaloguj się poprzez konto Google!");
         }
-        return user;
+        return new CustomUserPrincipal(user);
     }
 
     public long count() {
