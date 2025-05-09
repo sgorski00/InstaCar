@@ -1,7 +1,8 @@
 package pl.studia.InstaCar.service;
 
-import org.hibernate.query.Order;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,6 +12,7 @@ import pl.studia.InstaCar.model.dto.OrderDto;
 import pl.studia.InstaCar.model.enums.RentStatus;
 import pl.studia.InstaCar.repository.RentRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -34,7 +36,6 @@ public class OrderService {
         userDetailsService.save(order.getUserDetails());
         Rent rent = Rent.builder()
                 .vehicle(order.getCar())
-                .totalCost(order.getTotalPrice())
                 .rentDate(order.getPickUpDate())
                 .returnDate(order.getReturnDate())
                 .pickUpCity(cityService.getCityById(order.getPickUpCityId()))
@@ -84,5 +85,19 @@ public class OrderService {
         List<Rent> rents = rentRepository.findAllByUserOrderByRentDateDesc(user);
         return rents.size() < numOfRents ? rents : rents
                 .subList(0, numOfRents);
+    }
+
+    public Page<Rent> getAllRentsBetween(LocalDate dateFrom, LocalDate dateTo, Pageable pageable) {
+        dateFrom = dateFrom == null ? LocalDate.now().minusMonths(12) : dateFrom;
+        dateTo = dateTo == null ? LocalDate.now().plusDays(1) : dateTo;
+        return rentRepository.findAllByRentDateBetweenOrderByRentDateDesc(dateFrom, dateTo, pageable);
+    }
+
+    public List<Rent> findAllRents() {
+        return rentRepository.findAll();
+    }
+
+    public void saveAll(List<Rent> rents) {
+        rentRepository.saveAll(rents);
     }
 }

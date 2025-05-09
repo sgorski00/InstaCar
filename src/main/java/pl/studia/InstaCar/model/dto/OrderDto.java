@@ -1,11 +1,8 @@
 package pl.studia.InstaCar.model.dto;
 
 import lombok.Data;
-import pl.studia.InstaCar.model.Rent;
 import pl.studia.InstaCar.model.UserDetails;
 import pl.studia.InstaCar.model.Vehicle;
-import pl.studia.InstaCar.model.authentication.ApplicationUser;
-import pl.studia.InstaCar.service.CityService;
 
 import java.time.LocalDate;
 
@@ -25,9 +22,5 @@ public class OrderDto {
         this.userDetails = userDetails;
         this.pickUpDate = pickUpDate;
         this.returnDate = returnDate;
-    }
-
-    public double getTotalPrice() {
-        return car.getPrice() * (returnDate.toEpochDay() - pickUpDate.toEpochDay() + 1);
     }
 }
