@@ -67,29 +67,26 @@ public class OrderController {
     @GetMapping("/summary")
     public String showSummary(
             @RequestParam(name = "order") Long orderId,
-            Model model,
-            Principal principal
+            Model model
     ) {
-        Rent rent = orderService.getOrderIfOwner(orderId, principal.getName());
+        Rent rent = orderService.getOrderIfOwner(orderId);
         model.addAttribute("order", rent);
         return "order-summary";
     }
 
     @PostMapping("/decline")
     public String declineOrder(
-            @RequestParam(name = "orderId") Long orderId,
-            Principal principal
+            @RequestParam(name = "orderId") Long orderId
     ) {
-        orderService.cancelOrderByIdIfOwner(orderId, principal.getName());
+        orderService.cancelOrderByIdIfOwner(orderId);
         return "redirect:/order/summary?order=" + orderId;
     }
 
     @PostMapping("/accept")
     public String acceptOrder(
-            @RequestParam(name = "orderId") Long orderId,
-            Principal principal
+            @RequestParam(name = "orderId") Long orderId
     ) {
-        orderService.acceptOrderByIdIfOwner(orderId, principal.getName());
+        orderService.acceptOrderByIdIfOwner(orderId);
         return "redirect:/order/summary?order=" + orderId;
     }
 }

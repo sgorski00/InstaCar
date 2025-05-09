@@ -11,6 +11,7 @@ import pl.studia.InstaCar.model.dto.OrderDto;
 import pl.studia.InstaCar.model.enums.RentStatus;
 import pl.studia.InstaCar.repository.RentRepository;
 
+import java.util.List;
 import java.util.NoSuchElementException;
 
 @Service
@@ -65,17 +66,23 @@ public class OrderService {
     }
 
     @PreAuthorize("@orderSecurity.isOwner(#orderId, authentication.name)")
-    public Rent getOrderIfOwner(Long orderId, String username) {
+    public Rent getOrderIfOwner(Long orderId) {
         return getOrderById(orderId);
     }
 
     @PreAuthorize("@orderSecurity.isOwner(#orderId, authentication.name)")
-    public void cancelOrderByIdIfOwner(Long orderId, String username) {
+    public void cancelOrderByIdIfOwner(Long orderId) {
         cancelOrderById(orderId);
     }
 
     @PreAuthorize("@orderSecurity.isOwner(#orderId, authentication.name)")
-    public void acceptOrderByIdIfOwner(Long orderId, String username) {
+    public void acceptOrderByIdIfOwner(Long orderId) {
         acceptOrderById(orderId);
+    }
+
+    public List<Rent> getLastOrdersForUser(ApplicationUser user, int numOfRents) {
+        List<Rent> rents = rentRepository.findAllByUserOrderByRentDateDesc(user);
+        return rents.size() < numOfRents ? rents : rents
+                .subList(0, numOfRents);
     }
 }
