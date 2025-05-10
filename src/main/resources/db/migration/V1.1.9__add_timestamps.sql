@@ -1,0 +1,10 @@
+ALTER TABLE rents ADD COLUMN created_at timestamp NOT NULL default now();
+ALTER TABLE rents ADD COLUMN status_changed_at timestamp;
+ALTER TABLE app_users ADD COLUMN created_at timestamp NOT NULL default now();
+ALTER TABLE app_users ADD COLUMN updated_at timestamp;
+ALTER TABLE user_details ADD COLUMN created_at timestamp NOT NULL default now();
+ALTER TABLE user_details ADD COLUMN updated_at timestamp;
+ALTER TABLE vehicles ADD COLUMN created_at timestamp NOT NULL default now();
+ALTER TABLE vehicles ADD COLUMN updated_at timestamp;
+ALTER TABLE car_models ADD COLUMN created_at timestamp NOT NULL default now();
+ALTER TABLE car_models ADD COLUMN updated_at timestamp;

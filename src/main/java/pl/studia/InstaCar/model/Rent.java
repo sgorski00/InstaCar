@@ -7,6 +7,8 @@ import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.enums.RentStatus;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Entity
@@ -50,8 +52,14 @@ public class Rent implements Serializable {
     @Column(nullable = false)
     private RentStatus rentStatus = RentStatus.PENDING;
 
+    @Column(nullable = false)
+    private Timestamp createdAt;
+
+    private Timestamp statusChangedAt;
+
     @PrePersist
     public void setTotalCost() {
+        this.createdAt = Timestamp.from(Instant.now());
         if(totalCost != 0) return;
         this.totalCost = vehicle.getPrice() * (returnDate.toEpochDay() - rentDate.toEpochDay() + 1);
     }
@@ -60,5 +68,6 @@ public class Rent implements Serializable {
         if(this.rentStatus == status) return;
         if(this.rentStatus.equals(RentStatus.FINISHED)) throw new StatusChangeException("Zakończonego zamówienie nie można edytować.");
         this.rentStatus = status;
+        this.statusChangedAt = Timestamp.from(Instant.now());
     }
 }

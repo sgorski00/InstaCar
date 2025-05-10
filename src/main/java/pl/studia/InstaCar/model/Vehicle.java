@@ -11,6 +11,8 @@ import pl.studia.InstaCar.config.exceptions.NotAvailableException;
 import pl.studia.InstaCar.model.enums.RentStatus;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -63,6 +65,21 @@ public abstract class Vehicle implements Rental, Serializable {
     @OneToMany(mappedBy = "vehicle", cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Rent> rents = new ArrayList<>();
+
+    @Column(nullable = false)
+    private Timestamp createdAt;
+
+    private Timestamp updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = Timestamp.from(Instant.now());
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = Timestamp.from(Instant.now());
+    }
 
     @Override
     public boolean isAvailable(LocalDate startDate, LocalDate endDate) {

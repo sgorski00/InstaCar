@@ -105,4 +105,13 @@ public class OrderService {
     public void saveAll(List<Rent> rents) {
         rentRepository.saveAll(rents);
     }
+
+    public void cancelExpiredOrdersOlderThan(LocalDate date) {
+        rentRepository.findAllByCreatedAtBefore(date).forEach(rent -> {
+            if(rent.getRentStatus().equals(RentStatus.PENDING)) {
+                rent.setRentStatus(RentStatus.CANCELLED);
+                rentRepository.save(rent);
+            }
+        });
+    }
 }
