@@ -14,14 +14,15 @@ import pl.studia.InstaCar.model.SportCar;
 import pl.studia.InstaCar.model.Vehicle;
 import pl.studia.InstaCar.service.VehicleService;
 import pl.studia.InstaCar.service.WebClientService;
+import pl.studia.InstaCar.utils.ComparatorUtils;
 import pl.studia.InstaCar.utils.ListPaginator;
 import pl.studia.InstaCar.utils.PaginationUtils;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 @Log4j2
 @Controller
@@ -50,11 +51,13 @@ public class CarController {
             @RequestParam(value = "type", defaultValue = "all") String type,
             @RequestParam(value = "pickDate", required = false) LocalDate pickDate,
             @RequestParam(value = "returnDate", required = false) LocalDate returnDate,
+            @RequestParam(value = "sort", defaultValue = "name") String sort,
             Model model
     ) {
         if(pickDate == null) pickDate = LocalDate.now();
         if(returnDate == null) returnDate = LocalDate.now().plusDays(7);
-        List<Vehicle> allCars = vehicleService.getAllCarsByQueryAndTypeAvailableInDate(keyword, type, pickDate, returnDate);
+        List<Vehicle> allCars = new ArrayList<>(vehicleService.getAllCarsByQueryAndTypeAvailableInDate(keyword, type, pickDate, returnDate));
+        allCars.sort(ComparatorUtils.getVehicleComparator(sort));
         List<Vehicle> carsPaginatedList = listPaginator.getPaginatedList(allCars,page, size);
         PageRequest pageRequest = PageRequest.of(page - 1, size);
         Page<Vehicle> carsPage = new PageImpl<>(carsPaginatedList, pageRequest, allCars.size());
@@ -70,6 +73,7 @@ public class CarController {
         model.addAttribute("currentSize", size);
         model.addAttribute("totalPages", totalPages);
         model.addAttribute("pageNumbers", pageNumbers);
+        model.addAttribute("sort", sort);
         return "cars";
     }
 

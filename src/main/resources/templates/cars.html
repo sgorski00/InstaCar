@@ -18,7 +18,7 @@
 
 <section class="ftco-section bg-light">
     <div class="container">
-        <form th:action="@{/cars}" method="get" class="search-property">
+        <form th:action="@{/cars}" id="search-form" method="get" class="search-property">
             <div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="form-group">
@@ -32,6 +32,15 @@
                         <label for="returnDate" class="label">Data zwrotu</label>
                         <input type="date" class="form-control" id="returnDate" name="returnDate"
                                th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" th:value="${returnDate}">
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6">
+                    <div class="form-group">
+                        <label for="sort" class="label">Sortuj po</label>
+                        <select name="sort" id="sort" class="form-control">
+                            <option value="name" th:select="${sort} == 'name'">Nazwie rosnąco</option>
+                            <option value="price" th:select="${sort} == 'price'">Cenie rosnąco</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -96,20 +105,20 @@
             <div class="col text-center">
                 <div class="block-27">
                     <ul th:if="${totalPages > 1}">
-                        <li><a th:href="@{/cars(page=${1}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate})}">&laquo;</a>
+                        <li><a th:href="@{/cars(page=${1}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate}, sort=${sort})}">&laquo;</a>
                         </li>
                         <th:block th:each="pageNum : ${pageNumbers}">
                             <li th:if="${currentPage} == ${pageNum}" class="active">
-                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate})}"
+                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate}, sort=${sort})}"
                                    th:text="${pageNum}"></a>
                             </li>
                             <li th:unless="${currentPage} == ${pageNum}">
-                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate})}"
+                                <a th:href="@{/cars(page=${pageNum}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate}, sort=${sort})}"
                                    th:text="${pageNum}"></a>
                             </li>
                         </th:block>
                         <li>
-                            <a th:href="@{/cars(page=${totalPages}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate})}">&raquo;</a>
+                            <a th:href="@{/cars(page=${totalPages}, size=${currentSize}, type=${type}, keyword=${keyword}, pickDate=${pickDate}, returnDate=${returnDate}, sort=${sort})}">&raquo;</a>
                         </li>
                     </ul>
                 </div>
@@ -125,6 +134,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         const pickDate = document.getElementById('pickDate');
         const returnDate = document.getElementById('returnDate');
+        const form = document.getElementById('search-form');
 
         const formatDateToInput = (date) => date.toISOString().split('T')[0];
 
@@ -148,7 +158,9 @@
         };
 
         pickDate.addEventListener('change', updateMinMax);
+        pickDate.addEventListener('change', () => form.submit());
         returnDate.addEventListener('change', updateMinMax);
+        returnDate.addEventListener('change', () => form.submit());
 
         updateMinMax();
     });
