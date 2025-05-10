@@ -1,6 +1,7 @@
 package pl.studia.InstaCar.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,6 +12,7 @@ import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.dto.OrderDto;
 import pl.studia.InstaCar.model.enums.RentStatus;
 import pl.studia.InstaCar.repository.RentRepository;
+import pl.studia.InstaCar.service.event.OrderCreateEvent;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -19,12 +21,14 @@ import java.util.NoSuchElementException;
 @Service
 public class OrderService {
 
+    private final ApplicationEventPublisher eventPublisher;
     private final RentRepository rentRepository;
     private final UserDetailsService userDetailsService;
     private final CityService cityService;
 
     @Autowired
-    public OrderService(RentRepository rentRepository, UserDetailsService userDetailsService, CityService cityService) {
+    public OrderService(ApplicationEventPublisher eventPublisher, RentRepository rentRepository, UserDetailsService userDetailsService, CityService cityService) {
+        this.eventPublisher = eventPublisher;
         this.rentRepository = rentRepository;
         this.userDetailsService = userDetailsService;
         this.cityService = cityService;
@@ -45,6 +49,7 @@ public class OrderService {
                 .rentStatus(RentStatus.PENDING)
                 .build();
         order.getCar().rent(rent);
+        eventPublisher.publishEvent(new OrderCreateEvent(this, rent));
         return rentRepository.save(rent);
     }
 
