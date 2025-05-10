@@ -14,6 +14,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
@@ -57,6 +59,11 @@ public class ApplicationUser implements UserDetails, Serializable {
     @OneToOne(mappedBy = "user", cascade = {CascadeType.ALL}, orphanRemoval = true)
     private pl.studia.InstaCar.model.UserDetails userDetails;
 
+    @Column(nullable = false)
+    private Timestamp createdAt;
+
+    private Timestamp updatedAt;
+
     @Transient
     private static PasswordEncoder passwordEncoder;
 
@@ -80,7 +87,17 @@ public class ApplicationUser implements UserDetails, Serializable {
     }
 
     @PrePersist
+    public void prePersist() {
+        this.createdAt = Timestamp.from(Instant.now());
+        encryptPassword();
+    }
+
     @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = Timestamp.from(Instant.now());
+        encryptPassword();
+    }
+
     public void encryptPassword() {
         if (password != null && !password.startsWith("$2a$")) {
             this.password = passwordEncoder.encode(password);

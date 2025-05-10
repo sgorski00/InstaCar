@@ -12,6 +12,8 @@ import pl.studia.InstaCar.model.enums.FuelType;
 import pl.studia.InstaCar.model.enums.Transmission;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Table(name = "car_models")
@@ -53,6 +55,21 @@ public class CarModel implements Serializable {
 
     @Enumerated(EnumType.STRING)
     private Transmission transmission;
+
+    @Column(nullable = false)
+    private Timestamp createdAt;
+
+    private Timestamp updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = Timestamp.from(Instant.now());
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = Timestamp.from(Instant.now());
+    }
 
     @Override
     public String toString() {

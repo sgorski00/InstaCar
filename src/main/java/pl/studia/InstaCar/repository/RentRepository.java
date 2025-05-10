@@ -14,4 +14,6 @@ public interface RentRepository extends JpaRepository<Rent, Long> {
     Page<Rent> findAllByRentDateBetweenOrderByRentDateDesc(LocalDate startDate, LocalDate endDate, Pageable pageable);
 
     List<Rent> findAllByUserOrderByRentDateDesc(ApplicationUser user);
+
+    List<Rent> findAllByCreatedAtBefore(LocalDate date);
 }

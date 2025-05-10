@@ -9,6 +9,8 @@ import org.hibernate.annotations.OnDeleteAction;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
+import java.time.Instant;
 
 @Entity
 @Table(name = "user_details")
@@ -55,6 +57,21 @@ public class UserDetails implements Serializable {
     @Nullable
     @Size(max = 10, message = "Kod pocztowy nie może przekraczać 10 znaków")
     private String postalCode;
+
+    @Column(nullable = false)
+    private Timestamp createdAt;
+
+    private Timestamp updatedAt;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = Timestamp.from(Instant.now());
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = Timestamp.from(Instant.now());
+    }
 
     @Override
     public String toString() {
