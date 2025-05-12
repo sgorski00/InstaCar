@@ -6,7 +6,7 @@
         <a class="navbar-brand mb-0" th:href="@{/}">Insta<span>Car</span></a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#ftco-nav"
                 aria-controls="ftco-nav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="oi oi-menu"></span><span th:text="#{nav.menu}"></span>
+            <span class="oi oi-menu pr-1"></span><span th:text="#{nav.menu}"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="ftco-nav">
@@ -24,7 +24,7 @@
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                        th:text="${#authentication.principal.displayName}"></a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" th:href="@{/user}"></a>
+                        <a class="dropdown-item" th:href="@{/user}" th:text="#{nav.profile}"></a>
                         <div class="dropdown-divider"></div>
                         <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin}" class="dropdown-item" th:text="#{nav.admin}"></a>
                         <div sec:authorize="hasRole('ADMIN')" class="dropdown-divider"></div>
@@ -53,42 +53,39 @@
             <div class="col-md">
                 <div class="ftco-footer-widget mb-4">
                     <h2 class="ftco-heading-2"><a href="#" class="logo">Insta<span>Car</span></a></h2>
-                    <p>Potrzebujesz auta na weekend, podróż służbową lub wakacje? Wybierz naszą wypożyczalnię! Oferujemy
-                        nowoczesne, sprawdzone pojazdy w konkurencyjnych cenach. Minimum formalności, maksimum
-                        wygody!</p>
+                    <p th:text="#{footer.description}"></p>
                 </div>
             </div>
             <div class="col-md">
                 <div class="ftco-footer-widget mb-4 ml-md-5">
-                    <h2 class="ftco-heading-2">Informacje</h2>
+                    <h2 class="ftco-heading-2" th:text="#{footer.info}"></h2>
                     <ul class="list-unstyled">
-                        <li><a th:href="@{/about}" class="py-2 d-block">O nas</a></li>
-                        <li><a th:href="@{/cars}" class="py-2 d-block">Samochody</a></li>
-                        <li><a href="REGULAMIN SERWISU WYPOŻYCZALNI SAMOCHODOWEJ.pdf" class="py-2 d-block">Regulamin
-                            serwisu</a></li>
-                        <li><a href="Polityka Prywatności.pdf" class="py-2 d-block">Polityka prywatności</a></li>
+                        <li><a th:href="@{/about}" class="py-2 d-block" th:text="#{footer.about}"></a></li>
+                        <li><a th:href="@{/cars}" class="py-2 d-block" th:text="#{footer.cars}"></a></li>
+                        <li><a href="/REGULAMIN SERWISU WYPOŻYCZALNI SAMOCHODOWEJ.pdf" class="py-2 d-block" th:text="#{footer.regulations}"></a></li>
+                        <li><a href="/Polityka Prywatności.pdf" class="py-2 d-block" th:text="#{footer.privacy}"></a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-md">
                 <div class="ftco-footer-widget mb-4">
-                    <h2 class="ftco-heading-2">Pomoc</h2>
+                    <h2 class="ftco-heading-2" th:text="#{footer.help}"></h2>
                     <ul class="list-unstyled">
-                        <li><a href="FAQ.pdf" class="py-2 d-block">FAQ</a></li>
-                        <li><a href="Opcje płatności.pdf" class="py-2 d-block">Opcje płatności</a></li>
-                        <li><a href="Porady.pdf" class="py-2 d-block">Porady</a></li>
-                        <li><a th:href="@{/contact}" class="py-2 d-block">Napisz do nas</a></li>
+                        <li><a href="/FAQ.pdf" class="py-2 d-block" th:text="#{footer.faq}"></a></li>
+                        <li><a href="/Opcje płatności.pdf" class="py-2 d-block" th:text="#{footer.payment.info}"></a></li>
+                        <li><a href="/Porady.pdf" class="py-2 d-block" th:text="#{footer.advice.text}"></a></li>
+                        <li><a th:href="@{/contact}" class="py-2 d-block" th:text="#{footer.contact}"></a></li>
                     </ul>
                 </div>
             </div>
             <div class="col-md">
                 <div class="ftco-footer-widget mb-4">
-                    <h2 class="ftco-heading-2">Pytania?</h2>
+                    <h2 class="ftco-heading-2" th:text="#{footer.questions}"></h2>
                     <div class="block-23 mb-3">
                         <ul>
-                            <li><span class="icon icon-map-marker"></span><span class="text">Sejmowa 5A, 59-220 Legnica, Polska</span>
+                            <li><span class="icon icon-map-marker"></span><span class="text">ul. Sejmowa 5A, 59-220 Legnica, Polska</span>
                             </li>
-                            <li><a href="tel:+48574522070"><span class="icon icon-phone"></span><span class="text">+48 574 522 070</span></a>
+                            <li><a href="tel:+48 574 522 070"><span class="icon icon-phone"></span><span class="text">+48 574 522 070</span></a>
                             </li>
                             <li><a href="mailto:pomoc@instacar.com"><span class="icon icon-envelope"></span><span
                                     class="text">pomoc@instacar.com</span></a></li>
@@ -99,10 +96,9 @@
         </div>
         <div class="row">
             <div class="col-md-12 text-center">
-
                 <p><!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    Copyright &copy;<script>document.write(new Date().getFullYear());</script>
-                    Wszelkie prawa zastrzeżone
+                    Copyright &copy;<script>document.write(new Date().getFullYear());</script><br>
+                    <span th:text="#{footer.copyright}"></span>
                     <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. --></p>
             </div>
         </div>
