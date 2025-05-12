@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
             <div class="col-md-9 ftco-animate pb-5">
-                <h1 class="mb-3 bread">Samochód</h1>
+                <h1 class="mb-3 bread" th:text="#{car.title}"></h1>
             </div>
         </div>
     </div>
@@ -32,11 +32,11 @@
         <div class="container text-center my-4">
             <div class="d-flex flex-wrap gap-3 justify-content-center">
                 <div class="box col-3">PLN</div>
-                <div class="box col-3" th:each="price : ${prices}" th:text="${price.key}">Euro</div>
+                <div class="box col-3" th:each="price : ${prices}" th:text="${price.key}"></div>
             </div>
             <div class="d-flex flex-wrap gap-3 justify-content-center mt-3">
-                <div class="box col-3" th:text="${#numbers.formatDecimal(car.price,1,2,'POINT')}">PLN</div>
-                <div class="box col-3" th:each="price : ${prices}" th:text="${price.value}">E</div>
+                <div class="box col-3" th:text="${#numbers.formatDecimal(car.price,1,2,'POINT')}"></div>
+                <div class="box col-3" th:each="price : ${prices}" th:text="${price.value}"></div>
             </div>
         </div>
 
@@ -48,9 +48,9 @@
                             <div class="icon d-flex align-items-center justify-content-center">
                                 <span class="flaticon-pistons"></span>
                             </div>
-                            <div class="text">
+                            <div class="text mb-3">
                                 <h3 class="heading mb-0 pl-3">
-                                    Skrzynia biegów
+                                    <span class="text-muted" th:text="#{car.transmission}"></span>
                                     <span th:text="${car.model.transmission}"></span>
                                 </h3>
                             </div>
@@ -65,9 +65,9 @@
                             <div class="icon d-flex align-items-center justify-content-center">
                                 <span class="flaticon-car-seat"></span>
                             </div>
-                            <div class="text">
+                            <div class="text mb-3">
                                 <h3 class="heading mb-0 pl-3">
-                                    Miejsca
+                                    <span class="text-muted" th:text="#{car.seats}"></span>
                                     <span th:text="${car.model.seats}"></span>
                                 </h3>
                             </div>
@@ -82,9 +82,9 @@
                             <div class="icon d-flex align-items-center justify-content-center">
                                 <span class="flaticon-diesel"></span>
                             </div>
-                            <div class="text">
+                            <div class="text mb-3">
                                 <h3 class="heading mb-0 pl-3">
-                                    Paliwo
+                                    <span class="text-muted" th:text="#{car.fuel}"></span>
                                     <span th:text="${car.model.fuelType}"></span>
                                 </h3>
                             </div>
@@ -101,12 +101,12 @@
                             <li class="nav-item">
                                 <a class="nav-link active" id="pills-description-tab" data-toggle="pill"
                                    href="#pills-description" role="tab" aria-controls="pills-description"
-                                   aria-expanded="true">Informacje</a>
+                                   aria-expanded="true" th:text="#{car.info}"></a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-manufacturer-tab" data-toggle="pill"
                                    href="#pills-manufacturer" role="tab" aria-controls="pills-manufacturer"
-                                   aria-expanded="true">Opis</a>
+                                   aria-expanded="true" th:text="#{car.description}"></a>
                             </li>
                         </ul>
                     </div>
@@ -117,50 +117,50 @@
                             <div class="row">
                                 <div class="col-md-3">
                                     <ul class="features">
-                                        <li class="text-dark">Drzwi</li>
+                                        <li class="text-dark" th:text="#{car.doors}"></li>
                                         <li>⠀</li>
-                                        <li class="text-dark">Typ pojazdu</li>
+                                        <li class="text-dark" th:text="#{car.type}"></li>
                                         <li>⠀</li>
-                                        <li class="text-dark">Rok produkcji</li>
+                                        <li class="text-dark" th:text="#{car.year}"></li>
                                         <br />
                                         <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
-                                            <li class="text-dark">Konie mechaniczne</li>
+                                            <li class="text-dark" th:text="#{car.horsepower}"></li>
                                             <li>⠀</li>
-                                            <li class="text-dark">Przyspieszenie (0-100 km/h)</li></li>
+                                            <li class="text-dark" th:text="#{car.acceleration}"></li></li>
                                         </th:block>
                                         <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.CityCar'}">
-                                            <li class="text-dark">Pojemność bagażnika (l)</li>
+                                            <li class="text-dark" th:text="#{car.trunkcapacity}"></li>
                                         </th:block>
                                     </ul>
                                 </div>
                                 <div class="col-md-3">
                                     <ul class="features">
-                                        <li th:text="${car.model.doors} == null ? 'Brak danych' : ${car.model.doors}">5</li>
+                                        <li th:text="${car.model.doors} == null ? 'Brak danych' : ${car.model.doors}"></li>
                                         <li>⠀</li>
-                                        <li th:text="${car.model.carType}">10</li>
+                                        <li th:text="${car.model.carType}"></li>
                                         <li>⠀</li>
                                         <li th:text="${car.productionYear} == null ? 'Brak danych' : ${car.productionYear}"></li>
                                         <br />
                                         <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
-                                            <li th:text="${car.horsePower}">Konie mechaniczne</li>
+                                            <li th:text="${car.horsePower}"></li>
                                             <li>⠀</li>
-                                            <li th:text="${car.acceleration}">Przyspieszenie</li>
+                                            <li th:text="${car.acceleration}"></li>
                                         </th:block>
                                         <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.CityCar'}">
-                                            <li th:text="${car.trunkCapacity}">Pojemność bagażnika</li>
+                                            <li th:text="${car.trunkCapacity}"></li>
                                         </th:block>
                                     </ul>
                                 </div>
                                 <div class="col-md-3">
                                     <ul class="features">
-                                        <li class="text-dark">Silnik (cm<sup>3</sup>)</li>
+                                        <li class="text-dark" th:utext="#{car.engine}"></li>
                                         <li>⠀</li>
-                                        <li class="text-dark">Kolor</li>
+                                        <li class="text-dark" th:text="#{car.color}"></li>
                                         <li>⠀</li>
-                                        <li class="text-dark">VIN</li>
+                                        <li class="text-dark" th:text="#{car.vin}"></li>
                                         <br />
                                         <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
-                                            <li class="text-dark">Prędkość max. (km/h)</li>
+                                            <li class="text-dark" th:text="#{car.topspeed}"></li>
                                         </th:block>
                                     </ul>
                                 </div>
@@ -173,7 +173,7 @@
                                         <li th:text="${car.vin}"></li>
                                         <br />
                                         <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
-                                            <li th:text="${car.topSpeed}">Prędkość max. (km/h)</li>
+                                            <li th:text="${car.topSpeed}"></li>
                                         </th:block>
                                     </ul>
                                 </div>

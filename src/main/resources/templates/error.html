@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="pl">
-<th:block th:replace="~{/fragments/headerFragments :: head('Błąd')}"></th:block>
+<th:block th:replace="~{/fragments/headerFragments :: head(#{error.title})}"></th:block>
 <body>
     <th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
 
@@ -9,24 +9,23 @@
         <div class="container">
             <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
                 <div class="col-md-9 ftco-animate pb-5">
-
-                    <h1 class="mb-3 bread">Błąd</h1>
+                    <h1 class="mb-3 bread" th:text="#{error.title}"></h1>
                 </div>
             </div>
         </div>
     </section>
 
     <div class="container text-center mt-5 mb-5">
-        <h1 class="display-1 text-danger" th:text="${code == null ? '500' : code}">404</h1>
-        <h2 class="mb-3">Ups! Wystąpił błąd</h2>
-        <p class="lead text-muted" th:if="${messages != null && !messages.isEmpty()}" th:each="message: ${messages}" th:text="${message}">Przepraszamy, wystąpił błąd!</p>
-        <p class="lead text-muted" th:unless="${messages != null}">Wystąpił nieoczekiwany błąd!</p>
+        <h1 class="display-1 text-danger" th:text="${code == null ? '500' : code}"></h1>
+        <h2 class="mb-3" th:text="#{error.message}"></h2>
+        <p class="lead text-muted" th:if="${messages != null && !messages.isEmpty()}" th:each="message: ${messages}" th:text="${message}"></p>
+        <p class="lead text-muted" th:unless="${messages != null}" th:text="#{error.description}"></p>
         <div class="btn-group mt-4">
             <a th:href="@{/}" class="btn btn-primary">
-                <i class="bi bi-house-fill"></i> Wróć na stronę główną
+                <i class="bi bi-house-fill"></i><span th:text="#{error.home}"></span>
             </a>
             <a th:href="@{/contact}" class="btn btn-secondary">
-                <i class="bi bi-envelope-fill"></i> Skontaktuj się z pomocą
+                <i class="bi bi-envelope-fill"></i> <span th:text="#{error.contact}"></span>
             </a>
         </div>
     </div>
