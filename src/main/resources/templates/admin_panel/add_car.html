@@ -82,7 +82,7 @@
                                 <label for="fuelType" class="form-label">Rodzaj paliwa:</label>
                                 <select id="fuelType" name="fuelType" th:field="*{carModel.fuelType}"
                                         class="form-select" required>
-                                    <option th:each="fuel : ${fuels}" th:value="${fuel}" th:text="#{'fuel.type.' + ${fuel}"></option>
+                                    <option th:each="fuel : ${fuels}" th:value="${fuel}" th:text="#{'fuel.' + ${fuel}}"></option>
                                 </select>
                                 <input type="hidden" id="fuelType_hidden" name="fuelType">
                             </div>
