@@ -51,7 +51,7 @@
                             <div class="text mb-3">
                                 <h3 class="heading mb-0 pl-3">
                                     <span class="text-muted" th:text="#{car.transmission}"></span>
-                                    <span th:text="${car.model.transmission}"></span>
+                                    <span th:text="#{'transmission.' + ${car.model.transmission.name()}}"></span>
                                 </h3>
                             </div>
                         </div>
@@ -85,7 +85,7 @@
                             <div class="text mb-3">
                                 <h3 class="heading mb-0 pl-3">
                                     <span class="text-muted" th:text="#{car.fuel}"></span>
-                                    <span th:text="${car.model.fuelType}"></span>
+                                    <span th:text="#{'fuel.' + ${car.model.fuelType.name()}}"></span>
                                 </h3>
                             </div>
                         </div>
@@ -137,7 +137,7 @@
                                     <ul class="features">
                                         <li th:text="${car.model.doors} == null ? 'Brak danych' : ${car.model.doors}"></li>
                                         <li>⠀</li>
-                                        <li th:text="${car.model.carType}"></li>
+                                        <li th:text="#{'car.type.' + ${car.model.carType.name()}}"></li>
                                         <li>⠀</li>
                                         <li th:text="${car.productionYear} == null ? 'Brak danych' : ${car.productionYear}"></li>
                                         <br />

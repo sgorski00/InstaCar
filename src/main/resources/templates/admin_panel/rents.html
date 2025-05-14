@@ -45,7 +45,7 @@
                         <td th:text="${rent.returnDate}"></td>
                         <td th:text="${rent.vehicle.model}"></td>
                         <td th:text="${rent.user}"></td>
-                        <td th:text="${rent.rentStatus}"></td>
+                        <td th:text="#{'rent.status.' + ${rent.rentStatus}}"></td>
                         <td th:text="${rent.totalCost}"></td>
                         <td>
                             <a th:href="@{'/admin/rents/' + ${rent.id}}" class="btn btn-sm btn-primary me-2">Podgląd</a>

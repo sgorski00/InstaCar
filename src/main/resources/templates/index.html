@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
-<th:block th:replace="~{/fragments/headerFragments :: head('Strona główna')}"></th:block>
+<th:block th:replace="~{/fragments/headerFragments :: head(#{home.title})}"></th:block>
 <body>
 <th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
 
@@ -11,8 +11,8 @@
         <div class="row no-gutters slider-text justify-content-start align-items-center justify-content-center">
           <div class="col-lg-8 ftco-animate">
           	<div class="text w-100 text-center mb-md-5 pb-md-5">
-                <h1 class="mb-4">Szybki i łatwy sposób na wypożyczenie samochodu</h1>
-                <p style="font-size: 18px;">Twój klucz do odkrywania kraju i regionu czeka! Wybierz idealny samochód z naszej floty i ruszaj w niezapomnianą podróż.</p>
+                <h1 class="mb-4" th:text="#{home.header}"></h1>
+                <p style="font-size: 18px;" th:text="#{home.subheader}"></p>
             </div>
           </div>
         </div>
@@ -26,13 +26,13 @@
                 <div class="row no-gutters">
                     <div class="col-md-12 d-flex align-items-center">
                         <div class="services-wrap rounded-right rounded-left w-100 text-center">
-                            <h3 class="heading-section mb-4 text-center">Znajdź swój wymarzony samochód</h3>
+                            <h3 class="heading-section mb-4 text-center" th:text="#{home.text.main}"></h3>
                             <div class="row d-flex mb-4">
                                 <div class="col-md-4 d-flex align-self-stretch ftco-animate">
                                     <div class="services w-100 text-center">
                                         <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-route"></span></div>
                                         <div class="text w-100">
-                                            <h3 class="heading mb-2">Wybierz lokalizację</h3>
+                                            <h3 class="heading mb-2" th:text="#{home.text.location}"></h3>
                                         </div>
                                     </div>
                                 </div>
@@ -40,7 +40,7 @@
                                     <div class="services w-100 text-center">
                                         <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-handshake"></span></div>
                                         <div class="text w-100">
-                                            <h3 class="heading mb-2">Wybierz najlepszą ofertę</h3>
+                                            <h3 class="heading mb-2" th:text="#{home.text.offer}"></h3>
                                         </div>
                                     </div>
                                 </div>
@@ -48,12 +48,12 @@
                                     <div class="services w-100 text-center">
                                         <div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-rent"></span></div>
                                         <div class="text w-100">
-                                            <h3 class="heading mb-2">Zarezerwuj furę</h3>
+                                            <h3 class="heading mb-2" th:text="#{home.text.rent}"></h3>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <p><a th:href="@{/cars}" class="btn btn-primary py-3 px-4">Wymarzone samochody</a></p>
+                            <p><a th:href="@{/cars}" class="btn btn-primary py-3 px-4" th:text="#{home.submit}"></a></p>
                         </div>
                     </div>
                 </div>
@@ -61,96 +61,8 @@
         </div>
     </div>
 </section>
-
-
-		<section class="ftco-section">
-			<div class="container">
-				<div class="row justify-content-center mb-5">
-          <div class="col-md-7 text-center heading-section ftco-animate">
-          	<span class="subheading">Usługi</span>
-            <h2 class="mb-3">Nasze usługi</h2>
-          </div>
-        </div>
-				<div class="row">
-					<div class="col-md-3">
-						<div class="services services-2 w-100 text-center">
-            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-wedding-car"></span></div>
-            	<div class="text w-100">
-                <h3 class="heading mb-2">Ślub</h3>
-                <p>Wypożycz ekskluzywny samochód wraz z kierowcą na swoją wielką uroczystość.</p>
-              </div>
-            </div>
-					</div>
-					<div class="col-md-3">
-						<div class="services services-2 w-100 text-center">
-            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-transportation"></span></div>
-            	<div class="text w-100">
-                <h3 class="heading mb-2">Miasto</h3>
-                <p>Szybka taryfa z punktu A do punktu B w Twoim mieście.</p>
-              </div>
-            </div>
-					</div>
-					<div class="col-md-3">
-						<div class="services services-2 w-100 text-center">
-            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-car"></span></div>
-            	<div class="text w-100">
-                <h3 class="heading mb-2">Lotnisko</h3>
-                <p>Zawieziemy Cię na samolot i odbierzemy kiedy tylko chcesz.</p>
-              </div>
-            </div>
-					</div>
-					<div class="col-md-3">
-						<div class="services services-2 w-100 text-center">
-            	<div class="icon d-flex align-items-center justify-content-center"><span class="flaticon-transportation"></span></div>
-            	<div class="text w-100">
-                <h3 class="heading mb-2">Podróż</h3>
-                <p>Wypożyczysz u nas samochód na podróż życia w dalekie strony.</p>
-              </div>
-            </div>
-					</div>
-				</div>
-			</div>
-		</section>
-
-    <section class="ftco-counter ftco-section img bg-light" id="section-counter">
-			<div class="overlay"></div>
-    	<div class="container">
-    		<div class="row">
-          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18">
-              <div class="text text-border d-flex align-items-center">
-                <strong class="number" data-number="50">0</strong>
-                <span>Lat <br>Doświadczenia</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18">
-              <div class="text text-border d-flex align-items-center">
-                <strong class="number" data-number="1090">0</strong>
-                <span>Posiadanych <br>Samochodów</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18">
-              <div class="text text-border d-flex align-items-center">
-                <strong class="number" data-number="2590">0</strong>
-                <span>Zadowoloncyh <br>Klientów</span>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-            <div class="block-18">
-              <div class="text d-flex align-items-center">
-                <strong class="number" data-number="15">0</strong>
-                <span>Wszystkich<br>Oddziałów</span>
-              </div>
-            </div>
-          </div>
-        </div>
-    </div>
-</section>
+<th:block th:replace="~{/fragments/bodyFragments :: services}"></th:block>
+<th:block th:replace="~{/fragments/bodyFragments :: counter}"></th:block>
 <th:block th:replace="~{/fragments/bodyFragments :: footer}"></th:block>
 <th:block th:replace="~{/fragments/bodyFragments :: loader}"></th:block>
 <th:block th:replace="~{/fragments/bodyFragments :: scripts}"></th:block>
