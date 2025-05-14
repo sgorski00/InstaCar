@@ -61,18 +61,6 @@ public class ExceptionController {
         return "redirect:/login";
     }
 
-    @ExceptionHandler(EntityValidationException.class)
-    public String entityValidationExceptionHandler(
-            EntityValidationException ex,
-            RedirectAttributes redirectAttributes
-    ) {
-        redirectAttributes.addFlashAttribute("error", ex.getMessage());
-        if(ex.getRedirectUrl().startsWith("redirect")){
-            return ex.getRedirectUrl();
-        }
-        return "redirect:" + ex.getRedirectUrl();
-    }
-
     @ExceptionHandler(FileUploadException.class)
     public String fileUploadExceptionHandler(
             FileUploadException ex,

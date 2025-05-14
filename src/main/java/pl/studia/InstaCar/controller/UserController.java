@@ -7,7 +7,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.model.UserDetails;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.service.OrderService;
@@ -50,11 +49,13 @@ public class UserController {
             @ModelAttribute("user_details") @Valid UserDetails userDetails,
             BindingResult bindingResult,
             Principal principal,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            Model model
     ) {
         ApplicationUser user = userService.findUserByUsername(principal.getName());
         if(bindingResult.hasErrors()) {
-            throw new EntityValidationException("Podane dane nie spełniają wymagań.", "/users/" + user.getId());
+            redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
+            return "user";
         }
 
         userDetails.setUser(user);

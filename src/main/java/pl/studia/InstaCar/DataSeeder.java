@@ -120,7 +120,7 @@ public class DataSeeder implements CommandLineRunner {
 
             for(int i = 0; i < numOfCityCars; i++) {
                 CityCar cityCar = new CityCar();
-                cityCar.setTrunkCapacity(faker.number().numberBetween(150, 500));
+                cityCar.setTrunkCapacity((double) faker.number().numberBetween(150, 500));
                 setVehicleGenericFields(cityCar, models);
                 vehicles.add(cityCar);
                 vehicleService.save(cityCar);

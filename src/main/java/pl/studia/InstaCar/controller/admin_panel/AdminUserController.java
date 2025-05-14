@@ -1,5 +1,6 @@
 package pl.studia.InstaCar.controller.admin_panel;
 
+import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -7,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
@@ -71,7 +73,7 @@ public class AdminUserController {
     ) {
         ApplicationUser user = userService.findUserById(userId);
         model.addAttribute("userNotEditable", user);
-        model.addAttribute("user", new EditUserDto(user));
+        if(!model.containsAttribute("user")) model.addAttribute("user", new EditUserDto(user));
         model.addAttribute("roles", roleService.findAll());
         return "admin_panel/edit_user";
     }
@@ -79,9 +81,15 @@ public class AdminUserController {
     @PostMapping("/edit/{id}")
     public String editUser(
             @PathVariable("id") Long id,
-            @ModelAttribute("user") EditUserDto userDto,
+            @Valid @ModelAttribute("user") EditUserDto userDto,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     ) {
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
+            redirectAttributes.addFlashAttribute("user", userDto);
+            return "redirect:/admin/users/edit/" + id;
+        }
         ApplicationUser userToEdit = userService.findUserById(id);
         Role role = roleService.findById(userDto.getRoleId());
         userDto.updateUser(userToEdit, role);

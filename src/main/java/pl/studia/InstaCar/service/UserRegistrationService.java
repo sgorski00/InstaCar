@@ -6,7 +6,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.model.dto.UserRegistrationDto;
 import pl.studia.InstaCar.service.event.UserRegistrationEvent;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
@@ -47,7 +46,7 @@ public class UserRegistrationService {
             throw new NoSuchElementException(e.getMessage());
         } catch (DataIntegrityViolationException e) {
             log.error(e.getMessage());
-            throw new EntityValidationException("Podana nazwa użytkownika jest zajęta", "/register");
+            throw new IllegalArgumentException("Podana nazwa użytkownika jest zajęta");
         } catch (Exception e) {
             log.error(e.getCause());
             throw new RuntimeException("An error occurred while registering user");

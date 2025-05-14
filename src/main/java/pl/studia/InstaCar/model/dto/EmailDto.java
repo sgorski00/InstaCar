@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
@@ -13,7 +14,7 @@ import java.time.LocalTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmailDto {
+public class EmailDto implements Serializable {
 
     private String emailFrom;
     private String emailTo;

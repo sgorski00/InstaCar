@@ -7,14 +7,15 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
+
+import java.io.Serializable;
 
 @NoArgsConstructor(force = true)
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserRegistrationDto implements PasswordEquals{
+public class UserRegistrationDto implements PasswordEquals, Serializable {
     @NotBlank(message = "Nazwa użytkownika jest wymagana")
     @Size(min = 5, max = 50, message = "Nazwa użytkownika musi mieć od 5 do 50 znaków")
     private String username;
@@ -35,7 +36,7 @@ public class UserRegistrationDto implements PasswordEquals{
 
     public ApplicationUser mapToUser() {
         if(!arePasswordsEqual()) {
-            throw new EntityValidationException("Podane hasła nie są takie same", "redirect:/register");
+            throw new IllegalArgumentException("Podane hasła nie są takie same");
         }
         ApplicationUser user = new ApplicationUser();
         user.setUsername(username);

@@ -3,6 +3,7 @@ package pl.studia.InstaCar.model;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,5 +17,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CityCar extends Vehicle {
-    private double trunkCapacity;
+
+    @Positive(message = "Pojemność bagażnika musi być dodatnia")
+    private Double trunkCapacity;
 }

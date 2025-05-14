@@ -1,31 +1,71 @@
 package pl.studia.InstaCar.model.dto;
 
+import jakarta.annotation.Nullable;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.model.CarModel;
 import pl.studia.InstaCar.model.CityCar;
 import pl.studia.InstaCar.model.SportCar;
 import pl.studia.InstaCar.model.Vehicle;
 
+import java.io.Serializable;
+
 @Data
 @NoArgsConstructor(force = true)
-public class EditCarDto {
+public class EditCarDto implements Serializable {
 
     private Long id;
+
+    @NotNull(message = "Model nie może być pusty")
+    @Valid
     private CarModel model;
+
+    @NotBlank(message = "Typ pojazdu nie może być pusty")
     private String carType;
+
+    @Size(min=3, max=10, message = "Numer rejestracyjny musi mieć od 3 do 10 znaków")
     private String licensePlate;
+
+    @NotBlank(message = "VIN nie może być pusty")
     private String vin;
+
     private String color;
+
+    @Min(value = 1950, message = "Rok produkcji nie może być mniejszy niż 1950")
+    @Max(value = 2030, message = "Rok produkcji nie może być większy niż 2030")
     private int productionYear;
+
+    @Positive(message = "Cena musi być większa od 0")
     private double price;
+
+    @NotBlank(message = "Pole silnik musi być wypełnione")
     private String engine;
+
+    @NotBlank(message = "Należy załączyć zdjęcie")
     private String imageUrl;
-    private double acceleration;
-    private int topSpeed;
-    private int horsePower;
-    private double trunkCapacity;
+
+    @Nullable
+    @Positive(message = "Przyspieszenie nie może być mniejsze od 0")
+    private Double acceleration;
+
+    @Nullable
+    @Min(value = 100,message = "Prędkość minimalna to 100 km/h")
+    @Max(value = 400,message = "Prędkość minimalna to 400 km/h")
+    private Integer topSpeed;
+
+    @Nullable
+    @Min(value = 50,message = "Minimalna ilość koni mechanicznych to 50")
+    @Max(value = 1000,message = "Maksymalna ilość koni mechanicznych to 1000")
+    private Integer horsePower;
+
+    @Nullable
+    @Positive(message = "Pojemność bagażnika musi być dodatnia")
+    private Double trunkCapacity;
+
+    @NotBlank(message = "Opis nie może być pusty")
+    @Size(max = 250, message = "Opis nie może mieć więcej niż 250 znaków")
     private String description;
 
     public EditCarDto(Vehicle vehicle) {
@@ -73,7 +113,7 @@ public class EditCarDto {
                 cityCar.setTrunkCapacity(trunkCapacity);
                 yield cityCar;
             }
-            default -> throw new EntityValidationException("Zły typ pojazdu!", "/admin/cars/edit/" + id);
+            default ->  null;
         };
     }
 }

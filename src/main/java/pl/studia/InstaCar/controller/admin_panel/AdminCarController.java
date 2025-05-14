@@ -1,5 +1,8 @@
 package pl.studia.InstaCar.controller.admin_panel;
 
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
+import jakarta.validation.Validator;
 import lombok.extern.log4j.Log4j2;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,10 +12,10 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.model.CarModel;
 import pl.studia.InstaCar.model.CityCar;
 import pl.studia.InstaCar.model.SportCar;
@@ -39,17 +42,15 @@ public class AdminCarController {
 
     private final VehicleService vehicleService;
     private final CarModelService carModelService;
-    private final FileUploadService fileUploadService;
     private final ListPaginator<Vehicle> listPaginator;
 
     @Value("${default.pagination.pages.size}")
     private int visiblePages;
 
     @Autowired
-    public AdminCarController(VehicleService vehicleService, CarModelService carModelService, FileUploadService fileUploadService, ListPaginator<Vehicle> listPaginator) {
+    public AdminCarController(VehicleService vehicleService, CarModelService carModelService, ListPaginator<Vehicle> listPaginator) {
         this.vehicleService = vehicleService;
         this.carModelService = carModelService;
-        this.fileUploadService = fileUploadService;
         this.listPaginator = listPaginator;
     }
 
@@ -88,7 +89,7 @@ public class AdminCarController {
         Map<Long, String> modelMap = new HashMap<>();
         allModels.forEach(m -> modelMap.put(m.getId(), m.toString()));
 
-        model.addAttribute("carDto", new NewCarDto());
+        if(!model.containsAttribute("carDto")) model.addAttribute("carDto", new NewCarDto());
         model.addAttribute("models", modelMap);
         model.addAttribute("carTypes", CarType.values());
         model.addAttribute("transmissions", Transmission.values());
@@ -98,35 +99,38 @@ public class AdminCarController {
 
     @PostMapping("/add")
     public String addCar(
-            @ModelAttribute("carDto") NewCarDto car,
+            @Valid @ModelAttribute("carDto") NewCarDto car,
+            BindingResult bindingResult,
             @RequestParam("file") MultipartFile file,
             RedirectAttributes redirectAttributes
-    ) throws FileUploadException {
-        String imgUrl = fileUploadService.uploadFile(file);
-        CarModel model;
-        if(car.getCarModel().getId() == null) {
-            model = carModelService.save(car.getCarModel());
-        } else {
-            model = carModelService.getCarModelById(car.getCarModel().getId());
+    ) {
+        if (bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
+            redirectAttributes.addFlashAttribute("carDto", car);
+            return "redirect:/admin/cars/add";
         }
-        switch (car.getType()) {
-            case "sport" -> {
-                car.getSportCar().setModel(model);
-                car.getSportCar().setImageUrl(imgUrl);
-                car.getSportCar().setDescription(car.getDescription());
-                vehicleService.save(car.getSportCar());
-            }
-            case "city" -> {
-                car.getCityCar().setModel(model);
-                car.getCityCar().setImageUrl(imgUrl);
-                car.getCityCar().setDescription(car.getDescription());
-                vehicleService.save(car.getCityCar());
-            }
-            default -> throw new EntityValidationException("Zły typ pojazdu", "admin/cars/add");
+
+        try {
+            vehicleService.validateAndSaveNewCar(car, file);
+        } catch (ConstraintViolationException e) {
+            String errorMsg = e.getConstraintViolations().iterator().next().getMessage();
+            redirectAttributes.addFlashAttribute("error", errorMsg);
+            redirectAttributes.addFlashAttribute("carDto", car);
+            return "redirect:/admin/cars/add";
+        } catch (IllegalArgumentException e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("carDto", car);
+            return "redirect:/admin/cars/add";
+        } catch (FileUploadException e) {
+            redirectAttributes.addFlashAttribute("error", "Błąd przesyłania pliku");
+            redirectAttributes.addFlashAttribute("carDto", car);
+            return "redirect:/admin/cars/add";
         }
+
         redirectAttributes.addFlashAttribute("info", "Pojazd został zapisany");
         return "redirect:/admin/cars";
     }
+
 
     @PostMapping("/delete/{id}")
     public String deleteCar(
@@ -144,8 +148,8 @@ public class AdminCarController {
             Model model
     ) {
         EditCarDto carDto = new EditCarDto(vehicleService.getCarById(id));
-        log.debug("edit carDto GET method: {}", carDto);
-        model.addAttribute("car", carDto);
+        log.info("edit carDto GET method: {}", carDto);
+        if(!model.containsAttribute("car")) model.addAttribute("car", carDto);
         model.addAttribute("carTypes", CarType.values());
         model.addAttribute("transmissions", Transmission.values());
         model.addAttribute("fuels", FuelType.values());
@@ -154,10 +158,16 @@ public class AdminCarController {
 
     @PostMapping("/edit")
     public String editCar(
-            @ModelAttribute("car") EditCarDto carDto,
+            @Valid @ModelAttribute("car") EditCarDto carDto,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     ) {
         log.debug("edit carDto POST method: {}", carDto);
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
+            redirectAttributes.addFlashAttribute("car", carDto);
+            return "redirect:/admin/cars/edit/" + carDto.getId();
+        }
         switch(carDto.getCarType().toUpperCase()) {
             case "SPORT" -> {
                 SportCar car = (SportCar) vehicleService.getCarById(carDto.getId());
@@ -167,7 +177,11 @@ public class AdminCarController {
                 CityCar car = (CityCar) vehicleService.getCarById(carDto.getId());
                 vehicleService.save(carDto.mapToCar(car));
             }
-            default -> throw new EntityValidationException("Zły typ pojazdu", "/admin/cars/edit/" + carDto.getId());
+            default -> {
+                redirectAttributes.addFlashAttribute("car", carDto);
+                redirectAttributes.addFlashAttribute("error", "Zły typ pojazdu!");
+                return "redirect:/admin/cars/edit/" + carDto.getId();
+            }
         }
         redirectAttributes.addAttribute("info", "Pojazd został zapisany");
         return "redirect:/admin/cars";

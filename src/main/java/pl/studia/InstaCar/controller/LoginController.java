@@ -8,7 +8,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.dto.PasswordResetDto;
 import pl.studia.InstaCar.service.PasswordResetService;
@@ -81,20 +80,19 @@ public class LoginController {
             @RequestParam(name = "token") String token,
             @Valid @ModelAttribute("pwdResetDto") PasswordResetDto passwordResetDto,
             BindingResult bindingResult,
-            RedirectAttributes redirectAttributes
+            RedirectAttributes redirectAttributes,
+            Model model
     ) {
         if (bindingResult.hasErrors()) {
-            throw new EntityValidationException(
-                    "Podane hasło nie spełnia wymagań bezpieczeństwa",
-                    "/login/reset/form?token=" + token
-            );
+            model.addAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
+            model.addAttribute("token", token);
+            return "password_reset_form";
         }
 
         if (!passwordResetDto.arePasswordsEqual()) {
-            throw new EntityValidationException(
-                    "Podane hasła są takie same",
-                    "/login/reset/form?token=" + token
-            );
+            redirectAttributes.addFlashAttribute("error", "Podane hasła są takie same.");
+            redirectAttributes.addFlashAttribute("pwdResetDto", passwordResetDto);
+            return "redirect:/login/reset/form?token=" + token;
         }
 
         ApplicationUser user = passwordTokenService.getUserForToken(token);
