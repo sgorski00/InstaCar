@@ -46,7 +46,7 @@
                         <tr>
                             <th>Status</th>
                             <td>
-                                <span th:text="${rent.rentStatus}" class="badge bg-secondary px-3 py-2 text-uppercase"></span>
+                                <span th:text="#{'rent.status.' + ${rent.rentStatus}}" class="badge bg-secondary px-3 py-2 text-uppercase"></span>
                             </td>
                         </tr>
                         <tr>

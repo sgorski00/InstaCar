@@ -20,7 +20,7 @@ public class RateResponse {
     private List<Rate> rates;
 
     public double getNewestPrice(double price) {
-        return Double.parseDouble(rates.getLast().getMid()) / price;
+        return price / Double.parseDouble(rates.getLast().getMid());
     }
 
     public String getNewestPriceFormatted(double price) {

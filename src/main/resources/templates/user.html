@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
     <meta charset="utf-8">
-    <title>Profil - InstaCar</title>
+    <title th:text="#{user.title} + ' - InstaCar'"></title>
     <link rel="icon" href="images/favicon.png" type="image/x-icon">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -111,42 +111,39 @@
 <body>
 <th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
 <div class="container light-style flex-grow-1 container-p-y">
-    <h4 class="font-weight-bold py-3 mb-4">
-        Ustawienia konta
-    </h4>
+    <h4 class="font-weight-bold py-3 mb-4" th:text="#{user.settings}"></h4>
 
     <div class="card overflow-hidden">
         <div class="row no-gutters row-bordered row-border-light">
             <div class="col-md-3 pt-0">
                 <div class="list-group list-group-flush account-settings-links">
-                    <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general">Ogólne</a>
-                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info">Informacje</a>
-                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-rents">Historia wynajmu</a>
+                    <a class="list-group-item list-group-item-action active" data-toggle="list" href="#account-general" th:text="#{user.settings.general}"></a>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-info" th:text="#{user.settings.info}"></a>
+                    <a class="list-group-item list-group-item-action" data-toggle="list" href="#account-rents" th:text="#{user.settings.history}"></a>
                 </div>
             </div>
             <div class="col-md-9">
                 <div class="tab-content">
                     <div class="tab-pane fade active show" id="account-general">
                         <div class="card-body media align-items-center">
-                            <h2 th:text="${user.userDetails != null ? user.userDetails : user.username}">Profil</h2>
+                            <h2 th:text="${user}"></h2>
                         </div>
                         <hr class="border-light m-0">
-
                         <div class="card-body">
                             <div class="form-group">
-                                <label class="form-label">Nazwa użytkownika</label>
+                                <label class="form-label" th:text="#{register.username}"></label>
                                 <input type="text" class="form-control mb-1" th:value="${user.username}" disabled>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">E-mail</label>
+                                <label class="form-label" th:text="#{register.email}"></label>
                                 <input type="email" class="form-control mb-1" th:value="${user.email}" disabled>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Typ konta</label>
+                                <label class="form-label" th:text="#{user.account.type}"></label>
                                 <input type="text" class="form-control mb-1" th:value="${user.provider}" disabled>
                             </div>
                             <div class="form-group">
-                                <label class="form-label">Rola</label>
+                                <label class="form-label" th:text="#{user.account.role}"></label>
                                 <input type="text" class="form-control mb-1" th:value="${user.role}" disabled>
                             </div>
                         </div>
@@ -154,57 +151,57 @@
 
                     <div class="tab-pane fade" id="account-info">
                         <div class="card-body media align-items-center">
-                            <h2 th:text="${user.userDetails != null ? user.userDetails : user.username}">Profil</h2>
+                            <h2 th:text="${user}"></h2>
                         </div>
                         <hr class="border-light m-0">
                         <form th:action="@{/user/user_details}" method="post" th:object="${user_details}">
                             <div class="card-body pb-2">
                                 <div class="form-group">
-                                    <label class="form-label">Imię</label>
+                                    <label class="form-label" th:text="#{user.firstname}"></label>
                                     <input type="text" class="form-control" th:field="*{firstName}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Nazwisko</label>
+                                    <label class="form-label" th:text="#{user.lastname}"></label>
                                     <input type="text" class="form-control" th:field="*{lastName}" required>
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Telefon</label>
+                                    <label class="form-label" th:text="#{user.phone}"></label>
                                     <input type="text" class="form-control" th:field="*{phoneNumber}">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Ulica i nr domu/mieszkania:</label>
+                                    <label class="form-label" th:text="#{user.address}"></label>
                                     <input type="text" class="form-control" th:field="*{address}">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Kod pocztowy:</label>
+                                    <label class="form-label" th:text="#{user.postalcode}"></label>
                                     <input type="text" class="form-control" th:field="*{postalCode}">
                                 </div>
                                 <div class="form-group">
-                                    <label class="form-label">Miasto:</label>
+                                    <label class="form-label" th:text="#{user.city}"></label>
                                     <input type="text" class="form-control" th:field="*{city}">
                                 </div>
                             </div>
                             <hr class="border-light m-0">
                             <div class="text-right m-3">
-                                <button type="submit" class="btn btn-primary">Zapisz zmiany</button>&nbsp;
-                                <button type="reset" class="btn btn-default">Anuluj</button>
+                                <button type="submit" class="btn btn-primary" th:text="#{user.settings.submit}"></button>&nbsp;
+                                <button type="reset" class="btn btn-default" th:text="#{user.settings.cancel}"></button>
                             </div>
                         </form>
                     </div>
                     <div class="tab-pane fade" id="account-rents">
                         <div class="card-body media align-items-center">
-                            <h2 th:text="${user.userDetails != null ? user.userDetails : user.username}">Profil</h2>
+                            <h2 th:text="${user}"></h2>
                         </div>
                         <hr class="border-light m-0">
                         <div class="card-body">
                             <table class="table table-striped table-hover">
                                 <thead>
                                 <tr>
-                                    <th scope="col">Data wynajmu</th>
-                                    <th scope="col">Data zwrotu</th>
-                                    <th scope="col">Pojazd</th>
-                                    <th scope="col">Status</th>
-                                    <th scope="col">Koszt wynajmu</th>
+                                    <th scope="col" th:text="#{user.history.rent.date}"></th>
+                                    <th scope="col" th:text="#{user.history.return.date}"></th>
+                                    <th scope="col" th:text="#{user.history.car}"></th>
+                                    <th scope="col" th:text="#{user.history.status}"></th>
+                                    <th scope="col" th:text="#{user.history.price}"></th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -213,7 +210,7 @@
                                     <td th:text="${rent.rentDate}"></td>
                                     <td th:text="${rent.returnDate}"></td>
                                     <td th:text="${rent.vehicle.model}"></td>
-                                    <td th:text="${rent.rentStatus}"></td>
+                                    <td th:text="#{'rent.status.' + ${rent.rentStatus}}"></td>
                                     <td th:text="${rent.totalCost + ' zł'}"></td>
                                 </tr>
                                 </tbody>

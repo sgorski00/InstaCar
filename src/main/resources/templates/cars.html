@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
-<th:block th:replace="~{/fragments/headerFragments :: head('Pojazdy')}"></th:block>
+<th:block th:replace="~{/fragments/headerFragments :: head(#{cars.title})}"></th:block>
 <body>
 <th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
 
@@ -10,7 +10,7 @@
     <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
             <div class="col-md-9 ftco-animate pb-5">
-                <h1 class="mb-3 bread">Wybierz swój samochód</h1>
+                <h1 class="mb-3 bread" th:text="#{cars.title2}"></h1>
             </div>
         </div>
     </div>
@@ -22,24 +22,24 @@
             <div class="row">
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="form-group">
-                        <label for="pickDate" class="label">Data odbioru</label>
+                        <label for="pickDate" class="label" th:text="#{cars.pick.date}"></label>
                         <input type="date" class="form-control" id="pickDate" name="pickDate"
                                th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" th:value="${pickDate}">
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="form-group">
-                        <label for="returnDate" class="label">Data zwrotu</label>
+                        <label for="returnDate" class="label" th:text="#{cars.return.date}"></label>
                         <input type="date" class="form-control" id="returnDate" name="returnDate"
                                th:min="${#temporals.format(#temporals.createNow(), 'yyyy-MM-dd')}" th:value="${returnDate}">
                     </div>
                 </div>
                 <div class="col-lg-4 col-md-4 col-sm-6">
                     <div class="form-group">
-                        <label for="sort" class="label">Sortuj po</label>
+                        <label for="sort" class="label" th:text="#{cars.sort.by}"></label>
                         <select name="sort" id="sort" class="form-control">
-                            <option value="name" th:select="${sort} == 'name'">Nazwie rosnąco</option>
-                            <option value="price" th:select="${sort} == 'price'">Cenie rosnąco</option>
+                            <option value="name" th:select="${sort} == 'name'" th:text="#{cars.sort.name.asc}"></option>
+                            <option value="price" th:select="${sort} == 'price'" th:text="#{cars.sort.price.asc}"></option>
                         </select>
                     </div>
                 </div>
@@ -50,29 +50,29 @@
                         <div class="row">
                             <div class="col-lg-4 col-md-4 col-sm-6">
                                 <div class="form-group">
-                                    <label for="keyword">Szukaj po nazwie</label>
+                                    <label for="keyword" th:text="#{cars.search}"></label>
                                     <input type="text" class="form-control py-2" id="keyword" name="keyword"
                                            th:value="${keyword}">
                                 </div>
                             </div>
                             <div class="col-lg-4 col-md-4 col-sm-6">
                                 <div class="form-group">
-                                    <label for="type">Typ pojazdu</label>
+                                    <label for="type" th:text="#{cars.type}"></label>
                                     <select name="type" id="type" class="form-control py-2">
-                                        <option value="all" th:selected="${type == 'all'}">Wszystkie</option>
-                                        <option value="city" th:selected="${type == 'city'}">Miejski</option>
-                                        <option value="sport" th:selected="${type == 'sport'}">Sportowy</option>
+                                        <option value="all" th:selected="${type == 'all'}" th:text="#{cars.type.all}"></option>
+                                        <option value="city" th:selected="${type == 'city'}" th:text="#{cars.type.city}"></option>
+                                        <option value="sport" th:selected="${type == 'sport'}" th:text="#{cars.type.sport}"></option>
                                     </select>
                                 </div>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-3 d-flex align-items-end">
                                 <div class="form-group w-100">
-                                    <button type="reset" class="btn btn-secondary py-2 w-100">Wyczyść</button>
+                                    <button type="reset" class="btn btn-secondary py-2 w-100" th:text="#{cars.clear}"></button>
                                 </div>
                             </div>
                             <div class="col-lg-2 col-md-2 col-sm-3 d-flex align-items-end">
                                 <div class="form-group w-100">
-                                    <button type="submit" class="btn btn-primary py-2 w-100">Szukaj</button>
+                                    <button type="submit" class="btn btn-primary py-2 w-100" th:text="#{cars.submit}"></button>
                                 </div>
                             </div>
                         </div>
@@ -87,15 +87,14 @@
                          th:style="'background-image: url(' + ${car.getImageUrl()} +');'">
                     </div>
                     <div class="text">
-                        <h2 class="mb-0"><a th:href="@{'/cars/' + ${car.id}}" th:text="${car.model}">Mercedes Grand
-                            Sedan</a></h2>
+                        <h2 class="mb-0"><a th:href="@{'/cars/' + ${car.id}}" th:text="${car.model}"></a></h2>
                         <div class="d-flex mb-3">
-                            <span class="cat" th:text="${car.model.brand}">Cheverolet</span>
-                            <p class="price ml-auto" th:text="${car.price} + ' zł '"></p><span class="cat">/dzień</span>
+                            <span class="cat" th:text="${car.model.brand}"></span>
+                            <p class="price ml-auto" th:text="${car.price} + ' zł '"></p><span class="cat" th:text="#{cars.per.day}"></span>
                         </div>
                         <div class="d-flex mb-0 d-block justify-content-around">
-                            <a th:href="@{/order/create(carId=${car.id}, pickDate=${pickDate}, returnDate=${returnDate})}" class="btn btn-primary py-2 mr-1">Wynajmij</a>
-                            <a th:href="@{'/cars/' + ${car.id}}" class="btn btn-secondary py-2 ml-1">Szczegóły</a>
+                            <a th:href="@{/order/create(carId=${car.id}, pickDate=${pickDate}, returnDate=${returnDate})}" class="btn btn-primary py-2 mr-1 w-50" th:text="#{cars.rent}"></a>
+                            <a th:href="@{'/cars/' + ${car.id}}" class="btn btn-secondary py-2 ml-1 w-50" th:text="#{cars.details}"></a>
                         </div>
                     </div>
                 </div>

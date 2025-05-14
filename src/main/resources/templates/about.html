@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
-<th:block th:replace="~{/fragments/headerFragments :: head('O nas')}"></th:block>
+<th:block th:replace="~{/fragments/headerFragments :: head(#{about.title})}"></th:block>
 <body>
 <th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
 <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/bg_3.jpg');"
@@ -9,7 +9,7 @@
     <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
             <div class="col-md-9 ftco-animate pb-5">
-                <h1 class="mb-3 bread">O nas</h1>
+                <h1 class="mb-3 bread" th:text="#{about.title}"></h1>
             </div>
         </div>
     </div>
@@ -23,38 +23,21 @@
             </div>
             <div class="col-md-6 wrap-about ftco-animate">
                 <div class="heading-section heading-section-white pl-md-5">
-                    <h2 class="mb-4">Witamy w InstaCar</h2>
-
-                    <p>
-                        W InstaCar od lat pomagamy naszym klientom spełniać ich motoryzacyjne potrzeby, oferując
-                        niezawodny wynajem samochodów na każdą okazję. Nasza firma działa na rynku od ponad 50 lat,
-                        zdobywając zaufanie tysięcy klientów oraz budując reputację jako lidera w branży wynajmu
-                        pojazdów.
-                    </p>
-                    <p>
-                        Oferujemy szeroką gamę nowoczesnych i doskonale utrzymanych aut, które spełniają wymagania
-                        zarówno osób podróżujących służbowo, jak i prywatnie. Naszą misją jest dostarczanie usług na
-                        najwyższym poziomie, zapewniając jednocześnie elastyczność, przystępne ceny i profesjonalną
-                        obsługę.
-
-                        Wybierając InstaCar, wybierasz firmę z tradycją, doświadczeniem i pasją do motoryzacji. Dążymy
-                        do tego, aby każdy wynajem był dla naszych klientów bezstresowy i komfortowy. Niezależnie od
-                        tego, czy potrzebujesz samochodu na weekendowy wypad, wakacje, czy do pracy – jesteśmy tutaj,
-                        aby Ci pomóc.
-                    </p>
-                    <p><a th:href="@{/cars}" class="btn btn-primary py-3 px-4">Wyszukaj samochód</a></p>
+                    <h2 class="mb-4" th:text="#{about.welcome}"></h2>
+                    <p th:text="#{about.paragraph1}"></p>
+                    <p th:text="#{about.paragraph2}"></p>
+                    <p><a th:href="@{/cars}" class="btn btn-primary py-3 px-4" th:text="#{about.button}">Wyszukaj samochód</a></p>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-
 <section class="ftco-section testimony-section bg-light">
     <div class="container">
         <div class="row justify-content-center mb-5">
             <div class="col-md-7 text-center heading-section ftco-animate">
-                <h2 class="mb-3">Zadowoleni klienci</h2>
+                <h2 class="mb-3" th:text="#{about.clients}"></h2>
             </div>
         </div>
         <div class="row ftco-animate">
@@ -99,52 +82,13 @@
                             </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<section class="ftco-counter ftco-section img bg-light" id="section-counter">
-    <div class="overlay"></div>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-                <div class="block-18">
-                    <div class="text text-border d-flex align-items-center">
-                        <strong class="number" data-number="50">0</strong>
-                        <span>Lat <br>Doświadczenia</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-                <div class="block-18">
-                    <div class="text text-border d-flex align-items-center">
-                        <strong class="number" data-number="1090">0</strong>
-                        <span>Posiadanych <br>Samochodów</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-                <div class="block-18">
-                    <div class="text text-border d-flex align-items-center">
-                        <strong class="number" data-number="2590">0</strong>
-                        <span>Zadowoloncyh <br>Klientów</span>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6 col-lg-3 justify-content-center counter-wrap ftco-animate">
-                <div class="block-18">
-                    <div class="text d-flex align-items-center">
-                        <strong class="number" data-number="15">0</strong>
-                        <span>Wszystkich<br>Oddziałów</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<th:block th:replace="~{/fragments/bodyFragments :: counter}"></th:block>
 <th:block th:replace="~{/fragments/bodyFragments :: footer}"></th:block>
 <th:block th:replace="~{/fragments/bodyFragments :: loader}"></th:block>
 <th:block th:replace="~{/fragments/bodyFragments :: scripts}"></th:block>

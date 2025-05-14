@@ -1,81 +1,30 @@
 <!DOCTYPE html>
 <html lang="pl">
-<th:block th:replace="~{/fragments/headerFragments :: head('Rejestracja')}"></th:block>
+<th:block th:replace="~{/fragments/headerFragments :: head(#{services.title})}"></th:block>
 <body>
 <th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
 
-<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('images/image_3.jpg');"
+<section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/image_3.jpg');"
          data-stellar-background-ratio="0.5">
     <div class="overlay"></div>
     <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
             <div class="col-md-9 ftco-animate pb-5">
-                <h1 class="mb-3 bread">Usługi</h1>
+                <h1 class="mb-3 bread" th:text="#{services.title}"></h1>
             </div>
         </div>
     </div>
 </section>
 
-<section class="ftco-section">
-    <div class="container">
-        <div class="row justify-content-center mb-5">
-            <div class="col-md-7 text-center heading-section ftco-animate">
+<th:block th:replace="~{/fragments/bodyFragments :: services}"></th:block>
 
-                <h2 class="mb-3">Nasze usługi</h2>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-3">
-                <div class="services services-2 w-100 text-center">
-                    <div class="icon d-flex align-items-center justify-content-center"><span
-                            class="flaticon-wedding-car"></span></div>
-                    <div class="text w-100">
-                        <h3 class="heading mb-2">Ślub</h3>
-                        <p>Wypożycz ekskluzywny samochód wraz z kierowcą na swoją wielką uroczystość.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="services services-2 w-100 text-center">
-                    <div class="icon d-flex align-items-center justify-content-center"><span
-                            class="flaticon-transportation"></span></div>
-                    <div class="text w-100">
-                        <h3 class="heading mb-2">Miasto</h3>
-                        <p>Szybka taryfa z punktu A do punktu B w Twoim mieście.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="services services-2 w-100 text-center">
-                    <div class="icon d-flex align-items-center justify-content-center"><span
-                            class="flaticon-car"></span></div>
-                    <div class="text w-100">
-                        <h3 class="heading mb-2">Lotnisko</h3>
-                        <p>Zawieziemy Cię na samolot i odbierzemy kiedy tylko chcesz.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3">
-                <div class="services services-2 w-100 text-center">
-                    <div class="icon d-flex align-items-center justify-content-center"><span
-                            class="flaticon-transportation"></span></div>
-                    <div class="text w-100">
-                        <h3 class="heading mb-2">Podróż</h3>
-                        <p>Wypożyczysz u nas samochód na podróż życia w dalekie strony.</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="ftco-section ftco-intro" style="background-image: url(images/image_2.jpg);">
+<section class="ftco-section ftco-intro" style="background-image: url(/images/image_2.jpg);">
     <div class="overlay"></div>
     <div class="container">
         <div class="row justify-content-end">
             <div class="col-md-6 heading-section heading-section-white ftco-animate">
-                <h2 class="mb-3">Napisz, aby uzgodnić szczegóły</h2>
-                <a th:href="@{/contact}" class="btn btn-primary btn-lg">Formularz kontaktowy</a>
+                <h2 class="mb-3" th:text="#{services.contact.header}"></h2>
+                <a th:href="@{/contact}" class="btn btn-primary btn-lg" th:text="#{services.contact.submit}"></a>
             </div>
         </div>
     </div>

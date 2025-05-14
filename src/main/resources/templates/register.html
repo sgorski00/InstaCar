@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="pl">
-<th:block th:replace="~{/fragments/headerFragments :: head('Rejestracja')}"></th:block>
+<th:block th:replace="~{/fragments/headerFragments :: head(#{register.title})}"></th:block>
 <body>
 <th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
 <section class="vh-100 bg-image" style="background-image: url('/images/carback1.jpg');">
@@ -10,37 +10,35 @@
                 <div class="col-12 col-md-9 col-lg-7 col-xl-6 mt-5">
                     <div class="card" style="border-radius: 15px;">
                         <div class="card-body p-5">
-                            <h2 class="text-uppercase text-center mb-5">Stwórz konto</h2>
+                            <h2 class="text-uppercase text-center mb-5" th:text="#{register.title2}"></h2>
                             <form th:action="@{/register}" th:object="${user}" method="post">
                                 <div data-mdb-input-init class="form-outline mb-4">
                                     <input type="text" id="login" class="form-control form-control-lg"
                                            th:field="*{username}" required/>
-                                    <label class="form-label" for="login">Nazwa użytkownika</label>
+                                    <label class="form-label" for="login" th:text="#{register.username}"></label>
                                 </div>
 
                                 <div data-mdb-input-init class="form-outline mb-4">
                                     <input type="email" id="email" th:field="*{email}"
                                            class="form-control form-control-lg" required/>
-                                    <label class="form-label" for="email">Email</label>
+                                    <label class="form-label" for="email" th:text="#{register.email}"></label>
                                 </div>
 
                                 <div data-mdb-input-init class="form-outline mb-4">
                                     <input type="password" id="pass" th:field="*{password}"
                                            class="form-control form-control-lg" required/>
-                                    <label class="form-label" for="pass">Hasło</label>
+                                    <label class="form-label" for="pass" th:text="#{register.password}"></label>
                                 </div>
 
                                 <div data-mdb-input-init class="form-outline mb-4">
                                     <input type="password" id="passRepeat" th:field="*{confirmPassword}"
                                            class="form-control form-control-lg" required/>
-                                    <label class="form-label" for="passRepeat">Powtórz hasło</label>
+                                    <label class="form-label" for="passRepeat" th:text="#{register.password.repeat}"></label>
                                 </div>
 
                                 <div class="form-check d-flex justify-content-start mb-4 pb-3">
                                     <input class="form-check-input me-3" type="checkbox" value="" id="accept" required/>
-                                    <label class="form-check-label" for="accept">
-                                        Akceptuję ogólne warunki użytkowania i politykę prywatności.
-                                    </label>
+                                    <label class="form-check-label" for="accept" th:text="#{register.policy}"></label>
                                 </div>
 
                                 <p th:if="${error}" th:text="${error}" class="text-danger"></p>
@@ -49,13 +47,13 @@
                                 <div class="d-flex justify-content-center">
                                     <button type="submit" data-mdb-button-init
                                             data-mdb-ripple-init
-                                            class="btn btn-success btn-block btn-lg gradient-custom-4 text-body">
-                                        Zarejestruj
+                                            class="btn btn-success btn-block btn-lg gradient-custom-4 text-body"
+                                            th:text="#{register.submit}">
                                     </button>
                                 </div>
 
-                                <p class="text-center text-muted mt-5 mb-0">
-                                    Masz konto? <a th:href="@{/login}" class="fw-bold text-body"><u>Zaloguj się</u></a>
+                                <p class="text-center text-muted mt-5 mb-0" th:text="#{register.have.account}">
+                                    <a th:href="@{/login}" class="fw-bold text-body"><u th:text="#{register.login}"></u></a>
                                 </p>
                             </form>
                         </div>

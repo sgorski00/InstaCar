@@ -55,7 +55,7 @@
                                 <select id="carType" name="carType" th:field="*{carModel.carType}" class="form-select"
                                         required>
                                     <option th:each="carType : ${carTypes}" th:value="${carType}"
-                                            th:text="${carType}"></option>
+                                            th:text="#{'car.type.' + ${carType}}"></option>
                                 </select>
                                 <input type="hidden" id="carType_hidden" name="carType">
                             </div>
@@ -74,7 +74,7 @@
                                 <select id="transmission" name="transmission" th:field="*{carModel.transmission}"
                                         class="form-select" required>
                                     <option th:each="transmission : ${transmissions}" th:value="${transmission}"
-                                            th:text="${transmission}"></option>
+                                            th:text="#{'transmission.' + ${transmission}}"></option>
                                 </select>
                                 <input type="hidden" id="transmission_hidden" name="transmission">
                             </div>
@@ -82,7 +82,7 @@
                                 <label for="fuelType" class="form-label">Rodzaj paliwa:</label>
                                 <select id="fuelType" name="fuelType" th:field="*{carModel.fuelType}"
                                         class="form-select" required>
-                                    <option th:each="fuel : ${fuels}" th:value="${fuel}" th:text="${fuel}"></option>
+                                    <option th:each="fuel : ${fuels}" th:value="${fuel}" th:text="#{'fuel.type.' + ${fuel}"></option>
                                 </select>
                                 <input type="hidden" id="fuelType_hidden" name="fuelType">
                             </div>

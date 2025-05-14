@@ -1,6 +1,6 @@
 ﻿<!DOCTYPE html>
 <html lang="pl">
-<th:block th:replace="~{/fragments/headerFragments :: head('Zamówienie')}"></th:block>
+<th:block th:replace="~{/fragments/headerFragments :: head(#{order.title})}"></th:block>
 <body>
 <th:block th:replace="~{/fragments/bodyFragments :: navbar}"></th:block>
 <section class="hero-wrap hero-wrap-2 js-fullheight" style="background-image: url('/images/854_hero_2.jpg');" data-stellar-background-ratio="0.5">
@@ -8,7 +8,7 @@
     <div class="container">
         <div class="row no-gutters slider-text js-fullheight align-items-end justify-content-start">
             <div class="col-md-9 ftco-animate pb-5">
-                <h1 class="mb-3 bread">Złóż zamówienie</h1>
+                <h1 class="mb-3 bread" th:text="#{order.title2}"></h1>
             </div>
         </div>
     </div>
@@ -24,7 +24,7 @@
                             <div class="icon mr-3">
                                 <span class="icon-car"></span>
                             </div>
-                            <p><span>Pojazd:</span> <span class="text-dark font-weight-bold" th:text="${car.model}"></span></p>
+                            <p><span th:text="#{user.history.car} + ':'"></span> <span class="text-dark font-weight-bold" th:text="${car.model}"></span></p>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -32,7 +32,7 @@
                             <div class="icon mr-3">
                                 <span class="icon-star"></span>
                             </div>
-                            <p><span>Typ pojazdu:</span> <span class="text-dark font-weight-bold" th:text="${car.model.carType}"></span></p>
+                            <p><span th:text="#{car.type} + ':'"></span> <span class="text-dark font-weight-bold" th:text="#{'car.type.'+${car.model.carType}}"></span></p>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -40,7 +40,7 @@
                             <div class="icon mr-3">
                                 <span class="icon-date_range"></span>
                             </div>
-                            <p><span>Data:</span> <span class="text-dark font-weight-bold" th:text="${pickDate} + ' - ' + ${returnDate}"></span></p>
+                            <p><span th:text="#{order.date} + ':'"></span> <span class="text-dark font-weight-bold" th:text="${pickDate} + ' - ' + ${returnDate}"></span></p>
                         </div>
                     </div>
                     <div class="col-md-12">
@@ -48,7 +48,7 @@
                             <div class="icon mr-3">
                                 <span class="icon-money"></span>
                             </div>
-                            <p><span>Cena za dzień (zł):</span> <span class="text-dark font-weight-bold" th:text="${order.car.price}"></span></p>
+                            <p><span th:text="#{order.price.per.day} + ':'"></span> <span class="text-dark font-weight-bold" th:text="${order.car.price}"></span></p>
                         </div>
                     </div>
                 </div>
@@ -56,53 +56,53 @@
             <div class="col-md-8 block-9 mb-md-5">
                 <form th:action="@{/order/create}" th:object="${order}" method="post" class="bg-light p-5 contact-form">
                     <div id="step1">
-                        <h3>Dane osobowe</h3>
+                        <h3 th:text="#{order.personal.data}"></h3>
                         <div class="form-group">
-                            <input type="text" class="form-control" th:field="*{userDetails.firstName}" placeholder="Imię" required>
+                            <input type="text" class="form-control" th:field="*{userDetails.firstName}" th:placeholder="#{order.placeholder.firstname}" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" th:field="*{userDetails.lastName}" placeholder="Nazwisko" required>
+                            <input type="text" class="form-control" th:field="*{userDetails.lastName}" th:placeholder="#{order.placeholder.lastname}" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" th:field="*{userDetails.phoneNumber}" placeholder="Nr telefonu" required>
+                            <input type="text" class="form-control" th:field="*{userDetails.phoneNumber}" th:placeholder="#{order.placeholder.phone}" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" th:field="*{userDetails.postalCode}" placeholder="Kod pocztowy" required>
+                            <input type="text" class="form-control" th:field="*{userDetails.postalCode}" th:placeholder="#{order.placeholder.postalcode}" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" th:field="*{userDetails.city}" placeholder="Miasto" required>
+                            <input type="text" class="form-control" th:field="*{userDetails.city}" th:placeholder="#{order.placeholder.city}" required>
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" th:field="*{userDetails.address}" placeholder="Adres" required>
+                            <input type="text" class="form-control" th:field="*{userDetails.address}" th:placeholder="#{order.placeholder.address}" required>
                         </div>
                         <div class="form-group">
-                            <button type="button" onclick="next()" class="btn btn-primary py-3 px-5">Dalej</button>
-                            <p class="small text-secondary p-2">Zmiana danych w formularzu zaktualizuje twoje dane osobowe!</p>
+                            <button type="button" onclick="next()" class="btn btn-primary py-3 px-5" th:text="#{order.next}"></button>
+                            <p class="small text-secondary p-2" th:text="#{order.submit.info}"></p>
                         </div>
                     </div>
                     <div id="step2" class="d-none">
-                        <h3>Pozostałe informacje</h3>
+                        <h3 th:text="#{order.more.data}"></h3>
                         <div class="form-group">
                             <select th:field="*{pickUpCityId}" class="form-control">
-                                <option value="" disabled>Wybierz miasto odbioru...</option>
+                                <option value="" disabled th:text="#{order.select.pickup.city}"></option>
                                 <option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"></option>
                             </select>
                         </div>
                         <div class="form-group">
                             <select th:field="*{returnCityId}" class="form-control">
-                                <option value="" disabled>Wybierz miasto odbioru...</option>
+                                <option value="" disabled th:text="#{order.select.return.city}"></option>
                                 <option th:each="city : ${cities}" th:value="${city.id}" th:text="${city.name}"></option>
                             </select>
                         </div>
                         <div class="form-group">
-                            <textarea th:field="*{additionalInfo}" rows="4" class="form-control" placeholder="Dodatkowe informacje"></textarea>
+                            <textarea th:field="*{additionalInfo}" rows="4" class="form-control" th:placeholder="#{order.additional.info}"></textarea>
                         </div>
                         <input type="hidden" name="carId" th:value="*{car.id}">
                         <input type="hidden" th:field="*{pickUpDate}">
                         <input type="hidden" th:field="*{returnDate}">
                         <div class="form-group d-flex justify-content-between">
-                            <button type="button" onclick="previous()" class="btn btn-primary py-3 px-5">Powrót</button>
-                            <button type="submit" class="btn btn-primary py-3 px-5">Przejdź do podsumowania</button>
+                            <button type="button" onclick="previous()" class="btn btn-primary py-3 px-5" th:text="#{order.cancel}"></button>
+                            <button type="submit" class="btn btn-primary py-3 px-5" th:text="#{order.submit}"></button>
                         </div>
                     </div>
                 </form>
