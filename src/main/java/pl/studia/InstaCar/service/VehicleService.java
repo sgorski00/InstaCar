@@ -1,6 +1,10 @@
 package pl.studia.InstaCar.service;
 
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Validator;
 import lombok.extern.log4j.Log4j2;
+import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
@@ -8,17 +12,21 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import pl.studia.InstaCar.model.CarModel;
 import pl.studia.InstaCar.model.CityCar;
 import pl.studia.InstaCar.model.SportCar;
 import pl.studia.InstaCar.model.Vehicle;
+import pl.studia.InstaCar.model.dto.NewCarDto;
 import pl.studia.InstaCar.repository.CityCarRepository;
 import pl.studia.InstaCar.repository.SportCarRepository;
 import pl.studia.InstaCar.repository.VehicleRepository;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 @Log4j2
 @Service
@@ -28,13 +36,17 @@ public class VehicleService {
     private final SportCarRepository sportCarRepository;
     private final CityCarRepository cityCarRepository;
     private final CarModelService carModelService;
+    private final FileUploadService fileUploadService;
+    private final Validator validator;
 
     @Autowired
-    public VehicleService(VehicleRepository vehicleRepository, SportCarRepository sportCarRepository, CityCarRepository cityCarRepository, CarModelService carModelService) {
+    public VehicleService(VehicleRepository vehicleRepository, SportCarRepository sportCarRepository, CityCarRepository cityCarRepository, CarModelService carModelService, FileUploadService fileUploadService, Validator validator) {
         this.vehicleRepository = vehicleRepository;
         this.sportCarRepository = sportCarRepository;
         this.cityCarRepository = cityCarRepository;
         this.carModelService = carModelService;
+        this.fileUploadService = fileUploadService;
+        this.validator = validator;
     }
 
     @Cacheable(value = "allCars")
@@ -108,5 +120,34 @@ public class VehicleService {
         return vehicles.stream()
                 .filter(vehicle -> vehicle.isAvailable(dateFrom, dateTo))
                 .toList();
+    }
+
+    public void validateAndSaveNewCar(NewCarDto car, MultipartFile file) throws FileUploadException {
+        Set<ConstraintViolation<?>> violations = new HashSet<>();
+        String imgUrl = fileUploadService.uploadFile(file);
+        CarModel model = car.getCarModel().getId() == null
+                ? carModelService.save(car.getCarModel())
+                : carModelService.getCarModelById(car.getCarModel().getId());
+
+        switch (car.getType()) {
+            case "sport" -> {
+                SportCar sport = car.getSportCar();
+                sport.setModel(model);
+                sport.setImageUrl(imgUrl);
+                sport.setDescription(car.getDescription());
+                violations.addAll(validator.validate(car.getSportCar()));
+                if(!violations.isEmpty()) throw new ConstraintViolationException(violations);
+                vehicleRepository.save(sport);
+            }
+            case "city" -> {
+                CityCar city = car.getCityCar();
+                city.setModel(model);
+                city.setImageUrl(imgUrl);
+                city.setDescription(car.getDescription());
+                violations.addAll(validator.validate(car.getCityCar()));
+                if(!violations.isEmpty()) throw new ConstraintViolationException(violations);
+                vehicleRepository.save(city);
+            }
+        }
     }
 }

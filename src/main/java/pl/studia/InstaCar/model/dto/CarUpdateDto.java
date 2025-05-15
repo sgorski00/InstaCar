@@ -3,8 +3,10 @@ package pl.studia.InstaCar.model.dto;
 import lombok.Data;
 import pl.studia.InstaCar.model.Vehicle;
 
+import java.io.Serializable;
+
 @Data
-public class CarUpdateDto {
+public class CarUpdateDto implements Serializable {
     private String color;
     private String engine;
     private String licensePlate;

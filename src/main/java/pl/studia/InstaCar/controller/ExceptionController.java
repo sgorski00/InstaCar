@@ -5,6 +5,7 @@ import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailParseException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -61,18 +62,6 @@ public class ExceptionController {
         return "redirect:/login";
     }
 
-    @ExceptionHandler(EntityValidationException.class)
-    public String entityValidationExceptionHandler(
-            EntityValidationException ex,
-            RedirectAttributes redirectAttributes
-    ) {
-        redirectAttributes.addFlashAttribute("error", ex.getMessage());
-        if(ex.getRedirectUrl().startsWith("redirect")){
-            return ex.getRedirectUrl();
-        }
-        return "redirect:" + ex.getRedirectUrl();
-    }
-
     @ExceptionHandler(FileUploadException.class)
     public String fileUploadExceptionHandler(
             FileUploadException ex,
@@ -91,6 +80,15 @@ public class ExceptionController {
                 ex.getMessage()
         );
         return ResponseEntity.status(ex.getCode()).body(problemDetail);
+    }
+
+    @ExceptionHandler(MailParseException.class)
+    public String mailParseExceptionHandler(
+            MailParseException ex,
+            RedirectAttributes redirectAttributes
+    ) {
+        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/contact";
     }
 
     @ExceptionHandler(Exception.class)

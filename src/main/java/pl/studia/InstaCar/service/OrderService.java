@@ -48,9 +48,11 @@ public class OrderService {
                 .additionalInfo(order.getAdditionalInfo())
                 .rentStatus(RentStatus.PENDING)
                 .build();
+
         order.getCar().rent(rent);
+        Rent result = rentRepository.save(rent);
         eventPublisher.publishEvent(new OrderCreateEvent(this, rent));
-        return rentRepository.save(rent);
+        return result;
     }
 
     public Rent getOrderById(Long orderId) {

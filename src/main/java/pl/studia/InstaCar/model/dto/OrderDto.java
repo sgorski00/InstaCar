@@ -4,10 +4,11 @@ import lombok.Data;
 import pl.studia.InstaCar.model.UserDetails;
 import pl.studia.InstaCar.model.Vehicle;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
-public class OrderDto {
+public class OrderDto implements Serializable {
 
     private Vehicle car;
     private UserDetails userDetails;

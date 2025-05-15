@@ -6,10 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import pl.studia.InstaCar.config.exceptions.EntityValidationException;
 import pl.studia.InstaCar.model.dto.UserRegistrationDto;
 import pl.studia.InstaCar.service.tokens.EmailTokenService;
 import pl.studia.InstaCar.service.UserRegistrationService;
@@ -31,7 +29,7 @@ public class RegisterController {
     public String showRegisterForm(
             Model model
     ) {
-        model.addAttribute("user", new UserRegistrationDto());
+        if(!model.containsAttribute("user")) model.addAttribute("user", new UserRegistrationDto());
         return "register";
     }
 
@@ -42,16 +40,18 @@ public class RegisterController {
             RedirectAttributes redirectAttributes
     ) {
         if (bindingResult.hasErrors()) {
-            FieldError error = bindingResult.getFieldErrors().getFirst();
-            String message =  error.getDefaultMessage();
             log.info("Failed to create new user: {}", bindingResult.getAllErrors());
-            throw new EntityValidationException(
-                    message,
-                    "redirect:/register"
-            );
+            redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
+            redirectAttributes.addFlashAttribute("user", user);
+            return "redirect:/register";
         }
-
-        userRegistrationService.registerUser(user);
+        try {
+            userRegistrationService.registerUser(user);
+        }catch (Exception e) {
+            redirectAttributes.addFlashAttribute("error", e.getMessage());
+            redirectAttributes.addFlashAttribute("user", user);
+            return "redirect:/register";
+        }
         redirectAttributes.addFlashAttribute("info", "Proszę potwierdzić swój adres email poprzez link weryfikacyjny wysłany na adres: " + user.getEmail());
         return "redirect:/login";
     }

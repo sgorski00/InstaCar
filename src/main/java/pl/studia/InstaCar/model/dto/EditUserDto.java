@@ -1,6 +1,7 @@
 package pl.studia.InstaCar.model.dto;
 
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -10,33 +11,41 @@ import pl.studia.InstaCar.model.UserDetails;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.Role;
 
+import java.io.Serializable;
+
 @Log4j2
 @Data
 @NoArgsConstructor
-public class EditUserDto {
+public class EditUserDto implements Serializable {
 
-    @NotNull
+    @NotNull(message = "Należy wybrać rolę")
     private Long roleId;
 
+    @NotBlank(message = "Imię nie może być puste")
     @Size(max = 50, message = "Imię nie może być dłuższe niż 50 znaków")
     private String firstName;
 
+    @NotBlank(message = "Nazwisko nie może być puste")
     @Size(max = 50, message = "Nazwisko nie może być dłuższe niż 50 znaków")
     private String lastName;
 
     @Nullable
+    @NotBlank(message = "Numer telefonu nie może być pusty")
     @Size(max = 50, message = "Numer telefonu nie może być dłuższy niż 50 znaków")
     private String phoneNumber;
 
     @Nullable
+    @NotBlank(message = "Adres nie może być pusty")
     @Size(max = 255, message = "Adres nie może mieć więcej niż 255 znaków")
     private String address;
 
     @Nullable
+    @NotBlank(message = "Miasto nie może być puste")
     @Size(max = 50, message = "Nazwa miasta nie może być dłuższe niż 50 znaków")
     private String city;
 
     @Nullable
+    @NotBlank(message = "Kod pocztowy nie może być pusty")
     @Size(max = 10, message = "Kod pocztowy może mieć maksymalnie 10 znaków")
     private String postalCode;
 

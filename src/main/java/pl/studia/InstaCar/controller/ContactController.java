@@ -1,10 +1,12 @@
 package pl.studia.InstaCar.controller;
 
+import jakarta.validation.Valid;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,10 +40,16 @@ public class ContactController {
 
     @PostMapping
     public String sendEmail(
-            @ModelAttribute EmailDto email,
+            @Valid @ModelAttribute EmailDto email,
+            BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     ) {
         email.setEmailTo(contactEmail);
+        if(bindingResult.hasErrors()) {
+            redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
+            redirectAttributes.addFlashAttribute("email", email);
+            return "redirect:/contact";
+        }
         emailService.sendEmail(email);
         redirectAttributes.addFlashAttribute("info", "Wiadomość wysłana pomyślnie");
         return "redirect:/contact";
