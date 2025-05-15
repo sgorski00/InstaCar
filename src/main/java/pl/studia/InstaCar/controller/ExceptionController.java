@@ -5,6 +5,7 @@ import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailParseException;
 import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -79,6 +80,15 @@ public class ExceptionController {
                 ex.getMessage()
         );
         return ResponseEntity.status(ex.getCode()).body(problemDetail);
+    }
+
+    @ExceptionHandler(MailParseException.class)
+    public String mailParseExceptionHandler(
+            MailParseException ex,
+            RedirectAttributes redirectAttributes
+    ) {
+        redirectAttributes.addFlashAttribute("error", ex.getMessage());
+        return "redirect:/contact";
     }
 
     @ExceptionHandler(Exception.class)

@@ -2,6 +2,7 @@ package pl.studia.InstaCar.model;
 
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -31,30 +32,36 @@ public class UserDetails implements Serializable {
     private ApplicationUser user;
 
     @EqualsAndHashCode.Include
+    @NotBlank(message = "Imię nie może być puste")
     @Size(max = 50, message = "Imię nie może przekraczać 50 znaków")
     private String firstName;
 
     @EqualsAndHashCode.Include
+    @NotBlank(message = "Nazwisko nie może być puste")
     @Size(max = 50, message = "Nazwisko nie może przekraczać 50 znaków")
     private String lastName;
 
     @EqualsAndHashCode.Include
     @Nullable
+    @NotBlank(message = "Numer telefonu nie może być pusty")
     @Size(max = 50, message = "Numer telefonu nie może przekraczać 50 znaków")
     private String phoneNumber;
 
     @EqualsAndHashCode.Include
     @Nullable
+    @NotBlank(message = "Adres nie może być pusty")
     @Size(max = 255, message = "Adres nie może przekraczać 255 znaków")
     private String address;
 
     @EqualsAndHashCode.Include
     @Nullable
+    @NotBlank(message = "Miasto nie może być puste")
     @Size(max = 50, message = "Nazwa miasta nie może przekraczać 50 znaków")
     private String city;
 
     @EqualsAndHashCode.Include
     @Nullable
+    @NotBlank(message = "Kod pocztowy nie może być pusty")
     @Size(max = 10, message = "Kod pocztowy nie może przekraczać 10 znaków")
     private String postalCode;
 

@@ -1,5 +1,7 @@
 package pl.studia.InstaCar.model.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,10 +18,15 @@ import java.time.LocalTime;
 @AllArgsConstructor
 public class EmailDto implements Serializable {
 
+    @Email(message = "Email nadawcy jest nieprawidłowy")
     private String emailFrom;
+    @Email(message = "Email odbiorcy jest nieprawidłowy")
     private String emailTo;
+    @Size(min = 2, max = 50, message = "Nazwa musi mieć od 2 do 50 znaków")
     private String name;
+    @Size(min = 2, max = 50, message = "Temat musi mieć od 2 do 50 znaków")
     private String topic;
+    @Size(min = 2, max = 1000, message = "Wiadomość musi mieć od 2 do 1000 znaków")
     private String message;
 
     public SimpleMailMessage mapToSimpleMailMessage() {

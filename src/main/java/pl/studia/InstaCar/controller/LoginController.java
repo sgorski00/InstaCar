@@ -80,13 +80,11 @@ public class LoginController {
             @RequestParam(name = "token") String token,
             @Valid @ModelAttribute("pwdResetDto") PasswordResetDto passwordResetDto,
             BindingResult bindingResult,
-            RedirectAttributes redirectAttributes,
-            Model model
+            RedirectAttributes redirectAttributes
     ) {
         if (bindingResult.hasErrors()) {
-            model.addAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
-            model.addAttribute("token", token);
-            return "password_reset_form";
+            redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
+            return "redirect:/login/reset/form?token=" + token;
         }
 
         if (!passwordResetDto.arePasswordsEqual()) {

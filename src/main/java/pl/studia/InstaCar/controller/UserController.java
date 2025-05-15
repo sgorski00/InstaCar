@@ -38,7 +38,7 @@ public class UserController {
         ApplicationUser user = userService.findUserByUsername(principal.getName());
         UserDetails userDetails = user.getUserDetails();
         model.addAttribute("user", user);
-        model.addAttribute("user_details",
+        if(model.getAttribute("user_details") == null) model.addAttribute("user_details",
                 userDetails != null ? userDetails : new UserDetails());
         model.addAttribute("rents", orderService.getLastOrdersForUser(user, 15));
         return "user";
@@ -49,13 +49,13 @@ public class UserController {
             @ModelAttribute("user_details") @Valid UserDetails userDetails,
             BindingResult bindingResult,
             Principal principal,
-            RedirectAttributes redirectAttributes,
-            Model model
+            RedirectAttributes redirectAttributes
     ) {
         ApplicationUser user = userService.findUserByUsername(principal.getName());
         if(bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
-            return "user";
+            redirectAttributes.addFlashAttribute("user_details", userDetails);
+            return "redirect:/user";
         }
 
         userDetails.setUser(user);

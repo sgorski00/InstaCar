@@ -63,22 +63,22 @@
             <nav>
                 <ul th:if="${totalPages > 1}" class="pagination justify-content-center">
                     <li class="page-item">
-                        <a class="page-link" th:href="@{/admin/rents(page=${1}, size=${currentSize})}">&laquo;</a>
+                        <a class="page-link" th:href="@{/admin/rents(page=${1}, size=${currentSize}, dateFrom=${dateFrom}, dateTo=${dateTo})}">&laquo;</a>
                     </li>
 
                     <th:block th:each="pageNum : ${pageNumbers}">
                         <li class="page-item active" th:if="${currentPage} == ${pageNum}">
                             <a class="page-link"
-                               th:href="@{/admin/rents(page=${pageNum}, size=${currentSize})}"
+                               th:href="@{/admin/rents(page=${pageNum}, size=${currentSize}, dateFrom=${dateFrom}, dateTo=${dateTo})}"
                                th:text="${pageNum}"></a>
                         </li>
                         <li class="page-item" th:unless="${currentPage} == ${pageNum}">
-                            <a class="page-link" th:href="@{/admin/rents(page=${pageNum}, size=${currentSize})}"
+                            <a class="page-link" th:href="@{/admin/rents(page=${pageNum}, size=${currentSize}, dateFrom=${dateFrom}, dateTo=${dateTo})}"
                                th:text="${pageNum}"></a>
                         </li>
                     </th:block>
                     <li class="page-item">
-                        <a class="page-link" th:href="@{/admin/rents(page=${totalPages}, size=${currentSize})}">&raquo;</a>
+                        <a class="page-link" th:href="@{/admin/rents(page=${totalPages}, size=${currentSize}, dateFrom=${dateFrom}, dateTo=${dateTo})}">&raquo;</a>
                     </li>
                 </ul>
             </nav>
