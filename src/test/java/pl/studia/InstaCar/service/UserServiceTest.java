@@ -8,15 +8,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.AuthProvider;
+import pl.studia.InstaCar.model.authentication.Role;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,16 +31,18 @@ public class UserServiceTest {
     private UserService userService;
 
     private ApplicationUser user;
-    private EmailActivationToken token;
 
     @BeforeEach
     void setUp() {
-        token = new EmailActivationToken();
+        EmailActivationToken token = new EmailActivationToken();
         token.setIsUsed(true);
+        Role role = new Role();
+        role.setName("user");
         user = new ApplicationUser();
         user.setUsername("user");
         user.setProvider(AuthProvider.LOCAL);
         user.setEmailTokens(List.of(token));
+        user.setRole(role);
     }
 
     @Test

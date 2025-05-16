@@ -6,14 +6,16 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
-import pl.studia.InstaCar.model.authentication.ApplicationUser;
+import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.model.dto.UserRegistrationDto;
+import pl.studia.InstaCar.repository.EmailTokenRepository;
 import pl.studia.InstaCar.service.tokens.EmailTokenService;
 import pl.studia.InstaCar.service.UserRegistrationService;
 
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -27,6 +29,9 @@ public class RegisterControllerTest {
 
     @MockitoBean
     private EmailTokenService emailTokenService;
+
+    @MockitoBean
+    private EmailTokenRepository emailTokenRepository;
 
     @MockitoBean
     private UserRegistrationService userRegistrationService;
@@ -67,6 +72,23 @@ public class RegisterControllerTest {
     }
 
     @Test
+    void shouldNotRegisterUserWhenIncompatibleData() throws Exception {
+        UserRegistrationDto user = new UserRegistrationDto();
+        user.setUsername("username");
+        user.setPassword(" ");
+        user.setConfirmPassword(" ");
+        user.setEmail("email@email.com");
+        mvc.perform(post("/register")
+                        .flashAttr("user", user))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(flash().attributeExists("error"))
+                .andExpect(flash().attributeExists("user"))
+                .andExpect(redirectedUrl("/register"));
+
+        verify(userRegistrationService, times(0)).registerUser(any(UserRegistrationDto.class));
+    }
+
+    @Test
     void shouldActivateAccount() throws Exception {
         mvc.perform(get("/activate")
                         .param("token", "correct_token"))
@@ -74,5 +96,18 @@ public class RegisterControllerTest {
                 .andExpect(redirectedUrl("/login"))
                 .andExpect(flash().attributeExists("info"))
                 .andExpect(flash().attributeCount(1));
+
+        verify(emailTokenRepository, times(1)).save(any(EmailActivationToken.class));
+    }
+
+    @Test
+    void shouldNotActivateAccount() throws Exception {
+        when(emailTokenRepository.findFirstByTokenOrderByIdDesc(anyString())).thenReturn(Optional.empty());
+        mvc.perform(get("/activate")
+                        .param("token", "wrong_token"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/login"));
+
+        verify(emailTokenRepository, times(0)).save(any(EmailActivationToken.class));
     }
 }

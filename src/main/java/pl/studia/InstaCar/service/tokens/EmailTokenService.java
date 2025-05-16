@@ -2,12 +2,12 @@ package pl.studia.InstaCar.service.tokens;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pl.studia.InstaCar.config.exceptions.TokenIllegalArgumentException;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.repository.EmailTokenRepository;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -34,6 +34,6 @@ public class EmailTokenService extends TokenService<EmailActivationToken> {
     @Override
     protected EmailActivationToken findLastToken(String tokenStr) {
         return emailTokenRepository.findFirstByTokenOrderByIdDesc(tokenStr)
-                .orElseThrow(() -> new NoSuchElementException("Podany token nie istnieje"));
+                .orElseThrow(() -> new TokenIllegalArgumentException("Podany token nie istnieje", EmailActivationToken.class));
     }
 }
