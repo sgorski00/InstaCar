@@ -14,7 +14,7 @@ import pl.studia.InstaCar.service.event.OrderCreateEvent;
 @Log4j2
 public class OrderCreateListener {
 
-    @Value("${contact.email}")
+    @Value("${spring.mail.username}")
     private String contactEmail;
 
     private final EmailService emailService;

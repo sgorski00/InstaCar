@@ -26,7 +26,7 @@ public class ContactController {
     private final MessageSource messageSource;
 
     @Getter
-    @Value("${contact.email}")
+    @Value("${spring.mail.username}")
     private String contactEmail;
 
     @Autowired

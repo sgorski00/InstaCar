@@ -13,7 +13,7 @@ import pl.studia.InstaCar.service.EmailService;
 @Log4j2
 public class PasswordResetListener {
 
-    @Value("${contact.email}")
+    @Value("${spring.mail.username}")
     private String contactEmail;
 
     private final EmailService emailService;
