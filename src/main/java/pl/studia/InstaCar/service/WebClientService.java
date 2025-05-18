@@ -1,6 +1,9 @@
 package pl.studia.InstaCar.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -16,10 +19,12 @@ import java.util.concurrent.CompletableFuture;
 public class WebClientService {
 
     private final WebClient webClient;
+    private final MessageSource messageSource;
 
     @Autowired
-    public WebClientService(WebClient webClient) {
+    public WebClientService(WebClient webClient, @Qualifier("messageSource") MessageSource messageSource) {
         this.webClient = webClient;
+        this.messageSource = messageSource;
     }
 
     /**
@@ -34,7 +39,10 @@ public class WebClientService {
                 .retrieve()
                 .onStatus(status -> !status.is2xxSuccessful(), response -> response
                                 .bodyToMono(String.class)
-                                .flatMap(error -> Mono.error(new ApiRequestException("API error: " + error)))
+                                .flatMap(error -> {
+                                    String message = messageSource.getMessage("error.api.request.general", null, LocaleContextHolder.getLocale());
+                                    return Mono.error(new ApiRequestException(message + ": " + error));
+                                })
                         )
                 .bodyToMono(RateResponse.class);
     }

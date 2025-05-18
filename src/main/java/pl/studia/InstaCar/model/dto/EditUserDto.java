@@ -18,35 +18,35 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class EditUserDto implements Serializable {
 
-    @NotNull(message = "Należy wybrać rolę")
+    @NotNull(message = "{NotNull.role}")
     private Long roleId;
 
-    @NotBlank(message = "Imię nie może być puste")
-    @Size(max = 50, message = "Imię nie może być dłuższe niż 50 znaków")
+    @NotBlank(message = "{NotBlank.firstName}")
+    @Size(max = 50, message = "{Size.firstName}")
     private String firstName;
 
-    @NotBlank(message = "Nazwisko nie może być puste")
-    @Size(max = 50, message = "Nazwisko nie może być dłuższe niż 50 znaków")
+    @NotBlank(message = "{NotBlank.lastName}")
+    @Size(max = 50, message = "{Size.lastName}")
     private String lastName;
 
     @Nullable
-    @NotBlank(message = "Numer telefonu nie może być pusty")
-    @Size(max = 50, message = "Numer telefonu nie może być dłuższy niż 50 znaków")
+    @NotBlank(message = "{NotBlank.phoneNumber}")
+    @Size(max = 50, message = "{Size.phoneNumber}")
     private String phoneNumber;
 
     @Nullable
-    @NotBlank(message = "Adres nie może być pusty")
-    @Size(max = 255, message = "Adres nie może mieć więcej niż 255 znaków")
+    @NotBlank(message = "{NotBlank.address}")
+    @Size(max = 255, message = "{Size.address}")
     private String address;
 
     @Nullable
-    @NotBlank(message = "Miasto nie może być puste")
-    @Size(max = 50, message = "Nazwa miasta nie może być dłuższe niż 50 znaków")
+    @NotBlank(message = "{NotBlank.city}")
+    @Size(max = 50, message = "{Size.city}")
     private String city;
 
     @Nullable
-    @NotBlank(message = "Kod pocztowy nie może być pusty")
-    @Size(max = 10, message = "Kod pocztowy może mieć maksymalnie 10 znaków")
+    @NotBlank(message = "{NotBlank.postalCode}")
+    @Size(max = 10, message = "{Size.postalCode}")
     private String postalCode;
 
     public EditUserDto(ApplicationUser user) {

@@ -1,7 +1,10 @@
 package pl.studia.InstaCar.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,13 +28,15 @@ public class OrderService {
     private final RentRepository rentRepository;
     private final UserDetailsService userDetailsService;
     private final CityService cityService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public OrderService(ApplicationEventPublisher eventPublisher, RentRepository rentRepository, UserDetailsService userDetailsService, CityService cityService) {
+    public OrderService(ApplicationEventPublisher eventPublisher, RentRepository rentRepository, UserDetailsService userDetailsService, CityService cityService, @Qualifier("messageSource") MessageSource messageSource) {
         this.eventPublisher = eventPublisher;
         this.rentRepository = rentRepository;
         this.userDetailsService = userDetailsService;
         this.cityService = cityService;
+        this.messageSource = messageSource;
     }
 
     @Transactional
@@ -49,7 +54,7 @@ public class OrderService {
                 .rentStatus(RentStatus.PENDING)
                 .build();
 
-        order.getCar().rent(rent);
+        order.getCar().rent(rent, messageSource);
         Rent result = rentRepository.save(rent);
         eventPublisher.publishEvent(new OrderCreateEvent(this, rent));
         return result;
@@ -57,19 +62,22 @@ public class OrderService {
 
     public Rent getOrderById(Long orderId) {
         return rentRepository.findById(orderId).orElseThrow(
-                () -> new NoSuchElementException("Nie odnaleziono wypożyczenia o id: " + orderId + ".")
+                () -> {
+                    String message = messageSource.getMessage("error.rent.not.found", null, LocaleContextHolder.getLocale());
+                    return new NoSuchElementException(message + ": " + orderId);
+                }
         );
     }
 
     public void cancelOrderById(Long orderId) {
         Rent rent = getOrderById(orderId);
-        rent.setRentStatus(RentStatus.CANCELLED);
+        rent.setRentStatus(RentStatus.CANCELLED, messageSource);
         rentRepository.save(rent);
     }
 
     public void acceptOrderById(Long orderId) {
         Rent rent = getOrderById(orderId);
-        rent.setRentStatus(RentStatus.ACTIVE);
+        rent.setRentStatus(RentStatus.ACTIVE, messageSource);
         rentRepository.save(rent);
     }
 
@@ -111,7 +119,7 @@ public class OrderService {
     public void cancelExpiredOrdersOlderThan(LocalDate date) {
         rentRepository.findAllByCreatedAtBefore(date).forEach(rent -> {
             if(rent.getRentStatus().equals(RentStatus.PENDING)) {
-                rent.setRentStatus(RentStatus.CANCELLED);
+                rent.setRentStatus(RentStatus.CANCELLED, messageSource);
                 rentRepository.save(rent);
             }
         });

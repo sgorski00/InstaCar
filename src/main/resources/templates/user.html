@@ -142,7 +142,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="form-label" th:text="#{user.account.type}"></label>
-                                <input type="text" class="form-control mb-1" th:value="${user.provider}" disabled>
+                                <input type="text" class="form-control mb-1" th:value="#{'auth.provider.' + ${user.provider}}" disabled>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" th:text="#{user.account.role}"></label>

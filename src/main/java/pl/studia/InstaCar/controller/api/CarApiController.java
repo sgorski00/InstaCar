@@ -1,6 +1,9 @@
 package pl.studia.InstaCar.controller.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.studia.InstaCar.config.exceptions.ApiResponseException;
@@ -19,10 +22,12 @@ import java.util.NoSuchElementException;
 public class CarApiController {
 
     private final VehicleService vehicleService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public CarApiController(VehicleService vehicleService) {
+    public CarApiController(VehicleService vehicleService, @Qualifier("messageSource") MessageSource messageSource) {
         this.vehicleService = vehicleService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping
@@ -54,7 +59,8 @@ public class CarApiController {
     ) {
         Vehicle savedVehicle = vehicleService.save(vehicle);
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "Pojazd został dodany");
+        String message = messageSource.getMessage("attr.car.saved", null, LocaleContextHolder.getLocale());
+        response.put("message", message);
         response.put("id", savedVehicle.getId());
         return ResponseEntity.status(201)
                 .body(response);

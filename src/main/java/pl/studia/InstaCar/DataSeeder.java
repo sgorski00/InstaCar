@@ -3,6 +3,7 @@ package pl.studia.InstaCar;
 import com.github.javafaker.Faker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 import pl.studia.InstaCar.model.*;
@@ -27,6 +28,7 @@ public class DataSeeder implements CommandLineRunner {
     private final UserService userService;
     private final RoleService roleService;
     private final CarModelService carModelService;
+    private final MessageSource messageSource;
     private final Faker faker;
 
     private static final String[] CAR_BRANDS = {
@@ -41,10 +43,11 @@ public class DataSeeder implements CommandLineRunner {
     private final OrderService orderService;
 
     @Autowired
-    public DataSeeder(UserService userService, RoleService roleService, CarModelService carModelService, VehicleService vehicleService, CityService cityService, OrderService orderService) {
+    public DataSeeder(UserService userService, RoleService roleService, CarModelService carModelService, MessageSource messageSource, VehicleService vehicleService, CityService cityService, OrderService orderService) {
         this.userService = userService;
         this.roleService = roleService;
         this.carModelService = carModelService;
+        this.messageSource = messageSource;
         this.faker = new Faker();
         this.vehicleService = vehicleService;
         this.cityService = cityService;
@@ -78,12 +81,12 @@ public class DataSeeder implements CommandLineRunner {
                 rent.setReturnDate(returnDate);
 
                 if (returnDate.isAfter(today)) {
-                    rent.setRentStatus(RentStatus.FINISHED);
+                    rent.setRentStatus(RentStatus.FINISHED, messageSource);
                 }else {
                     RentStatus[] values = Arrays.stream(RentStatus.values())
                             .filter(status -> status != RentStatus.FINISHED)
                             .toArray(RentStatus[]::new);
-                    rent.setRentStatus(faker.options().option(values));
+                    rent.setRentStatus(faker.options().option(values), messageSource);
                 }
                 rents.add(rent);
             }

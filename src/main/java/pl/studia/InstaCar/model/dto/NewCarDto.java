@@ -1,6 +1,5 @@
 package pl.studia.InstaCar.model.dto;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -20,16 +19,16 @@ import java.io.Serializable;
 @Setter
 public class NewCarDto implements Serializable {
 
-    @NotBlank(message = "Typ pojazdu nie może być pusty")
-    private String type;
+    @NotBlank(message = "{NotBlank.carType}")
+    private String carType;
 
-    @NotNull(message = "Model pojazdu nie może być pusty")
+    @NotNull(message = "{NotNull.model}")
     private CarModel carModel = new CarModel();
 
     private SportCar sportCar = new SportCar();
     private CityCar cityCar = new CityCar();
 
-    @NotBlank(message = "Opis nie może być pusty")
-    @Size(max = 250, message = "Opis nie może mieć więcej niż 250 znaków")
+    @NotBlank(message = "{NotBlank.licensePlate}")
+    @Size(max = 250, message = "{Size.licensePlate}")
     private String description = "No description yet.";
 }

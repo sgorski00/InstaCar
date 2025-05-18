@@ -1,5 +1,7 @@
 package pl.studia.InstaCar.service.tokens;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 import pl.studia.InstaCar.config.exceptions.TokenIllegalArgumentException;
@@ -9,10 +11,12 @@ import pl.studia.InstaCar.model.authentication.tokens.BaseToken;
 
 public abstract class TokenService<T extends BaseToken> {
 
+    private final MessageSource messageSource;
     private final Class<T> type;
     protected final JpaRepository<T, Long> tokenRepository;
 
-    protected TokenService(JpaRepository<T, Long> tokenRepository, Class<T> type) {
+    protected TokenService(MessageSource messageSource, JpaRepository<T, Long> tokenRepository, Class<T> type) {
+        this.messageSource = messageSource;
         this.tokenRepository = tokenRepository;
         this.type = type;
     }
@@ -28,10 +32,12 @@ public abstract class TokenService<T extends BaseToken> {
         T foundToken = findLastToken(token);
 
         if(foundToken.getIsUsed()){
-            throw new TokenIllegalArgumentException("Podany token został już zużyty", this.type);
+            String message = messageSource.getMessage("error.token.used", null, LocaleContextHolder.getLocale());
+            throw new TokenIllegalArgumentException(message, this.type);
         }
         if(foundToken.isExpired()){
-            throw new TokenIllegalArgumentException("Podany token jest przeterminowany", this.type);
+            String message = messageSource.getMessage("error.token.expired", null, LocaleContextHolder.getLocale());
+            throw new TokenIllegalArgumentException(message, this.type);
         }
         foundToken.setIsUsed(true);
         tokenRepository.save(foundToken);
@@ -47,10 +53,12 @@ public abstract class TokenService<T extends BaseToken> {
     @Transactional
     public T saveTokenForUser(ApplicationUser user) throws TokenIllegalArgumentException {
         if (user == null) {
-            throw new TokenIllegalArgumentException("Nie podano użytkownika", this.type);
+            String message = messageSource.getMessage("error.token.user.null", null, LocaleContextHolder.getLocale());
+            throw new TokenIllegalArgumentException(message, this.type);
         }
         if(!user.getProvider().equals(AuthProvider.LOCAL)){
-            throw new TokenIllegalArgumentException("Zmiana hasła niemożliwa", this.type);
+            String message = messageSource.getMessage("error.token.user.not.local", null, LocaleContextHolder.getLocale());
+            throw new TokenIllegalArgumentException(message, this.type);
         }
         T token = generateTokenForUser(user);
         return tokenRepository.save(token);

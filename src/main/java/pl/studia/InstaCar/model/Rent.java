@@ -2,6 +2,8 @@ package pl.studia.InstaCar.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import pl.studia.InstaCar.config.exceptions.StatusChangeException;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.enums.RentStatus;
@@ -64,10 +66,13 @@ public class Rent implements Serializable {
         this.totalCost = vehicle.getPrice() * (returnDate.toEpochDay() - rentDate.toEpochDay() + 1);
     }
 
-    public void setRentStatus(RentStatus status) throws StatusChangeException {
+    public void setRentStatus(RentStatus status, MessageSource messageSource) throws StatusChangeException {
         if(this.rentStatus == status) return;
-        if(this.rentStatus.equals(RentStatus.FINISHED)) throw new StatusChangeException("Zakończonego zamówienie nie można edytować.");
+        if(this.rentStatus.equals(RentStatus.FINISHED)) throw new StatusChangeException(messageSource.getMessage("error.status.change", null, LocaleContextHolder.getLocale()));
         this.rentStatus = status;
         this.statusChangedAt = Timestamp.from(Instant.now());
     }
+
+    //disable default setter
+    private void setRentStatus(RentStatus rentStatus) {}
 }

@@ -3,6 +3,8 @@ package pl.studia.InstaCar.controller;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,12 +24,14 @@ public class LoginController {
     private final PasswordResetService passwordResetService;
     private final UserService userService;
     private final PasswordTokenService passwordTokenService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public LoginController(PasswordResetService passwordResetService, UserService userService, PasswordTokenService passwordTokenService) {
+    public LoginController(PasswordResetService passwordResetService, UserService userService, PasswordTokenService passwordTokenService, MessageSource messageSource) {
         this.passwordResetService = passwordResetService;
         this.userService = userService;
         this.passwordTokenService = passwordTokenService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping
@@ -59,7 +63,8 @@ public class LoginController {
     ) {
         ApplicationUser user = userService.findByUsernameOrEmail(identifier);
         passwordResetService.generateToken(user);
-        redirectAttributes.addFlashAttribute("info", "Wysłano maila z instrukcją resetowania hasła");
+        String message = messageSource.getMessage("attr.reset.message.sent", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("info", message);
         return "redirect:/login";
     }
 
@@ -88,14 +93,16 @@ public class LoginController {
         }
 
         if (!passwordResetDto.arePasswordsEqual()) {
-            redirectAttributes.addFlashAttribute("error", "Podane hasła są takie same.");
+            String message = messageSource.getMessage("validation.password.repeat.match", null, LocaleContextHolder.getLocale());
+            redirectAttributes.addFlashAttribute("error", message);
             redirectAttributes.addFlashAttribute("pwdResetDto", passwordResetDto);
             return "redirect:/login/reset/form?token=" + token;
         }
 
         ApplicationUser user = passwordTokenService.getUserForToken(token);
         passwordResetService.changePassword(user, passwordResetDto, token);
-        redirectAttributes.addFlashAttribute("info", "Hasło zostało zmienione");
+        String message = messageSource.getMessage("attr.password.saved", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("info", message);
         return "redirect:/login";
     }
 }

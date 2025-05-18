@@ -18,54 +18,54 @@ public class EditCarDto implements Serializable {
 
     private Long id;
 
-    @NotNull(message = "Model nie może być pusty")
+    @NotNull(message = "{NotNull.model}")
     @Valid
     private CarModel model;
 
-    @NotBlank(message = "Typ pojazdu nie może być pusty")
+    @NotBlank(message = "{NotBlank.carType}")
     private String carType;
 
-    @Size(min=3, max=10, message = "Numer rejestracyjny musi mieć od 3 do 10 znaków")
+    @Size(min=3, max=10, message = "{Size.licensePlate}")
     private String licensePlate;
 
-    @NotBlank(message = "VIN nie może być pusty")
+    @NotBlank(message = "{NotBlank.vin}")
     private String vin;
 
     private String color;
 
-    @Min(value = 1950, message = "Rok produkcji nie może być mniejszy niż 1950")
-    @Max(value = 2030, message = "Rok produkcji nie może być większy niż 2030")
+    @Min(value = 1950, message = "{Min.productionYear}")
+    @Max(value = 2030, message = "{Max.productionYear}")
     private int productionYear;
 
-    @Positive(message = "Cena musi być większa od 0")
+    @Positive(message = "{Positive.price}")
     private double price;
 
-    @NotBlank(message = "Pole silnik musi być wypełnione")
+    @NotBlank(message = "{NotBlank.engine}")
     private String engine;
 
-    @NotBlank(message = "Należy załączyć zdjęcie")
+    @NotBlank(message = "{NotBlank.imageUrl}")
     private String imageUrl;
 
     @Nullable
-    @Positive(message = "Przyspieszenie nie może być mniejsze od 0")
+    @Positive(message = "{Positive.acceleration}")
     private Double acceleration;
 
     @Nullable
-    @Min(value = 100,message = "Prędkość minimalna to 100 km/h")
-    @Max(value = 400,message = "Prędkość minimalna to 400 km/h")
+    @Min(value = 100, message = "{Min.topSpeed}")
+    @Max(value = 400, message = "{Max.topSpeed}")
     private Integer topSpeed;
 
     @Nullable
-    @Min(value = 50,message = "Minimalna ilość koni mechanicznych to 50")
-    @Max(value = 1000,message = "Maksymalna ilość koni mechanicznych to 1000")
+    @Min(value = 50, message = "{Min.horsePower}")
+    @Max(value = 1000, message = "{Max.horsePower}")
     private Integer horsePower;
 
     @Nullable
-    @Positive(message = "Pojemność bagażnika musi być dodatnia")
+    @Positive(message = "{Positive.trunkCapacity}")
     private Double trunkCapacity;
 
-    @NotBlank(message = "Opis nie może być pusty")
-    @Size(max = 250, message = "Opis nie może mieć więcej niż 250 znaków")
+    @NotBlank(message = "{NotBlank.description}")
+    @Size(max = 250, message = "{Size.description}")
     private String description;
 
     public EditCarDto(Vehicle vehicle) {

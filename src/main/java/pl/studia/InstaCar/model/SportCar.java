@@ -20,14 +20,14 @@ import lombok.Setter;
 @Setter
 public class SportCar extends Vehicle {
 
-    @Min(value = 50,message = "Minimalna ilość koni mechanicznych to 50")
-    @Max(value = 1000,message = "Maksymalna ilość koni mechanicznych to 1000")
+    @Min(value = 50, message = "{Min.horsePower}")
+    @Max(value = 1000, message = "{Max.horsePower}")
     private Integer horsePower;
 
-    @Positive(message = "Przyspieszenie nie może być mniejsze od 0")
+    @Positive(message = "{Positive.acceleration}")
     private Double acceleration; // 0-100 km/h in seconds
 
-    @Min(value = 100,message = "Prędkość minimalna to 100 km/h")
-    @Max(value = 400,message = "Prędkość minimalna to 400 km/h")
+    @Min(value = 100, message = "{Min.topSpeed}")
+    @Max(value = 400, message = "{Max.topSpeed}")
     private Integer topSpeed;
 }

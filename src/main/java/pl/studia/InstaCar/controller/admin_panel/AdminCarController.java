@@ -2,11 +2,13 @@ package pl.studia.InstaCar.controller.admin_panel;
 
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
-import jakarta.validation.Validator;
 import lombok.extern.log4j.Log4j2;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +28,6 @@ import pl.studia.InstaCar.model.enums.CarType;
 import pl.studia.InstaCar.model.enums.FuelType;
 import pl.studia.InstaCar.model.enums.Transmission;
 import pl.studia.InstaCar.service.CarModelService;
-import pl.studia.InstaCar.service.FileUploadService;
 import pl.studia.InstaCar.service.VehicleService;
 import pl.studia.InstaCar.utils.ListPaginator;
 import pl.studia.InstaCar.utils.PaginationUtils;
@@ -43,15 +44,17 @@ public class AdminCarController {
     private final VehicleService vehicleService;
     private final CarModelService carModelService;
     private final ListPaginator<Vehicle> listPaginator;
+    private final MessageSource messageSource;
 
     @Value("${default.pagination.pages.size}")
     private int visiblePages;
 
     @Autowired
-    public AdminCarController(VehicleService vehicleService, CarModelService carModelService, ListPaginator<Vehicle> listPaginator) {
+    public AdminCarController(VehicleService vehicleService, CarModelService carModelService, ListPaginator<Vehicle> listPaginator, @Qualifier("messageSource") MessageSource messageSource) {
         this.vehicleService = vehicleService;
         this.carModelService = carModelService;
         this.listPaginator = listPaginator;
+        this.messageSource = messageSource;
     }
 
     @GetMapping
@@ -117,17 +120,14 @@ public class AdminCarController {
             redirectAttributes.addFlashAttribute("error", errorMsg);
             redirectAttributes.addFlashAttribute("carDto", car);
             return "redirect:/admin/cars/add";
-        } catch (IllegalArgumentException e) {
+        } catch (IllegalArgumentException | FileUploadException e) {
             redirectAttributes.addFlashAttribute("error", e.getMessage());
-            redirectAttributes.addFlashAttribute("carDto", car);
-            return "redirect:/admin/cars/add";
-        } catch (FileUploadException e) {
-            redirectAttributes.addFlashAttribute("error", "Błąd przesyłania pliku");
             redirectAttributes.addFlashAttribute("carDto", car);
             return "redirect:/admin/cars/add";
         }
 
-        redirectAttributes.addFlashAttribute("info", "Pojazd został zapisany");
+        String message = messageSource.getMessage("attr.car.saved", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("info", message);
         return "redirect:/admin/cars";
     }
 
@@ -138,7 +138,8 @@ public class AdminCarController {
             RedirectAttributes redirectAttributes
     ) {
         vehicleService.deleteById(id);
-        redirectAttributes.addFlashAttribute("info", "Pojazd został usunięty");
+        String message = messageSource.getMessage("attr.car.deleted", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("info", message);
         return "redirect:/admin/cars";
     }
 
@@ -179,11 +180,13 @@ public class AdminCarController {
             }
             default -> {
                 redirectAttributes.addFlashAttribute("car", carDto);
-                redirectAttributes.addFlashAttribute("error", "Zły typ pojazdu!");
+                String message=messageSource.getMessage("error.vehicle.type.not.supported", null, LocaleContextHolder.getLocale());
+                redirectAttributes.addFlashAttribute("error", message);
                 return "redirect:/admin/cars/edit/" + carDto.getId();
             }
         }
-        redirectAttributes.addAttribute("info", "Pojazd został zapisany");
+        String message = messageSource.getMessage("attr.car.saved", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addAttribute("info", message);
         return "redirect:/admin/cars";
     }
 }
