@@ -6,6 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import pl.studia.InstaCar.model.CarModel;
 import pl.studia.InstaCar.model.CityCar;
 import pl.studia.InstaCar.model.SportCar;
 import pl.studia.InstaCar.model.Vehicle;
@@ -30,6 +31,9 @@ public class VehicleServiceTest {
 
     @Mock
     private CityCarRepository cityCarRepository;
+
+    @Mock
+    private CarModelService carModelService;
 
     @InjectMocks
     private VehicleService vehicleService;

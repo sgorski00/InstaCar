@@ -4,12 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
+import pl.studia.InstaCar.config.exceptions.TokenIllegalArgumentException;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.repository.EmailTokenRepository;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 import java.util.UUID;
 
 @Service
@@ -39,6 +39,6 @@ public class EmailTokenService extends TokenService<EmailActivationToken> {
     protected EmailActivationToken findLastToken(String tokenStr) {
         String message = messageSource.getMessage("error.token.not.found", null, LocaleContextHolder.getLocale());
         return emailTokenRepository.findFirstByTokenOrderByIdDesc(tokenStr)
-                .orElseThrow(() -> new NoSuchElementException(message));
+                .orElseThrow(() -> new TokenIllegalArgumentException(message, EmailActivationToken.class));
     }
 }

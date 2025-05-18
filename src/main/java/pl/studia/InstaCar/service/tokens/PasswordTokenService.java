@@ -11,7 +11,6 @@ import pl.studia.InstaCar.model.authentication.tokens.PasswordResetToken;
 import pl.studia.InstaCar.repository.PasswordTokenRepository;
 
 import java.time.LocalDateTime;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -43,7 +42,7 @@ public class PasswordTokenService extends TokenService<PasswordResetToken> {
         return passwordTokenRepository.findFirstByTokenOrderByIdDesc(tokenStr)
                 .orElseThrow(() -> {
                     String message = messageSource.getMessage("error.token.not.found", null, LocaleContextHolder.getLocale());
-                    return new NoSuchElementException(message);
+                    return new TokenIllegalArgumentException(message, PasswordResetToken.class);
                 });
     }
 
