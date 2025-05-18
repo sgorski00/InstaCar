@@ -11,7 +11,7 @@ public class PasswordResetDtoTest {
     void shouldReturnTrueIfPasswordsAreEqual() {
         PasswordResetDto dto = new PasswordResetDto();
         dto.setPassword("newPassword");
-        dto.setRepeatPassword("newPassword");
+        dto.setConfirmPassword("newPassword");
 
         boolean result = dto.arePasswordsEqual();
 
@@ -22,7 +22,7 @@ public class PasswordResetDtoTest {
     void shouldReturnFalseIfPasswordsAreNotEqual() {
         PasswordResetDto dto = new PasswordResetDto();
         dto.setPassword("newPassword");
-        dto.setRepeatPassword("wrongPassword");
+        dto.setConfirmPassword("wrongPassword");
 
         boolean result = dto.arePasswordsEqual();
 

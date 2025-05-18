@@ -55,7 +55,7 @@ public class PasswordResetServiceTest {
         ApplicationUser user = new ApplicationUser();
         PasswordResetDto resetDto = new PasswordResetDto();
         resetDto.setPassword("password");
-        resetDto.setRepeatPassword("password");
+        resetDto.setConfirmPassword("password");
         String token = "fakedToken";
 
         passwordResetService.changePassword(user, resetDto, token);

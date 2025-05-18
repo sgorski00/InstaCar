@@ -1,9 +1,12 @@
 package pl.studia.InstaCar.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.UserDetails;
 import pl.studia.InstaCar.repository.UserDetailsRepository;
@@ -14,10 +17,12 @@ import java.util.NoSuchElementException;
 public class UserDetailsService {
 
     private final UserDetailsRepository userDetailsRepository;
+    private final MessageSource messageSource;
 
     @Autowired
-    public UserDetailsService(UserDetailsRepository userDetailsRepository) {
+    public UserDetailsService(UserDetailsRepository userDetailsRepository, @Qualifier("messageSource") MessageSource messageSource) {
         this.userDetailsRepository = userDetailsRepository;
+        this.messageSource = messageSource;
     }
 
     @CacheEvict(value = "userDetails", allEntries = true)
@@ -43,7 +48,10 @@ public class UserDetailsService {
     @Cacheable(value = "userDetails", key = "#id")
     public UserDetails getUserDetails(long id) {
         return userDetailsRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("User details not found with id: " + id)
+                () -> {
+                    String message = messageSource.getMessage("error.user.details.not.found", null, LocaleContextHolder.getLocale());
+                    return new NoSuchElementException(message + ": " + id);
+                }
         );
     }
 

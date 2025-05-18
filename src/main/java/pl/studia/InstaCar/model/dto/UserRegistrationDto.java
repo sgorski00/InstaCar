@@ -7,6 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import pl.studia.InstaCar.config.validators.Login;
+import pl.studia.InstaCar.config.validators.Password;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 
 import java.io.Serializable;
@@ -16,27 +20,26 @@ import java.io.Serializable;
 @Getter
 @Setter
 public class UserRegistrationDto implements PasswordEquals, Serializable {
-    @NotBlank(message = "Nazwa użytkownika jest wymagana")
-    @Size(min = 5, max = 50, message = "Nazwa użytkownika musi mieć od 5 do 50 znaków")
+    @Login
     private String username;
 
-    @Email(message = "Podany email jest niepoprawny")
+    @Email(message = "{Email.email}")
     private String email;
 
-    @NotBlank(message = "Hasło jest wymagane")
-    @Size(min = 5, max = 50, message = "Hasło musi mieć od 5 do 50 znaków")
+    @Password
     private String password;
 
-    @NotBlank(message = "Należy podać powtórzone hasło")
+    @NotBlank(message = "{NotBlank.confirmPassword}")
     private String confirmPassword;
 
     public boolean arePasswordsEqual(){
         return password != null && password.equals(confirmPassword);
     }
 
-    public ApplicationUser mapToUser() {
+    public ApplicationUser mapToUser(MessageSource messageSource) {
         if(!arePasswordsEqual()) {
-            throw new IllegalArgumentException("Podane hasła nie są takie same");
+            String message = messageSource.getMessage("validation.password.repeat.match", null, LocaleContextHolder.getLocale());
+            throw new IllegalArgumentException(message);
         }
         ApplicationUser user = new ApplicationUser();
         user.setUsername(username);

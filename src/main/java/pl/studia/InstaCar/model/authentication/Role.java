@@ -18,7 +18,7 @@ public class Role implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Nazwa jest wymagana")
+    @NotBlank(message = "{NotBlank.name}")
     @Column(name = "name", nullable = false, unique = true)
     @EqualsAndHashCode.Include
     private String name;

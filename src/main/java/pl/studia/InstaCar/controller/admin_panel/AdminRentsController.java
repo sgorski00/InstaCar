@@ -2,7 +2,10 @@ package pl.studia.InstaCar.controller.admin_panel;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -20,14 +23,16 @@ import java.time.LocalDate;
 @RequestMapping("/admin/rents")
 public class AdminRentsController {
 
+    private final MessageSource messageSource;
     @Value("${default.pagination.pages.size}")
     private int visiblePages;
 
     private final OrderService orderService;
 
     @Autowired
-    public AdminRentsController(OrderService orderService) {
+    public AdminRentsController(OrderService orderService, @Qualifier("messageSource") MessageSource messageSource) {
         this.orderService = orderService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping
@@ -61,7 +66,8 @@ public class AdminRentsController {
             RedirectAttributes redirectAttributes
     ) {
         orderService.cancelOrderById(id);
-        redirectAttributes.addFlashAttribute("info", "Zamówienie o id: " + id + " zostało anulowane");
+        String message = messageSource.getMessage("attr.rent.canceled", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("info", message + ": " + id);
         return "redirect:/admin/rents?dateFrom=" + dateFrom + "&dateTo=" + dateTo;
     }
 

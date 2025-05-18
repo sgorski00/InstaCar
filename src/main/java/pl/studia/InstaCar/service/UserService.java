@@ -3,6 +3,9 @@ package pl.studia.InstaCar.service;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,10 +26,12 @@ public class UserService implements UserDetailsService {
 
     private static final Logger log = LogManager.getLogger(UserService.class);
     private final UserRepository userRepository;
+    private final MessageSource messageSource;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, @Qualifier("messageSource") MessageSource messageSource) {
         this.userRepository = userRepository;
+        this.messageSource = messageSource;
     }
 
     public boolean isEmpty() {
@@ -51,16 +56,21 @@ public class UserService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         ApplicationUser user = userRepository.findByUsernameIgnoreCase(username).orElseThrow(
-                () -> new UsernameNotFoundException("Podano błędną nazwę użytkownika!")
+                () -> {
+                    String message = messageSource.getMessage("error.login.not.found", null, LocaleContextHolder.getLocale());
+                    return new UsernameNotFoundException(message);
+                }
         );
         log.info("User found: {}", username);
         if (!user.isEnabled()){
             log.error("User {} not enabled", username);
-            throw new UsernameNotFoundException("Konto nie jest aktywowane!");
+            String message = messageSource.getMessage("error.login.not.active", null, LocaleContextHolder.getLocale());
+            throw new UsernameNotFoundException(message);
         }
 
         if(user.getProvider().equals(AuthProvider.GOOGLE)) {
-            throw new UsernameNotFoundException("Zaloguj się poprzez konto Google!");
+            String message = messageSource.getMessage("error.login.not.local", null, LocaleContextHolder.getLocale());
+            throw new UsernameNotFoundException(message);
         }
         return new CustomUserPrincipal(user);
     }
@@ -81,7 +91,10 @@ public class UserService implements UserDetailsService {
         }
         user = userRepository.findByEmailIgnoreCase(identifier);
         return user.orElseThrow(
-                () -> new UsernameNotFoundException("Nie odnaleziono użytkownika: " + identifier)
+                () -> {
+                    String message = messageSource.getMessage("error.login.not.found", null, LocaleContextHolder.getLocale());
+                    return new UsernameNotFoundException(message + ": " + identifier);
+                }
         );
     }
 
@@ -100,13 +113,19 @@ public class UserService implements UserDetailsService {
 
     public ApplicationUser findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("Nie odnaleziono użytkownika o id: " + id)
+                () -> {
+                    String message = messageSource.getMessage("error.user.not.found", null, LocaleContextHolder.getLocale());
+                    return new NoSuchElementException(message +": " + id);
+                }
         );
     }
 
     public ApplicationUser findUserByUsername(String username) {
         return userRepository.findByUsernameIgnoreCase(username).orElseThrow(
-                () -> new NoSuchElementException("Nie odnaleziono użytkownika: " + username)
+                () -> {
+                    String message = messageSource.getMessage("error.user.not.found", null, LocaleContextHolder.getLocale());
+                    return new NoSuchElementException(message + ": " + username);
+                }
         );
     }
 

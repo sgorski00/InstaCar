@@ -1,10 +1,13 @@
 package pl.studia.InstaCar.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.CarModel;
 import pl.studia.InstaCar.repository.CarModelRepository;
@@ -15,10 +18,12 @@ import java.util.NoSuchElementException;
 @Service
 public class CarModelService {
     private final CarModelRepository carModelRepository;
+    private final MessageSource messageSource;
 
     @Autowired
-    public CarModelService(CarModelRepository carModelRepository) {
+    public CarModelService(CarModelRepository carModelRepository, @Qualifier("messageSource") MessageSource messageSource) {
         this.carModelRepository = carModelRepository;
+        this.messageSource = messageSource;
     }
 
     public long count() {
@@ -37,8 +42,9 @@ public class CarModelService {
 
     @Cacheable(value = "carModels", key = "#id")
     public CarModel getCarModelById(Long id) {
+        String message = messageSource.getMessage("error.car.model.not.found", null, LocaleContextHolder.getLocale());
         return carModelRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("Car model not found with id: " + id));
+                .orElseThrow(() -> new NoSuchElementException(message +": " + id));
     }
 
     @Caching(

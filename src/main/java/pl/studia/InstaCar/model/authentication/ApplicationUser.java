@@ -11,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import pl.studia.InstaCar.config.validators.Login;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 
 import java.io.Serializable;
@@ -30,13 +31,12 @@ public class ApplicationUser implements UserDetails, Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank(message = "Nazwa użytkownika jest wymagana")
-    @Size(min = 5, max = 50, message = "Nazwa użytkownika musi mieć od 5 do 50 znaków")
+    @Login
     @Column(unique = true, nullable = false)
     @EqualsAndHashCode.Include
     private String username;
 
-    @Email(message = "Adres email jest nieprawidłowy")
+    @Email(message = "{Email.email}")
     @Column(unique = true, nullable = false)
     private String email;
 

@@ -1,6 +1,8 @@
 package pl.studia.InstaCar.service.tokens;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
@@ -14,11 +16,13 @@ import java.util.UUID;
 public class EmailTokenService extends TokenService<EmailActivationToken> {
 
     private final EmailTokenRepository emailTokenRepository;
+    private final MessageSource messageSource;
 
     @Autowired
-    public EmailTokenService(EmailTokenRepository emailTokenRepository) {
-        super(emailTokenRepository, EmailActivationToken.class);
+    public EmailTokenService(EmailTokenRepository emailTokenRepository, MessageSource messageSource) {
+        super(messageSource, emailTokenRepository, EmailActivationToken.class);
         this.emailTokenRepository = emailTokenRepository;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -33,7 +37,8 @@ public class EmailTokenService extends TokenService<EmailActivationToken> {
 
     @Override
     protected EmailActivationToken findLastToken(String tokenStr) {
+        String message = messageSource.getMessage("error.token.not.found", null, LocaleContextHolder.getLocale());
         return emailTokenRepository.findFirstByTokenOrderByIdDesc(tokenStr)
-                .orElseThrow(() -> new NoSuchElementException("Podany token nie istnieje"));
+                .orElseThrow(() -> new NoSuchElementException(message));
     }
 }

@@ -1,14 +1,16 @@
 package pl.studia.InstaCar.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.authentication.Role;
 import pl.studia.InstaCar.repository.RoleRepository;
 
-import javax.management.relation.RoleNotFoundException;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -16,10 +18,12 @@ import java.util.NoSuchElementException;
 public class RoleService {
 
     private final RoleRepository roleRepository;
+    private final MessageSource messageSource;
 
     @Autowired
-    public RoleService(RoleRepository roleRepository) {
+    public RoleService(RoleRepository roleRepository, @Qualifier("messageSource") MessageSource messageSource) {
         this.roleRepository = roleRepository;
+        this.messageSource = messageSource;
     }
 
     public boolean isEmpty() {
@@ -38,8 +42,9 @@ public class RoleService {
 
     @Cacheable(value = "roles", key = "#name")
     public Role findByName(String name) {
+        String message = messageSource.getMessage("error.role.not.found", null, LocaleContextHolder.getLocale());
         return roleRepository.findByNameIgnoreCase(name).orElseThrow(
-                () -> new NoSuchElementException("Nie odnaleziono roli: " + name)
+                () -> new NoSuchElementException(message + ": " + name)
         );
     }
 
@@ -49,8 +54,9 @@ public class RoleService {
 
     @Cacheable(value = "roles", key = "#id")
     public Role findById(Long id) {
+        String message = messageSource.getMessage("error.role.not.found", null, LocaleContextHolder.getLocale());
         return roleRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("Nie odnaleziono roli z id: " + id)
+                () -> new NoSuchElementException(message + ": " + id)
         );
     }
 }

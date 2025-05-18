@@ -3,6 +3,8 @@ package pl.studia.InstaCar.service;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,19 +24,21 @@ public class UserRegistrationService {
     private final UserService userService;
     private final RoleService roleService;
     private final EmailTokenService emailTokenService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public UserRegistrationService(ApplicationEventPublisher eventPublisher, UserService userService, RoleService roleService, EmailTokenService emailTokenService) {
+    public UserRegistrationService(ApplicationEventPublisher eventPublisher, UserService userService, RoleService roleService, EmailTokenService emailTokenService, MessageSource messageSource) {
         this.eventPublisher = eventPublisher;
         this.userService = userService;
         this.roleService = roleService;
         this.emailTokenService = emailTokenService;
+        this.messageSource = messageSource;
     }
 
     @Transactional
     public void registerUser(UserRegistrationDto userRegisterDto) {
         if(userService.existsByEmail(userRegisterDto.getEmail())) return;
-        ApplicationUser user = userRegisterDto.mapToUser();
+        ApplicationUser user = userRegisterDto.mapToUser(messageSource);
         try {
             Role role = roleService.findByName("user");
             user.setRole(role);
@@ -46,10 +50,12 @@ public class UserRegistrationService {
             throw new NoSuchElementException(e.getMessage());
         } catch (DataIntegrityViolationException e) {
             log.error(e.getMessage());
-            throw new IllegalArgumentException("Podana nazwa użytkownika jest zajęta");
+            String message = messageSource.getMessage("error.username.exists", null, LocaleContextHolder.getLocale());
+            throw new IllegalArgumentException(message);
         } catch (Exception e) {
             log.error(e.getCause());
-            throw new RuntimeException("An error occurred while registering user");
+            String message = messageSource.getMessage("error.register.general", null, LocaleContextHolder.getLocale());
+            throw new RuntimeException(message);
         }
     }
 }

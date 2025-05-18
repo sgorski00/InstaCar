@@ -1,9 +1,9 @@
 package pl.studia.InstaCar.model.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
+import pl.studia.InstaCar.config.validators.Password;
 
 import java.io.Serializable;
 
@@ -11,14 +11,13 @@ import java.io.Serializable;
 @Setter
 public class PasswordResetDto implements PasswordEquals, Serializable {
 
-    @NotBlank(message = "Hasło jest wymagane")
-    @Size(min = 5, message = "Hasło musi mieć co najmniej 5 znaków")
+    @Password
     private String password;
 
-    @NotBlank(message = "Hasło jest wymagane")
-    private String repeatPassword;
+    @NotBlank(message = "{NotBlank.confirmPassword}")
+    private String confirmPassword;
 
     public boolean arePasswordsEqual(){
-        return password.equals(repeatPassword);
+        return password.equals(confirmPassword);
     }
 }

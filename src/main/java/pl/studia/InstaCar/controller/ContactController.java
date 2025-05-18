@@ -3,7 +3,10 @@ package pl.studia.InstaCar.controller;
 import jakarta.validation.Valid;
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,14 +23,16 @@ import pl.studia.InstaCar.service.EmailService;
 public class ContactController {
 
     private final EmailService emailService;
+    private final MessageSource messageSource;
 
     @Getter
     @Value("${contact.email}")
     private String contactEmail;
 
     @Autowired
-    public ContactController(EmailService emailService) {
+    public ContactController(EmailService emailService, @Qualifier("messageSource") MessageSource messageSource) {
         this.emailService = emailService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping
@@ -51,7 +56,8 @@ public class ContactController {
             return "redirect:/contact";
         }
         emailService.sendEmail(email);
-        redirectAttributes.addFlashAttribute("info", "Wiadomość wysłana pomyślnie");
+        String message = messageSource.getMessage("attr.message.sent", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("info", message);
         return "redirect:/contact";
     }
 }

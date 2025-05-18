@@ -1,6 +1,9 @@
 package pl.studia.InstaCar.service.tokens;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.config.exceptions.TokenIllegalArgumentException;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
@@ -16,11 +19,13 @@ import java.util.UUID;
 public class PasswordTokenService extends TokenService<PasswordResetToken> {
 
     private final PasswordTokenRepository passwordTokenRepository;
+    private final MessageSource messageSource;
 
     @Autowired
-    public PasswordTokenService(PasswordTokenRepository passwordTokenRepository) {
-        super(passwordTokenRepository, PasswordResetToken.class);
+    public PasswordTokenService(PasswordTokenRepository passwordTokenRepository, @Qualifier("messageSource") MessageSource messageSource) {
+        super(messageSource, passwordTokenRepository, PasswordResetToken.class);
         this.passwordTokenRepository = passwordTokenRepository;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -36,7 +41,10 @@ public class PasswordTokenService extends TokenService<PasswordResetToken> {
     @Override
     protected PasswordResetToken findLastToken(String tokenStr) {
         return passwordTokenRepository.findFirstByTokenOrderByIdDesc(tokenStr)
-                .orElseThrow(() -> new NoSuchElementException("Podany token nie istnieje"));
+                .orElseThrow(() -> {
+                    String message = messageSource.getMessage("error.token.not.found", null, LocaleContextHolder.getLocale());
+                    return new NoSuchElementException(message);
+                });
     }
 
     /**
@@ -53,11 +61,13 @@ public class PasswordTokenService extends TokenService<PasswordResetToken> {
         if(oToken.isPresent()) {
             PasswordResetToken token = oToken.get();
             if (token.getIsUsed()) {
-                throw new TokenIllegalArgumentException("Podany token został wykorzystany", PasswordResetToken.class);
+                String message = messageSource.getMessage("error.token.used", null, LocaleContextHolder.getLocale());
+                throw new TokenIllegalArgumentException(message, PasswordResetToken.class);
             }
             return token.getUser();
         } else {
-            throw new TokenIllegalArgumentException("Podany token nie istnieje", PasswordResetToken.class);
+            String message = messageSource.getMessage("error.token.not.found", null, LocaleContextHolder.getLocale());
+            throw new TokenIllegalArgumentException(message, PasswordResetToken.class);
         }
     }
 }

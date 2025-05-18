@@ -29,7 +29,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="provider" class="form-label">Typ konta:</label>
-                                <input type="text" id="provider" name="provider" th:value="${userNotEditable.provider.name()}"
+                                <input type="text" id="provider" name="provider" th:value="#{'auth.provider.' + ${userNotEditable.provider)}}"
                                        class="form-control" disabled>
                             </div>
                             <div class="mb-3">

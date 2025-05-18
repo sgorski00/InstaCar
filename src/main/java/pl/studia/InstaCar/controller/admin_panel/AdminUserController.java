@@ -3,7 +3,10 @@ package pl.studia.InstaCar.controller.admin_panel;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
@@ -25,14 +28,16 @@ public class AdminUserController {
 
     private final UserService userService;
     private final RoleService roleService;
+    private final MessageSource messageSource;
 
     @Value("${default.pagination.pages.size}")
     private int visiblePages;
 
     @Autowired
-    public AdminUserController(UserService userService, RoleService roleService) {
+    public AdminUserController(UserService userService, RoleService roleService, @Qualifier("messageSource") MessageSource messageSource) {
         this.userService = userService;
         this.roleService = roleService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping
@@ -62,7 +67,8 @@ public class AdminUserController {
             RedirectAttributes redirectAttributes
     ) {
         userService.deleteUserById(userId);
-        redirectAttributes.addFlashAttribute("info", "Użytkownik został usunięty");
+        String message = messageSource.getMessage("attr.user.deleted", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("info", message);
         return "redirect:/admin/users";
     }
 
@@ -89,12 +95,15 @@ public class AdminUserController {
             redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
             redirectAttributes.addFlashAttribute("user", userDto);
             return "redirect:/admin/users/edit/" + id;
+        } else {
+            log.error("Brak błędów");
         }
         ApplicationUser userToEdit = userService.findUserById(id);
         Role role = roleService.findById(userDto.getRoleId());
         userDto.updateUser(userToEdit, role);
         userService.save(userToEdit);
-        redirectAttributes.addFlashAttribute("message", "Użytkownik edytowany pomyślnie.");
+        String message = messageSource.getMessage("attr.user.edited", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("message", message);
         return "redirect:/admin/users/edit/" + id;
     }
 }

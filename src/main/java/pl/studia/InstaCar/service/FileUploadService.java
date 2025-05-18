@@ -2,7 +2,10 @@ package pl.studia.InstaCar.service;
 
 import lombok.extern.log4j.Log4j2;
 import org.apache.tomcat.util.http.fileupload.FileUploadException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,6 +21,13 @@ public class FileUploadService {
     @Value("${upload.directory}")
     private String uploadDirectory;
 
+    private final MessageSource messageSource;
+
+    @Autowired
+    public FileUploadService(MessageSource messageSource) {
+        this.messageSource = messageSource;
+    }
+
     /**
      * Uploads the file to the uploadDirectory path adn returns a saved path with file name.
      *
@@ -28,14 +38,17 @@ public class FileUploadService {
     public String uploadFile(MultipartFile file) throws FileUploadException {
         log.debug("Plik wgrany: {}", file.getOriginalFilename());
         log.debug("Rozmiar pliku: {}", file.getSize());
+        String message;
         if(file.isEmpty()) {
-            throw new FileUploadException("Plik jest pusty");
+            message = messageSource.getMessage("error.file.empty", null, LocaleContextHolder.getLocale());
+            throw new FileUploadException(message);
         }
 
         try {
             String contet = file.getContentType();
             if(contet == null || !contet.startsWith("image")) {
-                throw new FileUploadException("Plik nie jest obrazem");
+                message = messageSource.getMessage("error.file.not.image", null, LocaleContextHolder.getLocale());
+                throw new FileUploadException(message);
             }
 
             //noinspection DataFlowIssue
@@ -47,7 +60,8 @@ public class FileUploadService {
 
             return getUploadDir(dest.toString());
         }catch (NullPointerException | IOException e) {
-            throw new FileUploadException("Przesłano nieprawidłowy plik");
+            message = messageSource.getMessage("error.file.general", null, LocaleContextHolder.getLocale());
+            throw new FileUploadException(message);
         }
     }
 

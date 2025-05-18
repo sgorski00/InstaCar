@@ -2,6 +2,9 @@ package pl.studia.InstaCar.controller;
 
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -22,12 +25,14 @@ public class UserController {
     private final UserService userService;
     private final UserDetailsService userDetailsService;
     private final OrderService orderService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public UserController(UserService userService, UserDetailsService userDetailsService, OrderService orderService) {
+    public UserController(UserService userService, UserDetailsService userDetailsService, OrderService orderService, @Qualifier("messageSource") MessageSource messageSource) {
         this.userService = userService;
         this.userDetailsService = userDetailsService;
         this.orderService = orderService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping
@@ -60,7 +65,8 @@ public class UserController {
 
         userDetails.setUser(user);
         userDetailsService.save(userDetails);
-        redirectAttributes.addFlashAttribute("info", "Dane kontaktowe zapisane pomyślnie");
+        String message = messageSource.getMessage("attr.user.details.saved", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("info", message);
         return "redirect:/user";
     }
 }

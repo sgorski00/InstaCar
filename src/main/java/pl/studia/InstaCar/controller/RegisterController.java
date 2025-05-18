@@ -3,6 +3,9 @@ package pl.studia.InstaCar.controller;
 import jakarta.validation.Valid;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,11 +21,13 @@ public class RegisterController {
 
     private final UserRegistrationService userRegistrationService;
     private final EmailTokenService emailTokenService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public RegisterController(UserRegistrationService userRegistrationService, EmailTokenService emailTokenService) {
+    public RegisterController(UserRegistrationService userRegistrationService, EmailTokenService emailTokenService, @Qualifier("messageSource") MessageSource messageSource) {
         this.userRegistrationService = userRegistrationService;
         this.emailTokenService = emailTokenService;
+        this.messageSource = messageSource;
     }
 
     @GetMapping("/register")
@@ -52,7 +57,8 @@ public class RegisterController {
             redirectAttributes.addFlashAttribute("user", user);
             return "redirect:/register";
         }
-        redirectAttributes.addFlashAttribute("info", "Proszę potwierdzić swój adres email poprzez link weryfikacyjny wysłany na adres: " + user.getEmail());
+        String message = messageSource.getMessage("attr.register.success", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("info", message);
         return "redirect:/login";
     }
 
@@ -62,7 +68,8 @@ public class RegisterController {
             RedirectAttributes redirectAttributes
     ) {
         emailTokenService.setTokenActivated(token);
-        redirectAttributes.addFlashAttribute("info", "Aktywacja zakończona pomyślnie. Możesz się zalogować!");
+        String message = messageSource.getMessage("attr.activate.success", null, LocaleContextHolder.getLocale());
+        redirectAttributes.addFlashAttribute("info", message);
         return "redirect:/login";
     }
 }

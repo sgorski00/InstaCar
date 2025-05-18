@@ -1,10 +1,13 @@
 package pl.studia.InstaCar.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
 import pl.studia.InstaCar.model.City;
 import pl.studia.InstaCar.repository.CityRepository;
@@ -17,10 +20,12 @@ import java.util.NoSuchElementException;
 public class CityService {
 
     private final CityRepository cityRepository;
+    private final MessageSource messageSource;
 
     @Autowired
-    public CityService(CityRepository cityRepository) {
+    public CityService(CityRepository cityRepository, @Qualifier("messageSource") MessageSource messageSource) {
         this.cityRepository = cityRepository;
+        this.messageSource = messageSource;
     }
 
     public long count() {
@@ -46,14 +51,20 @@ public class CityService {
     @Cacheable(value = "cities", key = "#name")
     public City getCityByName(String name) {
         return cityRepository.findByName(name).orElseThrow(
-                () -> new NoSuchElementException("City not found with name: " + name)
+                () -> {
+                    String message = messageSource.getMessage("error.city.not.found", null, LocaleContextHolder.getLocale());
+                    return new NoSuchElementException(message + ": " + name);
+                }
         );
     }
 
     @Cacheable(value = "cities", key = "#id")
     public City getCityById(Long id) {
         return cityRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException("City not found with id: " + id)
+                () -> {
+                    String message = messageSource.getMessage("error.city.not.found", null, LocaleContextHolder.getLocale());
+                    return new NoSuchElementException(message + ": " + id);
+                }
         );
     }
 

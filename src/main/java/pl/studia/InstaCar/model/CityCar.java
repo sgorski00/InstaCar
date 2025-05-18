@@ -18,6 +18,6 @@ import lombok.Setter;
 @AllArgsConstructor
 public class CityCar extends Vehicle {
 
-    @Positive(message = "Pojemność bagażnika musi być dodatnia")
+    @Positive(message = "{Positive.trunkCapacity}")
     private Double trunkCapacity;
 }
