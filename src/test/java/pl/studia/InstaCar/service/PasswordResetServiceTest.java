@@ -56,13 +56,14 @@ public class PasswordResetServiceTest {
 
     @Test
     void shouldChangePassword() {
+        String token = "fakedToken";
         ApplicationUser user = new ApplicationUser();
-        PasswordResetDto resetDto = new PasswordResetDto();
+        PasswordResetDto resetDto = new PasswordResetDto(token);
         resetDto.setPassword("password");
         resetDto.setConfirmPassword("password");
-        String token = "fakedToken";
+        resetDto.setToken(token);
 
-        passwordResetService.changePassword(user, resetDto, token);
+        passwordResetService.changePassword(user, resetDto);
 
         verify(userService, times(1)).save(user);
         verify(passwordTokenService, times(1)).setTokenActivated(token);

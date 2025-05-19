@@ -57,6 +57,7 @@ public class EmailTokenServiceTest {
 
         assertTrue(token.getIsUsed());
         verify(emailTokenRepository, times(1)).save(any(EmailActivationToken.class));
+
     }
 
     @Test

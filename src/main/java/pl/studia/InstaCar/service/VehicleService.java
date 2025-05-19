@@ -104,9 +104,11 @@ public class VehicleService {
     )
     @Transactional
     public void deleteById(long id) {
-        String message = messageSource.getMessage("error.car.not.found", null, LocaleContextHolder.getLocale());
         Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException(message + ": " + id)
+                () -> {
+                    String message = messageSource.getMessage("error.car.not.found", null, LocaleContextHolder.getLocale());
+                    return new NoSuchElementException(message + ": " + id);
+                }
         );
         CarModel carModel = vehicle.getModel();
         vehicle.setModel(null);

@@ -36,7 +36,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    void shouldReturnFalseIfListIsEmpty() {
+    void shouldReturnFalseIfListIsNotEmpty() {
         when(roleRepository.count()).thenReturn(1L);
 
         assertFalse(roleService.isEmpty());

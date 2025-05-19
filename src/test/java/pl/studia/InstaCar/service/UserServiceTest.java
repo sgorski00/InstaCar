@@ -17,10 +17,11 @@ import pl.studia.InstaCar.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -64,6 +65,7 @@ public class UserServiceTest {
         when(userRepository.findByUsernameIgnoreCase("user")).thenReturn(Optional.empty());
 
         assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("user"));
+        verify(messageSource, times(1)).getMessage(eq("error.login.not.found"), nullable(Object[].class), any(Locale.class));
     }
 
     @Test
@@ -73,6 +75,7 @@ public class UserServiceTest {
         when(userRepository.findByUsernameIgnoreCase("user")).thenReturn(Optional.of(user));
 
         assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("user"));
+        verify(messageSource, times(1)).getMessage(eq("error.login.not.active"), nullable(Object[].class), any(Locale.class));
     }
 
     @Test
@@ -81,5 +84,6 @@ public class UserServiceTest {
         when(userRepository.findByUsernameIgnoreCase("user")).thenReturn(Optional.of(user));
 
         assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("user"));
+        verify(messageSource, times(1)).getMessage(eq("error.login.not.local"), nullable(Object[].class), any(Locale.class));
     }
 }

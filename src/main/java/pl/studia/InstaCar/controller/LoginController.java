@@ -75,32 +75,30 @@ public class LoginController {
     ) {
         ApplicationUser user = passwordTokenService.getUserForToken(token);
         model.addAttribute("username", user.getUsername());
-        model.addAttribute("pwdResetDto", new PasswordResetDto());
+        model.addAttribute("pwdResetDto", new PasswordResetDto(token));
         model.addAttribute("token", token);
         return "password_reset_form";
     }
 
     @PostMapping("/reset/form")
     public String sendPasswordResetForm(
-            @RequestParam(name = "token") String token,
             @Valid @ModelAttribute("pwdResetDto") PasswordResetDto passwordResetDto,
             BindingResult bindingResult,
             RedirectAttributes redirectAttributes
     ) {
         if (bindingResult.hasErrors()) {
             redirectAttributes.addFlashAttribute("error", bindingResult.getAllErrors().getFirst().getDefaultMessage());
-            return "redirect:/login/reset/form?token=" + token;
+            return "redirect:/login/reset/form?token=" + passwordResetDto.getToken();
         }
 
         if (!passwordResetDto.arePasswordsEqual()) {
             String message = messageSource.getMessage("validation.password.repeat.match", null, LocaleContextHolder.getLocale());
             redirectAttributes.addFlashAttribute("error", message);
-            redirectAttributes.addFlashAttribute("pwdResetDto", passwordResetDto);
-            return "redirect:/login/reset/form?token=" + token;
+            return "redirect:/login/reset/form?token=" + passwordResetDto.getToken();
         }
 
-        ApplicationUser user = passwordTokenService.getUserForToken(token);
-        passwordResetService.changePassword(user, passwordResetDto, token);
+        ApplicationUser user = passwordTokenService.getUserForToken(passwordResetDto.getToken());
+        passwordResetService.changePassword(user, passwordResetDto);
         String message = messageSource.getMessage("attr.password.saved", null, LocaleContextHolder.getLocale());
         redirectAttributes.addFlashAttribute("info", message);
         return "redirect:/login";

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.MessageSource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
@@ -12,6 +13,7 @@ import pl.studia.InstaCar.repository.EmailTokenRepository;
 import pl.studia.InstaCar.service.tokens.EmailTokenService;
 import pl.studia.InstaCar.service.UserRegistrationService;
 
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -36,6 +38,9 @@ public class RegisterControllerTest {
     @MockitoBean
     private UserRegistrationService userRegistrationService;
 
+    @MockitoBean
+    private MessageSource messageSource;
+
     @Test
     void shouldShowRegistrationForm() throws Exception {
         mvc.perform(get("/register"))
@@ -55,9 +60,9 @@ public class RegisterControllerTest {
         mvc.perform(post("/register")
                         .flashAttr("user", user))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(flash().attributeExists("info"))
                 .andExpect(redirectedUrl("/login"));
 
+        verify(messageSource, times(1)).getMessage(eq("attr.register.success"), nullable(Object[].class), any(Locale.class));
         verify(userRegistrationService, times(1)).registerUser(user);
     }
 
@@ -65,7 +70,7 @@ public class RegisterControllerTest {
     void shouldNotRegisterUserWhenNotPassedInPost() throws Exception {
         mvc.perform(post("/register"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(flash().attributeExists("error"))
+                .andExpect(flash().attributeExists("error", "user"))
                 .andExpect(redirectedUrl("/register"));
 
         verify(userRegistrationService, times(0)).registerUser(any(UserRegistrationDto.class));
@@ -81,8 +86,7 @@ public class RegisterControllerTest {
         mvc.perform(post("/register")
                         .flashAttr("user", user))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(flash().attributeExists("error"))
-                .andExpect(flash().attributeExists("user"))
+                .andExpect(flash().attributeExists("error", "user"))
                 .andExpect(redirectedUrl("/register"));
 
         verify(userRegistrationService, times(0)).registerUser(any(UserRegistrationDto.class));
@@ -94,9 +98,9 @@ public class RegisterControllerTest {
                         .param("token", "correct_token"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/login"))
-                .andExpect(flash().attributeExists("info"))
                 .andExpect(flash().attributeCount(1));
 
+        verify(messageSource, times(1)).getMessage(eq("attr.activate.success"), nullable(Object[].class), any(Locale.class));
         verify(emailTokenService, times(1)).setTokenActivated(anyString());
     }
 

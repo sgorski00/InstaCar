@@ -9,7 +9,7 @@ public class PasswordResetDtoTest {
 
     @Test
     void shouldReturnTrueIfPasswordsAreEqual() {
-        PasswordResetDto dto = new PasswordResetDto();
+        PasswordResetDto dto = new PasswordResetDto("token");
         dto.setPassword("newPassword");
         dto.setConfirmPassword("newPassword");
 
@@ -20,7 +20,7 @@ public class PasswordResetDtoTest {
 
     @Test
     void shouldReturnFalseIfPasswordsAreNotEqual() {
-        PasswordResetDto dto = new PasswordResetDto();
+        PasswordResetDto dto = new PasswordResetDto("token");
         dto.setPassword("newPassword");
         dto.setConfirmPassword("wrongPassword");
 

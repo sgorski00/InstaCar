@@ -38,8 +38,8 @@ public class UserRegistrationServiceTest {
     @InjectMocks
     private UserRegistrationService userRegistrationService;
 
-    UserRegistrationDto user;
-    Role userRole;
+    private UserRegistrationDto user;
+    private Role userRole;
 
     @BeforeEach
     public void setUp() {
@@ -89,6 +89,4 @@ public class UserRegistrationServiceTest {
         verify(userService, never()).save(any(ApplicationUser.class));
         verify(eventPublisher, never()).publishEvent(any(UserRegistrationEvent.class));
     }
-
-
 }

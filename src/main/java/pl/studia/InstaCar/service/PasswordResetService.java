@@ -51,14 +51,13 @@ public class PasswordResetService {
      *
      * @param user user to change password for
      * @param resetDto password reset data
-     * @param token token that was used to reset password
      */
     @Transactional
-    public void changePassword(ApplicationUser user, PasswordResetDto resetDto, String token) throws TokenIllegalArgumentException {
+    public void changePassword(ApplicationUser user, PasswordResetDto resetDto) throws TokenIllegalArgumentException {
         try {
             user.setPassword(resetDto.getPassword());
             userService.save(user);
-            passwordTokenService.setTokenActivated(token);
+            passwordTokenService.setTokenActivated(resetDto.getToken());
         } catch (TokenIllegalArgumentException e) {
             throw new TokenIllegalArgumentException(e.getMessage(), PasswordResetToken.class);
         }

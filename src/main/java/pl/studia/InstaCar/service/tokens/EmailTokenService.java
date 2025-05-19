@@ -37,8 +37,10 @@ public class EmailTokenService extends TokenService<EmailActivationToken> {
 
     @Override
     protected EmailActivationToken findLastToken(String tokenStr) {
-        String message = messageSource.getMessage("error.token.not.found", null, LocaleContextHolder.getLocale());
         return emailTokenRepository.findFirstByTokenOrderByIdDesc(tokenStr)
-                .orElseThrow(() -> new TokenIllegalArgumentException(message, EmailActivationToken.class));
+                .orElseThrow(() -> {
+                    String message = messageSource.getMessage("error.token.not.found", null, LocaleContextHolder.getLocale());
+                    return new TokenIllegalArgumentException(message, EmailActivationToken.class);
+                });
     }
 }
