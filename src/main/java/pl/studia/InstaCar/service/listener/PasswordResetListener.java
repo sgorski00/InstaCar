@@ -33,10 +33,6 @@ public class PasswordResetListener {
         log.info("New password reset request! Email sending...");
         String token = event.getResetToken().getToken();
         String emailTo = event.getUser().getEmail();
-        try {
-            emailService.sendEmail(ResetPasswordEmailBuilder.build(contactEmail, emailTo, token, messageSource));
-        } catch (UnknownHostException e) {
-            throw new RuntimeException(e);
-        }
+        emailService.sendEmail(ResetPasswordEmailBuilder.build(contactEmail, emailTo, token, messageSource));
     }
 }
