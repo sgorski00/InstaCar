@@ -9,9 +9,10 @@ public class ComparatorUtils {
     public static Comparator<Vehicle> getVehicleComparator(String field) {
         Comparator<Vehicle> comparator;
 
-        switch (field) {
-            case "price" -> comparator = Comparator.comparingDouble(Vehicle::getPrice);
-            default -> comparator = Comparator
+        if (field.equals("price")) {
+            comparator = Comparator.comparingDouble(Vehicle::getPrice);
+        } else {
+            comparator = Comparator
                     .comparing((Vehicle v) -> v.getModel().getBrand(), String.CASE_INSENSITIVE_ORDER)
                     .thenComparing(v -> v.getModel().getModelName(), String.CASE_INSENSITIVE_ORDER);
         }
