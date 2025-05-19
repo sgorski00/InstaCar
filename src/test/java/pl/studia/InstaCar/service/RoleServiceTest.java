@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.MessageSource;
 import pl.studia.InstaCar.model.authentication.Role;
 import pl.studia.InstaCar.repository.RoleRepository;
 
@@ -21,6 +22,9 @@ public class RoleServiceTest {
     @Mock
     private RoleRepository roleRepository;
 
+    @Mock
+    private MessageSource messageSource;
+
     @InjectMocks
     private RoleService roleService;
 
@@ -32,7 +36,7 @@ public class RoleServiceTest {
     }
 
     @Test
-    void shouldReturnFalseIfListIsEmpty() {
+    void shouldReturnFalseIfListIsNotEmpty() {
         when(roleRepository.count()).thenReturn(1L);
 
         assertFalse(roleService.isEmpty());

@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.tokens.PasswordResetToken;
 import pl.studia.InstaCar.model.dto.PasswordResetDto;
@@ -26,6 +27,9 @@ public class PasswordResetServiceTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private MessageSource messageSource;
 
     @InjectMocks
     private PasswordResetService passwordResetService;
@@ -52,13 +56,14 @@ public class PasswordResetServiceTest {
 
     @Test
     void shouldChangePassword() {
+        String token = "fakedToken";
         ApplicationUser user = new ApplicationUser();
-        PasswordResetDto resetDto = new PasswordResetDto();
+        PasswordResetDto resetDto = new PasswordResetDto(token);
         resetDto.setPassword("password");
         resetDto.setConfirmPassword("password");
-        String token = "fakedToken";
+        resetDto.setToken(token);
 
-        passwordResetService.changePassword(user, resetDto, token);
+        passwordResetService.changePassword(user, resetDto);
 
         verify(userService, times(1)).save(user);
         verify(passwordTokenService, times(1)).setTokenActivated(token);

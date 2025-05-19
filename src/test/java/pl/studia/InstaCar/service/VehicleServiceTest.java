@@ -31,6 +31,9 @@ public class VehicleServiceTest {
     @Mock
     private CityCarRepository cityCarRepository;
 
+    @Mock
+    private CarModelService carModelService;
+
     @InjectMocks
     private VehicleService vehicleService;
 

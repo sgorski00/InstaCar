@@ -179,8 +179,11 @@
                             </li>
                             <li><a href="tel:+48 574 522 070"><span class="icon icon-phone"></span><span class="text">+48 574 522 070</span></a>
                             </li>
-                            <li><a href="mailto:pomoc@instacar.com"><span class="icon icon-envelope"></span><span
-                                    class="text">pomoc@instacar.com</span></a></li>
+                            <li>
+                                <a th:href="'mailto:' + ${@environment.getProperty('spring.mail.username')}">
+                                <span class="icon icon-envelope"></span><span class="text" th:text="${@environment.getProperty('spring.mail.username')}"></span>
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>

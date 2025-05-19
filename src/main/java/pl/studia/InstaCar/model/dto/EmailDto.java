@@ -6,11 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.mail.SimpleMailMessage;
 
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 
 @Builder
 @Data
@@ -29,15 +32,18 @@ public class EmailDto implements Serializable {
     @Size(min = 2, max = 1000, message = "{Size.message}")
     private String message;
 
-    public SimpleMailMessage mapToSimpleMailMessage() {
-        String text =
-        """
-        Message from: %s
-        Date: %s
-        Time: %s
+    public SimpleMailMessage mapToSimpleMailMessage(MessageSource messageSource) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
+        String from = messageSource.getMessage("mail.general.from", new Object[]{name}, LocaleContextHolder.getLocale());
+        String date = messageSource.getMessage("mail.general.date", new Object[]{LocalDate.now()}, LocaleContextHolder.getLocale());
+        String time = messageSource.getMessage("mail.general.time", new Object[]{LocalTime.now().format(formatter)}, LocaleContextHolder.getLocale());
+        String text = """
+        %s
+        %s
+        %s
         
         %s
-        """.formatted(name, LocalDate.now(), LocalTime.now(), message);
+        """.formatted(from, date, time, message);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setFrom(emailFrom);

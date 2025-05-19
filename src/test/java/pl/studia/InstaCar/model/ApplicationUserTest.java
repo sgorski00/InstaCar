@@ -113,6 +113,15 @@ public class ApplicationUserTest {
     }
 
     @Test
+    void shouldReturnTrueIfProviderIsNotLocal() {
+        applicationUser.setProvider(AuthProvider.GOOGLE);
+
+        boolean result = applicationUser.isEnabled();
+
+        assertTrue(result);
+    }
+
+    @Test
     void shouldBeLocalAccountByDefault() {
         assertEquals(applicationUser.getProvider(), AuthProvider.LOCAL);
     }

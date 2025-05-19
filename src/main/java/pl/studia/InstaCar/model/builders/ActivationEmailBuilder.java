@@ -1,29 +1,28 @@
 package pl.studia.InstaCar.model.builders;
 
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import pl.studia.InstaCar.model.dto.EmailDto;
+
+import java.net.InetAddress;
 
 public class ActivationEmailBuilder {
 
-    public static EmailDto build(String emailFrom, String emailTo, String token) {
-        String serverAddress = "localhost";
-        String activationLink = "%s/activate?token=%s".formatted(serverAddress, token);
-        String text = getMessage(activationLink);
+    private static final String SERVER_ADDRESS = InetAddress.getLoopbackAddress().getHostName();
+
+    public static EmailDto build(String emailFrom, String emailTo, String token, MessageSource messageSource) {
+        String activationLink = "%s/activate?token=%s".formatted(SERVER_ADDRESS, token);
+        String text = getMessage(activationLink, messageSource);
         return EmailDto.builder()
                 .emailFrom(emailFrom)
                 .emailTo(emailTo)
-                .topic("InstaCar - potwierdzenie rejestracji")
+                .topic(messageSource.getMessage("mail.activation.title", null, LocaleContextHolder.getLocale()))
                 .message(text)
-                .name("InstaCar - prosimy nie odpowiadać na tego maila.")
+                .name(messageSource.getMessage("mail.general.name", null, LocaleContextHolder.getLocale()))
                 .build();
     }
 
-    private static String getMessage(String activationLink) {
-        return """
-                Cześć, dziękujemy za rejestracje w serwisie InstaCar!
-                
-                Proszę potwierdzić swój adres email, żeby móc korzystać z serwisu.
-                Twój link aktywacyjny:
-                %s
-                """.formatted(activationLink);
+    private static String getMessage(String activationLink, MessageSource messageSource) {
+        return messageSource.getMessage("mail.activation.message", new Object[]{activationLink}, LocaleContextHolder.getLocale());
     }
 }

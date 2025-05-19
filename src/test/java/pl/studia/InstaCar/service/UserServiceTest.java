@@ -6,21 +6,22 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.MessageSource;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.AuthProvider;
+import pl.studia.InstaCar.model.authentication.Role;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.repository.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.Locale;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -28,20 +29,25 @@ public class UserServiceTest {
     @Mock
     private UserRepository userRepository;
 
+    @Mock
+    private MessageSource messageSource;
+
     @InjectMocks
     private UserService userService;
 
     private ApplicationUser user;
-    private EmailActivationToken token;
 
     @BeforeEach
     void setUp() {
-        token = new EmailActivationToken();
+        EmailActivationToken token = new EmailActivationToken();
         token.setIsUsed(true);
+        Role role = new Role();
+        role.setName("user");
         user = new ApplicationUser();
         user.setUsername("user");
         user.setProvider(AuthProvider.LOCAL);
         user.setEmailTokens(List.of(token));
+        user.setRole(role);
     }
 
     @Test
@@ -59,6 +65,7 @@ public class UserServiceTest {
         when(userRepository.findByUsernameIgnoreCase("user")).thenReturn(Optional.empty());
 
         assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("user"));
+        verify(messageSource, times(1)).getMessage(eq("error.login.not.found"), nullable(Object[].class), any(Locale.class));
     }
 
     @Test
@@ -68,6 +75,7 @@ public class UserServiceTest {
         when(userRepository.findByUsernameIgnoreCase("user")).thenReturn(Optional.of(user));
 
         assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("user"));
+        verify(messageSource, times(1)).getMessage(eq("error.login.not.active"), nullable(Object[].class), any(Locale.class));
     }
 
     @Test
@@ -76,5 +84,6 @@ public class UserServiceTest {
         when(userRepository.findByUsernameIgnoreCase("user")).thenReturn(Optional.of(user));
 
         assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername("user"));
+        verify(messageSource, times(1)).getMessage(eq("error.login.not.local"), nullable(Object[].class), any(Locale.class));
     }
 }

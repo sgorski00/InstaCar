@@ -42,7 +42,7 @@
                             <div class="icon mr-3">
                                 <span class="icon-envelope-o"></span>
                             </div>
-                            <p><span th:text="#{contact.email} + ':'"></span> <a href="mailto:pomoc@instacar.com">pomoc@instacar.com</a></p>
+                            <p><span th:text="#{contact.email} + ':'"></span> <a th:href="'mailto:' + ${@environment.getProperty('spring.mail.username')}" th:text="${@environment.getProperty('spring.mail.username')}"></a></p>
                         </div>
                     </div>
                 </div>
