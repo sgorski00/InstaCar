@@ -11,7 +11,6 @@ import pl.studia.InstaCar.model.authentication.tokens.PasswordResetToken;
 import pl.studia.InstaCar.repository.PasswordTokenRepository;
 
 import java.time.LocalDateTime;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -54,19 +53,11 @@ public class PasswordTokenService extends TokenService<PasswordResetToken> {
      * @throws TokenIllegalArgumentException if the token is already used or does not exist
      */
     public ApplicationUser getUserForToken(String tokenStr) {
-        Optional<PasswordResetToken> oToken = tokenRepository.findAll().stream()
-                .filter(t -> t.getToken().equals(tokenStr))
-                .findFirst();
-        if(oToken.isPresent()) {
-            PasswordResetToken token = oToken.get();
-            if (token.getIsUsed()) {
-                String message = messageSource.getMessage("error.token.used", null, LocaleContextHolder.getLocale());
-                throw new TokenIllegalArgumentException(message, PasswordResetToken.class);
-            }
-            return token.getUser();
-        } else {
-            String message = messageSource.getMessage("error.token.not.found", null, LocaleContextHolder.getLocale());
+        PasswordResetToken token = findLastToken(tokenStr);
+        if (token.getIsUsed()) {
+            String message = messageSource.getMessage("error.token.used", null, LocaleContextHolder.getLocale());
             throw new TokenIllegalArgumentException(message, PasswordResetToken.class);
         }
+        return token.getUser();
     }
 }

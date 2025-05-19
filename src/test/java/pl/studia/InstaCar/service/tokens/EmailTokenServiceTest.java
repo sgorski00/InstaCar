@@ -1,4 +1,4 @@
-package pl.studia.InstaCar.service;
+package pl.studia.InstaCar.service.tokens;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -13,11 +13,9 @@ import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.AuthProvider;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
 import pl.studia.InstaCar.repository.EmailTokenRepository;
-import pl.studia.InstaCar.service.tokens.EmailTokenService;
 
 import java.time.LocalDateTime;
 import java.util.Locale;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -119,5 +117,14 @@ public class EmailTokenServiceTest {
         assertThrows(IllegalArgumentException.class, () -> emailTokenService.saveTokenForUser(user));
 
         verify(emailTokenRepository, times(0)).save(any(EmailActivationToken.class));
+    }
+
+    @Test
+    void shouldThrowWhenTokenNotFound() {
+        when(emailTokenRepository.findFirstByTokenOrderByIdDesc(anyString())).thenReturn(Optional.empty());
+
+        TokenIllegalArgumentException exception = assertThrows(TokenIllegalArgumentException.class, () -> emailTokenService.findLastToken("fakedToken"));
+        assertEquals(exception.getTokenClass(), EmailActivationToken.class);
+        verify(messageSource, times(1)).getMessage(eq("error.token.not.found"), nullable(Object[].class), any(Locale.class));
     }
 }

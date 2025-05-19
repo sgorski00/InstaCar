@@ -42,9 +42,11 @@ public class CarModelService {
 
     @Cacheable(value = "carModels", key = "#id")
     public CarModel getCarModelById(Long id) {
-        String message = messageSource.getMessage("error.car.model.not.found", null, LocaleContextHolder.getLocale());
         return carModelRepository.findById(id)
-                .orElseThrow(() -> new NoSuchElementException(message +": " + id));
+                .orElseThrow(() -> {
+                    String message = messageSource.getMessage("error.car.model.not.found", null, LocaleContextHolder.getLocale());
+                    return new NoSuchElementException(message +": " + id);
+                });
     }
 
     @Caching(
