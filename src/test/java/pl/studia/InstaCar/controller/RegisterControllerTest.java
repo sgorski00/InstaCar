@@ -97,7 +97,7 @@ public class RegisterControllerTest {
                 .andExpect(flash().attributeExists("info"))
                 .andExpect(flash().attributeCount(1));
 
-        verify(emailTokenRepository, times(1)).save(any(EmailActivationToken.class));
+        verify(emailTokenService, times(1)).setTokenActivated(anyString());
     }
 
     @Test

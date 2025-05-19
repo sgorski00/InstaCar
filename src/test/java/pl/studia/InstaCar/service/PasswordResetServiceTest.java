@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.MessageSource;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.tokens.PasswordResetToken;
 import pl.studia.InstaCar.model.dto.PasswordResetDto;
@@ -26,6 +27,9 @@ public class PasswordResetServiceTest {
 
     @Mock
     private UserService userService;
+
+    @Mock
+    private MessageSource messageSource;
 
     @InjectMocks
     private PasswordResetService passwordResetService;

@@ -7,6 +7,8 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.context.MessageSource;
+import pl.studia.InstaCar.config.exceptions.TokenIllegalArgumentException;
 import pl.studia.InstaCar.model.authentication.ApplicationUser;
 import pl.studia.InstaCar.model.authentication.AuthProvider;
 import pl.studia.InstaCar.model.authentication.tokens.EmailActivationToken;
@@ -14,6 +16,7 @@ import pl.studia.InstaCar.repository.EmailTokenRepository;
 import pl.studia.InstaCar.service.tokens.EmailTokenService;
 
 import java.time.LocalDateTime;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 
@@ -26,6 +29,9 @@ public class EmailTokenServiceTest {
 
     @Mock
     private EmailTokenRepository emailTokenRepository;
+
+    @Mock
+    private MessageSource messageSource;
 
     @InjectMocks
     private EmailTokenService emailTokenService;
@@ -57,10 +63,9 @@ public class EmailTokenServiceTest {
     void shouldNotSetTokenActivatedIfTokenNotFound() {
         when(emailTokenRepository.findFirstByTokenOrderByIdDesc(anyString())).thenReturn(Optional.empty());
 
-        NoSuchElementException thrown = assertThrows(NoSuchElementException.class, () ->emailTokenService.setTokenActivated("fakedToken"));
-
-        assertTrue(thrown.getMessage().contains("token nie istnieje"));
+        assertThrows(TokenIllegalArgumentException.class, () -> emailTokenService.setTokenActivated("fakedToken"));
         assertFalse(token.getIsUsed());
+        verify(messageSource, times(1)).getMessage(eq("error.token.not.found"), nullable(Object[].class), any(Locale.class));
         verify(emailTokenRepository, times(0)).save(any(EmailActivationToken.class));
     }
 
@@ -69,10 +74,9 @@ public class EmailTokenServiceTest {
         token.setExpiresAt(LocalDateTime.MIN);
         when(emailTokenRepository.findFirstByTokenOrderByIdDesc(anyString())).thenReturn(Optional.of(token));
 
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->emailTokenService.setTokenActivated("fakedToken"));
-
-        assertTrue(thrown.getMessage().contains("token jest przeterminowany"));
+        assertThrows(IllegalArgumentException.class, () ->emailTokenService.setTokenActivated("fakedToken"));
         assertFalse(token.getIsUsed());
+        verify(messageSource, times(1)).getMessage(eq("error.token.expired"), nullable(Object[].class), any(Locale.class));
         verify(emailTokenRepository, times(0)).save(any(EmailActivationToken.class));
     }
 
@@ -81,10 +85,9 @@ public class EmailTokenServiceTest {
         token.setIsUsed(true);
         when(emailTokenRepository.findFirstByTokenOrderByIdDesc(anyString())).thenReturn(Optional.of(token));
 
-        IllegalArgumentException thrown = assertThrows(IllegalArgumentException.class, () ->emailTokenService.setTokenActivated("fakedToken"));
-
-        assertTrue(thrown.getMessage().contains("zużyty"));
+        assertThrows(IllegalArgumentException.class, () ->emailTokenService.setTokenActivated("fakedToken"));
         assertTrue(token.getIsUsed());
+        verify(messageSource, times(1)).getMessage(eq("error.token.used"), nullable(Object[].class), any(Locale.class));
         verify(emailTokenRepository, times(0)).save(any(EmailActivationToken.class));
     }
 
