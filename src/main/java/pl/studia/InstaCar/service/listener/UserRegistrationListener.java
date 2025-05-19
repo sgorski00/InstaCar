@@ -3,6 +3,7 @@ package pl.studia.InstaCar.service.listener;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.MessageSource;
 import org.springframework.context.event.EventListener;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -19,10 +20,12 @@ public class UserRegistrationListener {
     private String contactEmail;
 
     private final EmailService emailService;
+    private final MessageSource messageSource;
 
     @Autowired
-    public UserRegistrationListener(EmailService emailService) {
+    public UserRegistrationListener(EmailService emailService, MessageSource messageSource) {
         this.emailService = emailService;
+        this.messageSource = messageSource;
     }
 
     @Async
@@ -32,7 +35,7 @@ public class UserRegistrationListener {
         String email = event.getUser().getEmail();
         String token = event.getEmailToken().getToken();
 
-        EmailDto emailDto = ActivationEmailBuilder.build(contactEmail,email, token);
+        EmailDto emailDto = ActivationEmailBuilder.build(contactEmail,email, token, messageSource);
         emailService.sendEmail(emailDto);
     }
 }
