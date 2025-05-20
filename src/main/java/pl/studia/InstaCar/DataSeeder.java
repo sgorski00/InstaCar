@@ -30,17 +30,16 @@ public class DataSeeder implements CommandLineRunner {
     private final CarModelService carModelService;
     private final MessageSource messageSource;
     private final Faker faker;
+    private final OrderService orderService;
+    private final VehicleService vehicleService;
+    private final CityService cityService;
 
     private static final String[] CAR_BRANDS = {
             "Toyota","BMW","Mercedes","Ford","Audi","Volkswagen","Honda","Hyundai"
     };
-
     private static final String[] CAR_MODELS = {
             "Mondeo","Corolla","Stilo","911","Passat","Ceed","Sandero","Ibiza","i30", "E47", "A4", "3008"
     };
-    private final VehicleService vehicleService;
-    private final CityService cityService;
-    private final OrderService orderService;
 
     @Autowired
     public DataSeeder(UserService userService, RoleService roleService, CarModelService carModelService, MessageSource messageSource, VehicleService vehicleService, CityService cityService, OrderService orderService) {

@@ -9,6 +9,8 @@
         <div class="col-lg-9 col-md-8 p-4 d-flex flex-column">
             <h4 class="text-muted">Edytuj użytkownika</h4>
             <h5 class="text-info" th:text="${message}"></h5>
+            <h5 class="text-info" th:text="${info}"></h5>
+            <h5 class="text-danger" th:text="${error}"></h5>
             <hr>
 
             <div class="container">
@@ -29,7 +31,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="provider" class="form-label">Typ konta:</label>
-                                <input type="text" id="provider" name="provider" th:value="#{'auth.provider.' + ${userNotEditable.provider)}}"
+                                <input type="text" id="provider" name="provider" th:value="#{'auth.provider.' + ${userNotEditable.provider}}"
                                        class="form-control" disabled>
                             </div>
                             <div class="mb-3">
