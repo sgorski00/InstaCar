@@ -65,7 +65,7 @@
                     <p th:if="${error}" th:text="#{contact.error}"></p>
                     <p th:if="${info}" th:text="${info}"></p>
                     <div class="form-group">
-                        <input type="submit" value="Wyślij" class="btn btn-primary py-3 px-5">
+                        <button type="submit" th:text="#{contact.submit}" class="btn btn-primary py-3 px-5"></button>
                     </div>
                 </form>
             </div>

@@ -2,7 +2,7 @@ services:
   postgres:
     image: postgres:17.2
     container_name: db
-    restart: always
+    restart: no
     environment:
       POSTGRES_USER: root
       POSTGRES_PASSWORD: secret
@@ -19,7 +19,7 @@ services:
       context: .
       dockerfile: ./docker-files/java/Dockerfile
     container_name: app
-    restart: always
+    restart: no
     depends_on:
       - postgres
       - mailhog
