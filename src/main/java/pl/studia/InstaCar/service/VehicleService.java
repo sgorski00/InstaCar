@@ -65,23 +65,26 @@ public class VehicleService {
 
     @Cacheable(value = "cars", key = "#id")
     public Vehicle getCarById(long id) {
-        String message = messageSource.getMessage("error.car.not.found", null, LocaleContextHolder.getLocale());
         return vehicleRepository.findById(id).orElseThrow(
-                () -> new NoSuchElementException(message + ": " + id)
+                () -> {
+                    String message = messageSource.getMessage("error.car.not.found", null, LocaleContextHolder.getLocale());
+                    return new NoSuchElementException(message + ": " + id);
+                }
         );
     }
 
     public Vehicle getCarByIdWithRents(long id) {
-        String message = messageSource.getMessage("error.car.not.found", null, LocaleContextHolder.getLocale());
         return vehicleRepository.findByIdWithRents(id).orElseThrow(
-                () -> new NoSuchElementException(message + ": " + id)
+                () -> {
+                    String message = messageSource.getMessage("error.car.not.found", null, LocaleContextHolder.getLocale());
+                    return new NoSuchElementException(message + ": " + id);
+                }
         );
     }
 
     @Caching(
             put = @CachePut(value = "cars", key = "#result.id"),
             evict = @CacheEvict(value = "allCars", allEntries = true)
-
     )
     @Transactional
     public Vehicle save(Vehicle vehicle) {

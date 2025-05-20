@@ -45,8 +45,8 @@ public class FileUploadService {
         }
 
         try {
-            String contet = file.getContentType();
-            if(contet == null || !contet.startsWith("image")) {
+            String content = file.getContentType();
+            if(content == null || !content.startsWith("image")) {
                 message = messageSource.getMessage("error.file.not.image", null, LocaleContextHolder.getLocale());
                 throw new FileUploadException(message);
             }

@@ -6,14 +6,13 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import pl.studia.InstaCar.model.dto.EmailDto;
 
 import java.net.InetAddress;
-import java.net.UnknownHostException;
 
 @Log4j2
 public class ResetPasswordEmailBuilder {
 
     private static final String SERVER_ADDRESS = InetAddress.getLoopbackAddress().getHostName();
 
-    public static EmailDto build(String emailFrom, String emailTo, String token, MessageSource messageSource) throws UnknownHostException {
+    public static EmailDto build(String emailFrom, String emailTo, String token, MessageSource messageSource) {
         String resetLink = "%s/login/reset/form?token=%s".formatted(SERVER_ADDRESS, token);
         String message = getMessage(resetLink, messageSource);
 

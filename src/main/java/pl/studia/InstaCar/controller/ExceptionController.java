@@ -142,7 +142,7 @@ public class ExceptionController {
             redirectAttributes.addFlashAttribute("code", 500);
         }
 
-        ex.printStackTrace();
+//        ex.printStackTrace();
         redirectAttributes.addFlashAttribute("messages", messages);
         return "redirect:/error";
     }
