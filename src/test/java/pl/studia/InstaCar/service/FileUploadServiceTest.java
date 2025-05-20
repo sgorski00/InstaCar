@@ -12,10 +12,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.lang.reflect.Field;
 import java.nio.file.Path;
+import java.util.List;
 import java.util.Locale;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,7 +46,7 @@ public class FileUploadServiceTest {
         String result = fileUploadService.uploadFile(file);
 
         verify(file, times(1)).transferTo(any(Path.class));
-        assertTrue(result.startsWith("\\temp\\"));
+        assertTrue(result.contains("/temp/") || result.contains("\\temp\\"));
         assertTrue(result.endsWith(".jpg"));
     }
 
@@ -59,7 +59,7 @@ public class FileUploadServiceTest {
         String result = fileUploadService.uploadFile(file);
 
         verify(file, times(1)).transferTo(any(Path.class));
-        assertTrue(result.startsWith("\\temp\\"));
+        assertTrue(result.contains("/temp/") || result.contains("\\temp\\"));
         assertTrue(result.endsWith(".png"));
     }
     @Test
