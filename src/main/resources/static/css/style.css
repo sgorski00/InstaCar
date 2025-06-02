@@ -9979,31 +9979,42 @@ label[for="return-location"] {
 }
 /* Stylizacja samego pola select */
 #pickup-location {
-    background-color: #1e90ff; /* t³o pola (np. niebieski) */
+    background-color: #1e90ff; /* tï¿½o pola (np. niebieski) */
     color: #fff; /* kolor tekstu w polu */
     border: 2px solid #000080; /* obramowanie (ciemnoniebieskie) */
     padding: 0.5rem;
     border-radius: 0.25rem;
 }
 
-    /* Stylizacja opcji w liœcie */
+    /* Stylizacja opcji w liï¿½cie */
     #pickup-location option {
-        background-color: #f8f9fa; /* t³o opcji (jasnoszare lub bia³e) */
+        background-color: #f8f9fa; /* tï¿½o opcji (jasnoszare lub biaï¿½e) */
         color: #000; /* kolor tekstu opcji */
         padding: 0.5rem;
     }
 
 #return-location {
-    background-color: #1e90ff; /* t³o pola (np. niebieski) */
+    background-color: #1e90ff; /* tï¿½o pola (np. niebieski) */
     color: #fff; /* kolor tekstu w polu */
     border: 2px solid #000080; /* obramowanie (ciemnoniebieskie) */
     padding: 0.5rem;
     border-radius: 0.25rem;
 }
 
-    /* Stylizacja opcji w liœcie */
+    /* Stylizacja opcji w liï¿½cie */
     #return-location option {
-        background-color: #f8f9fa; /* t³o opcji (jasnoszare lub bia³e) */
+        background-color: #f8f9fa; /* tï¿½o opcji (jasnoszare lub biaï¿½e) */
         color: #000; /* kolor tekstu opcji */
         padding: 0.5rem;
     }
+
+table td,
+table th {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+tbody td {
+  font-weight: 500;
+  color: #999999;
+}
