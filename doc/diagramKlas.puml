@@ -1,8 +1,0 @@
-@startuml
-class Samochod
-class Rezerwacja
-class Uzytkownik
-
-Uzytkownik --> Rezerwacja
-Rezerwacja --> Samochod
-@enduml
