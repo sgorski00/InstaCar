@@ -122,11 +122,11 @@
                                         <li class="text-dark" th:text="#{car.type}"></li>
                                         <li>⠀</li>
                                         <li class="text-dark" th:text="#{car.year}"></li>
-                                        <br />
+                                        <br/>
                                         <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
                                             <li class="text-dark" th:text="#{car.horsepower}"></li>
                                             <li>⠀</li>
-                                            <li class="text-dark" th:text="#{car.acceleration}"></li></li>
+                                            <li class="text-dark" th:text="#{car.acceleration}"></li>
                                         </th:block>
                                         <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.CityCar'}">
                                             <li class="text-dark" th:text="#{car.trunkcapacity}"></li>
@@ -135,12 +135,12 @@
                                 </div>
                                 <div class="col-md-3 d-none d-md-block">
                                     <ul class="features">
-                                        <li th:text="${car.model.doors} == null ? 'Brak danych' : ${car.model.doors}"></li>
+                                        <li th:text="${car.model.doors} == null ? #{car.no.data} : ${car.model.doors}"></li>
                                         <li>⠀</li>
                                         <li th:text="#{'car.type.' + ${car.model.carType.name()}}"></li>
                                         <li>⠀</li>
-                                        <li th:text="${car.productionYear} == null ? 'Brak danych' : ${car.productionYear}"></li>
-                                        <br />
+                                        <li th:text="${car.productionYear} == null ? #{car.no.data} : ${car.productionYear}"></li>
+                                        <br/>
                                         <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
                                             <li th:text="${car.horsePower}"></li>
                                             <li>⠀</li>
@@ -158,7 +158,7 @@
                                         <li class="text-dark" th:text="#{car.color}"></li>
                                         <li>⠀</li>
                                         <li class="text-dark" th:text="#{car.vin}"></li>
-                                        <br />
+                                        <br/>
                                         <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
                                             <li class="text-dark" th:text="#{car.topspeed}"></li>
                                         </th:block>
@@ -166,12 +166,12 @@
                                 </div>
                                 <div class="col-md-3 d-none d-md-block">
                                     <ul class="features">
-                                        <li th:text="${car.engine} == null ? 'Brak danych' : ${car.engine}"></li>
+                                        <li th:text="${car.engine} == null ? #{car.no.data} : ${car.engine}"></li>
                                         <li>⠀</li>
-                                        <li th:text="${car.color} == null ? 'Brak danych' : ${car.color}"></li>
+                                        <li th:text="${car.color} == null ? #{car.no.data} : ${car.color}"></li>
                                         <li>⠀</li>
                                         <li th:text="${car.vin}"></li>
-                                        <br />
+                                        <br/>
                                         <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
                                             <li th:text="${car.topSpeed}"></li>
                                         </th:block>
@@ -179,13 +179,11 @@
                                 </div>
                             </div>
 
-
-
                             <div class="col-md-3 d-block d-md-none">
                                 <ul class="features">
                                     <li class="text-dark" th:text="#{car.doors}"></li>
                                     <li>⠀</li>
-                                    <li th:text="${car.model.doors} == null ? 'Brak danych' : ${car.model.doors}"></li>
+                                    <li th:text="${car.model.doors} == null ? #{car.no.data} : ${car.model.doors}"></li>
                                     <li>⠀</li>
                                     <li class="text-dark" th:text="#{car.type}"></li>
                                     <li>⠀</li>
@@ -193,21 +191,21 @@
                                     <li>⠀</li>
                                     <li class="text-dark" th:text="#{car.year}"></li>
                                     <li>⠀</li>
-                                    <li th:text="${car.productionYear} == null ? 'Brak danych' : ${car.productionYear}"></li>
+                                    <li th:text="${car.productionYear} == null ? #{car.no.data} : ${car.productionYear}"></li>
                                     <li>⠀</li>
                                     <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.SportCar'}">
                                         <li class="text-dark" th:text="#{car.horsepower}"></li>
                                         <li>⠀</li>
                                         <li th:text="${car.horsePower}"></li>
                                         <li>⠀</li>
-                                        <li class="text-dark" th:text="#{car.acceleration}"></li></li>
+                                        <li class="text-dark" th:text="#{car.acceleration}"></li>
                                         <li>⠀</li>
                                         <li th:text="${car.acceleration}"></li>
                                         <li>⠀</li>
                                     </th:block>
                                     <th:block th:if="${car.class.name == 'pl.studia.InstaCar.model.CityCar'}">
                                         <li class="text-dark" th:text="#{car.trunkcapacity}"></li>
-                                        <li> </li>
+                                        <li>⠀</li>
                                         <li th:text="${car.trunkCapacity}"></li>
                                         <li>⠀</li>
                                     </th:block>
@@ -217,11 +215,11 @@
                                 <ul class="features">
                                     <li class="text-dark" th:utext="#{car.engine}"></li>
                                     <li>⠀</li>
-                                    <li th:text="${car.engine} == null ? 'Brak danych' : ${car.engine}"></li>
+                                    <li th:text="${car.engine} == null ? #{car.no.data} : ${car.engine}"></li>
                                     <li>⠀</li>
                                     <li class="text-dark" th:text="#{car.color}"></li>
                                     <li>⠀</li>
-                                    <li th:text="${car.color} == null ? 'Brak danych' : ${car.color}"></li>
+                                    <li th:text="${car.color} == null ? #{car.no.data} : ${car.color}"></li>
                                     <li>⠀</li>
                                     <li class="text-dark" th:text="#{car.vin}"></li>
                                     <li>⠀</li>
@@ -234,9 +232,6 @@
                                     </th:block>
                                 </ul>
                             </div>
-
-                        </div>
-
                         </div>
 
                         <div class="tab-pane fade" id="pills-manufacturer" role="tabpanel"
