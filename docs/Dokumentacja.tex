@@ -245,7 +245,7 @@ Do tworzenia warstwy prezentacji wykorzystano szablony Thymeleaf, które integru
 
 \subsubsection{Obsługa błędów}
 System posiada mechanizmy obsługi wyjątków oraz walidacji danych wejściowych przy użyciu adnotacji takich jak \texttt{@Valid}, \texttt{@NotBlank}, czy \texttt{@Email}. Komunikaty o błędach wyświetlane są bezpośrednio w interfejsie użytkownika. Dodatkowo, zostały zaimplementowane customowe walidatory do loginu i hasła, umożliwiające szczegółową kontrolę nad poprawnością tych danych zgodnie z~przyjętymi regułami biznesowymi.
-
+\newpage
 \subsubsection{Przykładowe listingu kodu w języku programowania Java}
 	
 \begin{lstlisting}[style=customjava, caption={Fragment klasy DataSeeder – generowanie modeli samochodów}]
@@ -292,7 +292,7 @@ return models;
 }
 }
 \end{lstlisting}
-	
+	\newpage
 \begin{lstlisting}[style=customJava, caption={Klasa PaginationUtils - oblicza numery stron do wyświetlenia w paginacji}]
 public class PaginationUtils {
 public static int[] getPageNumbers(int currentPage, int visiblePages, int totalPages) {
@@ -336,7 +336,28 @@ return pages;
 	}
 	
 \end{lstlisting}	
-	
+
+\newpage
+\section{Instrukcja uruchomieniowa}
+W celu uruchomienia aplikacji należy zainstalować na swoim urządzeniu następujące aplikacje: \textit{Docker}, \textit{GitHub CLI} oraz – w przypadku systemu Windows – aplikację umożliwiającą uruchomienie komendy \textit{make}.
+
+\begin{enumerate}
+    \item Sklonowanie repozytorium: \newline
+    \texttt{git clone https://github.com/sgorski00/InstaCar.git} \newline
+    \texttt{cd InstaCar}
+    
+    \item Utworzenie profilu \textit{prod} (opcjonalne):
+    \begin{itemize}
+        \item Utwórz plik \texttt{application-prod.properties} w ścieżce \texttt{/src/main/resources/}.
+        \item W pliku konfiguracyjnym ustaw dane klienta OAuth2 oraz poczty e-mail.
+        \item Zmień wartość przy kluczu \texttt{spring.profiles.default} na \texttt{prod}.
+    \end{itemize}
+    
+    \item Uruchomienie aplikacji: w konsoli wpisz komendę \texttt{make up}.
+\end{enumerate}
+
+
+\newpage
 \section{Interfejs użytkownika}
 \subsection{Ogólna charakterystyka}
 	
@@ -600,7 +621,8 @@ return pages;
 	text-align: left;
 	background-color: #fff; }
 	\end{lstlisting}
-	
+
+    \newpage
 	\subsection{JavaScript}
 	W projekcie JavaScript został wykorzystany głównie do obsługi interakcji na stronie frontendowej oraz działania komponentów z frameworka Bootstrap. Nie zastosowano dedykowanych frameworków JavaScript ani rozbudowanych skryptów. Implementacja opiera się na standardowych rozwiązaniach, które wspierają responsywność i podstawową dynamikę aplikacji.
 	\begin{lstlisting}[style=jsStyle, caption={Fragment kodu JavaScript}]
@@ -679,7 +701,7 @@ return pages;
 	\newpage
 	\addcontentsline{toc}{section}{Spis rysunków}
 	\listoffigures
-	
+	\newpage
 	\addcontentsline{toc}{section}{Spis listingów}
 	\lstlistoflistings
 	
