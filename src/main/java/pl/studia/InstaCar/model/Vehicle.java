@@ -53,7 +53,7 @@ public abstract class Vehicle implements Rental, Serializable {
 
     @Min(value = 1950, message = "{Min.productionYear}")
     @Max(value = 2030, message = "{Max.productionYear}")
-    private int productionYear;
+    private Integer productionYear;
 
     @NotBlank(message = "{NotBlank.engine}")
     private String engine;
@@ -61,7 +61,7 @@ public abstract class Vehicle implements Rental, Serializable {
     private String color;
 
     @Positive(message = "{Positive.price}")
-    private double price; // per day in PLN
+    private Double price; // per day in PLN
 
     @NotBlank(message = "{NotBlank.imageUrl}")
     private String imageUrl;
